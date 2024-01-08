@@ -4,19 +4,32 @@ import { transformApiData } from "../../utils";
 import { APIPlatform, RawUser } from "../../types";
 
 export default async (c: Context) => {
-  const { version, platform } = c.req.param();
+  const { version: leaderboardVersion, platform } = c.req.param();
   const returnRawData = ["true", "1"].includes(c.req.query("raw") ?? "");
   const returnCountOnly = ["true", "1"].includes(c.req.query("count") ?? "");
   const nameFilter = c.req.query("name");
 
+  // If no leaderboard version is provided, return an error
+  if (!leaderboardVersion)
+    return c.json(
+      {
+        error: `No leaderboard version provided. Valid versions: ${apiRoutes
+          .flatMap(x => x.version)
+          .join(", ")}. Example: /v1/leaderboard/cb1`,
+      },
+      404
+    );
+
   // Get the API route that matches the version
-  const apiRoute = apiRoutes.find(route => route.version.includes(version));
+  const apiRoute = apiRoutes.find(route =>
+    route.version.includes(leaderboardVersion)
+  );
 
   // If no API route matches the version, return an error
   if (!apiRoute)
     return c.json(
       {
-        error: `Version '${version}' is not a valid version. Valid versions: ${apiRoutes
+        error: `Leaderboard version '${leaderboardVersion}' is not a valid version. Valid versions: ${apiRoutes
           .flatMap(x => x.version)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       },
@@ -30,9 +43,9 @@ export default async (c: Context) => {
   if (routeRequiresPlatform && !validPlatformProvided)
     return c.json(
       {
-        error: `Leaderboard version '${version}' requires a platform. Valid platforms: ${apiRoute.availablePlatforms.join(
+        error: `Leaderboard version '${leaderboardVersion}' requires a platform. Valid platforms: ${apiRoute.availablePlatforms.join(
           ", "
-        )}. Example: /v1/leaderboard/${version}/steam`,
+        )}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
       },
       404
     );
@@ -41,9 +54,9 @@ export default async (c: Context) => {
   if (routeRequiresPlatform && platform && !validPlatformProvided)
     return c.json(
       {
-        error: `Platform '${platform}' is not available for API version ${version}. Valid platforms: ${apiRoute.availablePlatforms.join(
+        error: `Platform '${platform}' is not available for leaderboard version ${leaderboardVersion}. Valid platforms: ${apiRoute.availablePlatforms.join(
           ", "
-        )}. Example: /v1/leaderboard/${version}/steam`,
+        )}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
       },
       404
     );
@@ -68,7 +81,7 @@ export default async (c: Context) => {
     // Return data
     return c.json({
       meta: {
-        leaderboardVersion: version,
+        leaderboardVersion: leaderboardVersion,
         leaderboardPlatform: platform,
         nameFilter,
         returnRawData,
