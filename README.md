@@ -4,12 +4,12 @@ This API is currently just a wrapper around the official THE FINALS leaderboard 
 
 ### Usage
 
-There is a single endpoint, `/v1/leaderboard/leaderboardVersion/platform?`, which returns a JSON object.
+There is a single endpoint, `/v1/leaderboard/:leaderboardVersion?/:platform?`, which returns a JSON object.
 
 #### Parameters
 
-- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, or `live`. Always required
-- `platform`: The platform. Only required for versions `ob`, and `live`. Needs to be one of `crossplay`, `steam`, `xbox`, or `psn`
+- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, `s1`, `s2` or `live`. Always required. `Live` is the currently active season.
+- `platform`: The platform. Only required for versions `ob`, `s1`, `s2`, and `live`. Needs to be one of `crossplay`, `steam`, `xbox`, or `psn`
 
 #### Query Parameters
 
@@ -27,6 +27,10 @@ There is a single endpoint, `/v1/leaderboard/leaderboardVersion/platform?`, whic
 
 `https://api.the-finals-leaderboard.com/v1/leaderboard/ob/steam?count=true&name=ttv`
 
-#### Get the raw data from the Live crossplay leaderboard
+#### Get the raw data from the Season 1 crossplay leaderboard
 
-`https://api.the-finals-leaderboard.com/v1/leaderboard/live/crossplay?raw=true`
+`https://api.the-finals-leaderboard.com/v1/leaderboard/s1/crossplay?raw=true`
+
+#### Get the raw data from the Season 2 crossplay leaderboard
+
+`https://api.the-finals-leaderboard.com/v1/leaderboard/s2/crossplay?raw=true`

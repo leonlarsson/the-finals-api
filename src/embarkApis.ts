@@ -20,9 +20,15 @@ export const apiRoutes: APIRoute[] = [
       `https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}.json`,
   },
   {
-    version: ["live"],
+    version: ["s1", "season1"],
     availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
     url: (platform: APIPlatform) =>
       `https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}-discovery-live.json`,
+  },
+  {
+    version: ["s2", "season2", "live"],
+    availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
+    url: (platform: APIPlatform) =>
+      `https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json`,
   },
 ] satisfies APIRoute[];
