@@ -1,8 +1,19 @@
-export type APIVersion = "cb1" | "cb2" | "ob" | "live";
+export type APIVersion =
+  | "cb1"
+  | "closedbeta1"
+  | "cb2"
+  | "closedbeta2"
+  | "ob"
+  | "openbeta"
+  | "s1"
+  | "season1"
+  | "s2"
+  | "season2"
+  | "live";
 export type APIPlatform = "crossplay" | "steam" | "xbox" | "psn";
 export type APIRoute = {
-  version: string[];
-  availablePlatforms: string[];
+  version: APIVersion[];
+  availablePlatforms: APIPlatform[];
   url: (platform: APIPlatform) => string;
 };
 

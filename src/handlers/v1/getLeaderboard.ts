@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import { apiRoutes } from "../../embarkApis";
 import { transformApiData } from "../../utils";
-import { APIPlatform, RawUser } from "../../types";
+import { APIPlatform, APIVersion, RawUser } from "../../types";
 
 export default async (c: Context) => {
   const { leaderboardVersion, platform } = c.req.param();
@@ -22,7 +22,7 @@ export default async (c: Context) => {
 
   // Get the API route that matches the version
   const apiRoute = apiRoutes.find(route =>
-    route.version.includes(leaderboardVersion)
+    route.version.includes(leaderboardVersion as APIVersion)
   );
 
   // If no API route matches the version, return an error
@@ -37,7 +37,9 @@ export default async (c: Context) => {
     );
 
   const routeRequiresPlatform = apiRoute.availablePlatforms.length > 0;
-  const validPlatformProvided = apiRoute.availablePlatforms.includes(platform);
+  const validPlatformProvided = apiRoute.availablePlatforms.includes(
+    platform as APIPlatform
+  );
 
   // If the API route requires a platform and no platform is provided, return an error
   if (routeRequiresPlatform && !validPlatformProvided)
