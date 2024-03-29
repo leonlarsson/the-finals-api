@@ -1,22 +1,5 @@
-import { RawUser, User } from "./types";
-
-export const transformApiData = (data: RawUser[]): User[] =>
-  data.map(user => ({
-    rank: user.r,
-    change: user.or - user.r,
-    leagueNumber: user.ri,
-    league: user.ri ? numberToLeague(user.ri) : undefined,
-    name: user.name,
-    steamName: user.steam,
-    xboxName: user.xbox,
-    psnName: user.psn,
-    xp: user.x,
-    level: user.mx,
-    cashouts: user.c,
-    fame: user.f,
-  }));
-
-const numberToLeague = (leagueNumber: number) => {
+// Returns the league name for a given ri value from Embark's API
+export default (leagueNumber: number) => {
   // Borrowed from https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-live.js/main.js?v2
   const leagueMap: Record<number, string> = {
     0: "Unranked",
@@ -42,5 +25,5 @@ const numberToLeague = (leagueNumber: number) => {
     20: "Diamond 1",
   };
 
-  return leagueMap[leagueNumber];
+  return leagueMap[leagueNumber] ?? "Unknown";
 };

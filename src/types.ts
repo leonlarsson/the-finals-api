@@ -1,4 +1,5 @@
-export type APIVersion =
+export type LeaderboardVersion = "cb1" | "cb2" | "ob" | "s1" | "s2";
+export type APIVersionParam =
   | "cb1"
   | "closedbeta1"
   | "cb2"
@@ -10,11 +11,14 @@ export type APIVersion =
   | "s2"
   | "season2"
   | "live";
-export type APIPlatform = "crossplay" | "steam" | "xbox" | "psn";
+export type APIPlatformParam = "crossplay" | "steam" | "xbox" | "psn";
 export type APIRoute = {
-  version: APIVersion[];
-  availablePlatforms: APIPlatform[];
-  url: (platform: APIPlatform) => string;
+  leaderboardVersion: LeaderboardVersion;
+  params: {
+    versions: APIVersionParam[];
+    platforms: APIPlatformParam[];
+  };
+  url: (platform: APIPlatformParam) => string;
 };
 
 export type RawUser = {
@@ -47,7 +51,7 @@ export type RawUser = {
 export type User = {
   rank: number;
   leagueNumber?: number;
-  league?: string;
+  league: string;
   change: number;
   name: string;
   steamName?: string;
@@ -57,4 +61,9 @@ export type User = {
   level?: number;
   cashouts: number;
   fame: number;
+};
+
+export type FameLeague = {
+  fame: number;
+  name: string;
 };
