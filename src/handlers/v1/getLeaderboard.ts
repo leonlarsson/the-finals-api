@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { apiRoutes } from "../../embarkApis";
+import { apiRoutes } from "../../apis";
 import { transformApiData } from "../../utils";
 import { APIPlatform, APIVersion, RawUser } from "../../types";
 
