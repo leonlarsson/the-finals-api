@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { cache } from "hono/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
+import proxyUrl from "./handlers/proxy/proxyUrl";
 
 const app = new Hono();
 
@@ -18,5 +19,6 @@ app.get(
 );
 
 app.get("/v1/leaderboard/:leaderboardVersion?/:platform?", getLeaderboard);
+app.get("/proxy", proxyUrl);
 
 export default app;
