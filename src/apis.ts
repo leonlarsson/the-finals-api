@@ -7,9 +7,13 @@ export const apiRoutes: APIRoute[] = [
       versions: ["cb1", "closedbeta1"],
       platforms: [],
     },
-    // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard-beta-1.json
-    url: () =>
-      "https://cdn.the-finals-leaderboard.com/data/closedbeta1/data.json",
+    fetchData: async () => {
+      // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard-beta-1.json
+      const url =
+        "https://cdn.the-finals-leaderboard.com/data/closedbeta1/data.json";
+      const response = await fetch(url);
+      return response.json();
+    },
   },
   {
     leaderboardVersion: "cb2",
@@ -17,9 +21,13 @@ export const apiRoutes: APIRoute[] = [
       versions: ["cb2", "closedbeta2"],
       platforms: [],
     },
-    // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard.json
-    url: () =>
-      "https://cdn.the-finals-leaderboard.com/data/closedbeta2/data.json",
+    fetchData: async () => {
+      // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard.json
+      const url =
+        "https://cdn.the-finals-leaderboard.com/data/closedbeta2/data.json";
+      const response = await fetch(url);
+      return response.json();
+    },
   },
   {
     leaderboardVersion: "ob",
@@ -27,9 +35,12 @@ export const apiRoutes: APIRoute[] = [
       versions: ["ob", "openbeta"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
-    // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}.json
-    url: (platform: APIPlatformParam) =>
-      `https://cdn.the-finals-leaderboard.com/data/openbeta/${platform}.json`,
+    fetchData: async (platform: APIPlatformParam) => {
+      // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}.json
+      const url = `https://cdn.the-finals-leaderboard.com/data/openbeta/${platform}.json`;
+      const response = await fetch(url);
+      return response.json();
+    },
   },
   {
     leaderboardVersion: "s1",
@@ -37,9 +48,12 @@ export const apiRoutes: APIRoute[] = [
       versions: ["s1", "season1"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
-    // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}-discovery-live.json
-    url: (platform: APIPlatformParam) =>
-      `https://cdn.the-finals-leaderboard.com/data/season1/${platform}.json`,
+    fetchData: async (platform: APIPlatformParam) => {
+      // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}-discovery-live.json
+      const url = `https://cdn.the-finals-leaderboard.com/data/season1/${platform}.json`;
+      const response = await fetch(url);
+      return response.json();
+    },
   },
   {
     leaderboardVersion: "s2",
@@ -47,7 +61,10 @@ export const apiRoutes: APIRoute[] = [
       versions: ["s2", "season2", "live"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
-    url: (platform: APIPlatformParam) =>
-      `https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json`,
+    fetchData: async (platform: APIPlatformParam) => {
+      const url = `https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json`;
+      const response = await fetch(url);
+      return response.json();
+    },
   },
 ] satisfies APIRoute[];

@@ -18,7 +18,7 @@ export type APIRoute = {
     versions: APIVersionParam[];
     platforms: APIPlatformParam[];
   };
-  url: (platform: APIPlatformParam) => string;
+  fetchData: (platform: APIPlatformParam) => Promise<RawUser[]>;
 };
 
 export type RawUser = {

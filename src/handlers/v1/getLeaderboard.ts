@@ -63,11 +63,8 @@ export default async (c: Context) => {
       404
     );
 
-  const apiUrl = apiRoute.url(platform as APIPlatformParam);
-
   try {
-    const res = await fetch(apiUrl);
-    const data = (await res.json()) as RawUser[];
+    const data = await apiRoute.fetchData(platform as APIPlatformParam);
 
     // Filter data by name query
     const filteredData = data.filter(user =>
@@ -95,7 +92,7 @@ export default async (c: Context) => {
   } catch (error) {
     return c.json(
       {
-        error: `An error occurred while fetching the leaderboard: ${apiUrl}`,
+        error: `An error occurred while fetching the leaderboard: ${apiRoute.leaderboardVersion}`,
       },
       500
     );
