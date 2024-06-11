@@ -65,6 +65,9 @@ export default async (c: Context) => {
 
   try {
     const data = await apiRoute.fetchData(platform as APIPlatformParam);
+    if (data === null) {
+      return c.json({ error: "No valid data returned :(" }, 500);
+    }
 
     // Filter data by name query
     const filteredData = data.filter(user =>

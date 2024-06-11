@@ -1,6 +1,4 @@
-import { Context } from "hono";
-
-export default async (c: Context) => {
+export default async () => {
   const res = await fetch(
     "https://id.embark.games/leaderboards/community-event-2-10"
   );
@@ -10,16 +8,16 @@ export default async (c: Context) => {
   )?.[1];
 
   if (!stringData) {
-    return c.json({ error: "No data found" }, 500);
+    return null;
   }
 
   try {
     const jsonData = JSON.parse(stringData);
-    return c.json({
+    return {
       entries: jsonData.props.pageProps.entries,
       progress: jsonData.props.pageProps.progress,
-    });
+    };
   } catch (error) {
-    return c.json({ error: "Error parsing JSON" }, 500);
+    return null;
   }
 };

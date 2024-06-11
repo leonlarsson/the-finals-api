@@ -1,4 +1,4 @@
-export type LeaderboardVersion = "cb1" | "cb2" | "ob" | "s1" | "s2";
+export type LeaderboardVersion = "cb1" | "cb2" | "ob" | "s1" | "s2" | "s3";
 export type APIVersionParam =
   | "cb1"
   | "closedbeta1"
@@ -10,6 +10,8 @@ export type APIVersionParam =
   | "season1"
   | "s2"
   | "season2"
+  | "s3"
+  | "season3"
   | "live";
 export type APIPlatformParam = "crossplay" | "steam" | "xbox" | "psn";
 export type APIRoute = {
@@ -18,7 +20,7 @@ export type APIRoute = {
     versions: APIVersionParam[];
     platforms: APIPlatformParam[];
   };
-  fetchData: (platform: APIPlatformParam) => Promise<RawUser[]>;
+  fetchData: (platform: APIPlatformParam) => Promise<RawUser[] | null>;
 };
 
 export type RawUser = {

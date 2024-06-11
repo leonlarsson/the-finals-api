@@ -3,7 +3,7 @@ import { cors } from "hono/cors";
 import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import proxyUrl from "./handlers/proxy/proxyUrl";
-import get210Event from "./handlers/get210Event";
+import get210Event from "./handlers/misc/get210Event";
 
 const app = new Hono();
 

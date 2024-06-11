@@ -1,4 +1,5 @@
 import { APIPlatformParam, APIRoute } from "./types";
+import fetchS3data from "./utils/fetchers/fetchS3data";
 
 export const apiRoutes: APIRoute[] = [
   {
@@ -58,13 +59,25 @@ export const apiRoutes: APIRoute[] = [
   {
     leaderboardVersion: "s2",
     params: {
-      versions: ["s2", "season2", "live"],
+      versions: ["s2", "season2"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
     fetchData: async (platform: APIPlatformParam) => {
+      // TODO: Store S2 data in R2 once the season is over
       const url = `https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json`;
       const response = await fetch(url);
       return response.json();
     },
   },
+  // {
+  //   leaderboardVersion: "s3",
+  //   params: {
+  //     versions: ["s3", "season3", "live"],
+  //     platforms: ["crossplay", "steam", "xbox", "psn"],
+  //   },
+  //   fetchData: async (platform: APIPlatformParam) => {
+  //     const data = await fetchS3data();
+  //     return data;
+  //   },
+  // },
 ] satisfies APIRoute[];
