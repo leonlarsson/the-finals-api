@@ -3,12 +3,11 @@ import { apiRoutes } from "../../apis/leaderboard";
 import {
   LeaderboardAPIPlatformParam,
   LeaderboardAPIVersionParam,
+  User,
 } from "../../types";
-import transformApiData from "../../utils/transformApiData";
 
 export default async (c: Context) => {
   const { leaderboardVersion, platform } = c.req.param();
-  const returnRawData = ["true", "1"].includes(c.req.query("raw") ?? "");
   const returnCountOnly = ["true", "1"].includes(c.req.query("count") ?? "");
   const nameFilter = c.req.query("name");
 
@@ -69,44 +68,43 @@ export default async (c: Context) => {
     );
 
   try {
-    const data = await apiRoute.fetchData(
+    const fetchedData = await apiRoute.fetchData(
       platform as LeaderboardAPIPlatformParam
     );
-    if (data === null) {
-      return c.json({ error: "No valid data returned :(" }, 500);
+
+    // Validate and parse data with Zod schema
+    const parseResult = apiRoute.zodSchema.safeParse(fetchedData);
+    if (!parseResult.success) {
+      throw new Error(parseResult.error.toString());
     }
 
     // Filter data by name query
-    const filteredData = data.filter(user =>
-      [
-        user.name,
-        "steam" in user ? user.steam : undefined,
-        "xbox" in user ? user.xbox : undefined,
-        "psn" in user ? user.psn : undefined,
-      ].some(platformName =>
-        platformName?.toLowerCase().includes(nameFilter?.toLowerCase() ?? "")
+    const filteredData = parseResult.data.filter((user: User) =>
+      [user.name, user.steamName, user.xboxName, user.psnName].some(
+        platformName =>
+          platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? "")
       )
     );
-
-    const dataToReturn = returnRawData
-      ? filteredData
-      : transformApiData(apiRoute.leaderboardVersion, filteredData);
 
     // Return data
     return c.json({
       meta: {
-        developerMessage:
-          "If you are using 'live' as the version, please know that it will always mean Season 2. Specify a version directly instead of using 'live' to avoid confusion.",
-        leaderboardVersion: leaderboardVersion,
+        ...(leaderboardVersion === "live"
+          ? {
+              developerMessage:
+                "Please know that using 'live' as the version will always point to Season 2. Specify a version directly instead of using 'live' to avoid confusion.",
+            }
+          : {}),
+        leaderboardVersion: apiRoute.leaderboardVersion,
         leaderboardPlatform: platform,
         nameFilter,
-        returnRawData,
         returnCountOnly,
       },
       count: filteredData.length,
-      data: returnCountOnly ? [] : dataToReturn,
+      data: returnCountOnly ? [] : filteredData,
     });
   } catch (error) {
+    console.log("Error in getLeaderboard:", error);
     return c.json(
       {
         error: `An error occurred while fetching the leaderboard: ${apiRoute.leaderboardVersion}`,

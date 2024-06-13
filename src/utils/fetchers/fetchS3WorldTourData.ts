@@ -1,3 +1,5 @@
+import { season3WorldTourSchema } from "../../transformers/season3WorldTour";
+
 export default async () => {
   const res = await fetch("https://id.embark.games/leaderboards/world-tour");
   const text = await res.text();
@@ -11,8 +13,18 @@ export default async () => {
 
   try {
     const jsonData = JSON.parse(stringData);
-    return jsonData.props.pageProps.entries;
+
+    // Validate and parse data with Zod schema
+    const parsedResult = season3WorldTourSchema.safeParse(
+      jsonData.props.pageProps.entries
+    );
+
+    if (!parsedResult.success) {
+      throw new Error(parsedResult.error.toString());
+    }
+    return parsedResult.data;
   } catch (error) {
+    console.log("Error in fetchS3WorldTourData:", error);
     return null;
   }
 };

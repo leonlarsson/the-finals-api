@@ -1,3 +1,9 @@
+import { closedBeta1Schema } from "../transformers/closedBeta1";
+import { closedBeta2Schema } from "../transformers/closedBeta2";
+import { openBetaSchema } from "../transformers/openBeta";
+import { season1Schema } from "../transformers/season1";
+import { season2Schema } from "../transformers/season2";
+import { season3Schema } from "../transformers/season3";
 import { LeaderboardAPIPlatformParam, LeaderboardAPIRoute } from "../types";
 import fetchS3data from "../utils/fetchers/fetchS3data";
 
@@ -10,10 +16,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     },
     fetchData: async () => {
       // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard-beta-1.json
-      // https://cdn.the-finals-leaderboard.com/data/closedbeta1/data.json
       const data = await import("../data/closedbeta1/data.json");
       return data.default;
     },
+    zodSchema: closedBeta1Schema,
   },
   {
     leaderboardVersion: "cb2",
@@ -23,10 +29,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     },
     fetchData: async () => {
       // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard.json
-      // https://cdn.the-finals-leaderboard.com/data/closedbeta2/data.json
       const data = await import("../data/closedbeta2/data.json");
       return data.default;
     },
+    zodSchema: closedBeta2Schema,
   },
   {
     leaderboardVersion: "ob",
@@ -36,7 +42,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     },
     fetchData: async (platform: LeaderboardAPIPlatformParam) => {
       // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}.json
-      // https://cdn.the-finals-leaderboard.com/data/openbeta/${platform}.json
       const imports = {
         crossplay: () => import("../data/openbeta/crossplay.json"),
         steam: () => import("../data/openbeta/steam.json"),
@@ -47,6 +52,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       const data = await imports[platform]();
       return data.default;
     },
+    zodSchema: openBetaSchema,
   },
   {
     leaderboardVersion: "s1",
@@ -56,7 +62,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     },
     fetchData: async (platform: LeaderboardAPIPlatformParam) => {
       // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}-discovery-live.json
-      // https://cdn.the-finals-leaderboard.com/data/season1/${platform}.json
       const imports = {
         crossplay: () => import("../data/season1/crossplay.json"),
         steam: () => import("../data/season1/steam.json"),
@@ -67,6 +72,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       const data = await imports[platform]();
       return data.default;
     },
+    zodSchema: season1Schema,
   },
   {
     leaderboardVersion: "s2",
@@ -87,6 +93,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       const data = await imports[platform]();
       return data.default;
     },
+    zodSchema: season2Schema,
   },
   {
     leaderboardVersion: "s3",
@@ -98,5 +105,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       const data = await fetchS3data();
       return data;
     },
+    zodSchema: season3Schema,
   },
 ] satisfies LeaderboardAPIRoute[];
