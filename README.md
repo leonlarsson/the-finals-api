@@ -8,8 +8,8 @@ There is a single endpoint, `/v1/leaderboard/:leaderboardVersion?/:platform?`, w
 
 #### Parameters
 
-- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, `s1`, `s2` or `live`. Always required. `Live` is the currently active season.
-- `platform`: The platform. Only required for versions `ob`, `s1`, `s2`, and `live`. Needs to be one of `crossplay`, `steam`, `xbox`, or `psn`
+- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, `s1`, `s2`, or `s3`. Always required.
+- `platform`: The platform. Only required for versions `ob`, `s1`, and `s2`. Needs to be one of `crossplay`, `steam`, `xbox`, or `psn`
 
 #### Query Parameters
 
@@ -34,3 +34,7 @@ There is a single endpoint, `/v1/leaderboard/:leaderboardVersion?/:platform?`, w
 #### Get the raw data from the Season 2 crossplay leaderboard
 
 `https://api.the-finals-leaderboard.com/v1/leaderboard/s2/crossplay?raw=true`
+
+#### Get the data from the Season 3 leaderboard
+
+`https://api.the-finals-leaderboard.com/v1/leaderboard/s3/crossplay`

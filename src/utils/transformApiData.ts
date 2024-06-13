@@ -25,4 +25,10 @@ export default (
     level: "mx" in user ? user.mx : undefined,
     cashouts: "c" in user ? user.c : undefined,
     fame: "f" in user ? user.f : undefined,
+    rankScore:
+      leaderboardVersion === "s3"
+        ? "p" in user
+          ? user.p
+          : undefined
+        : undefined,
   }));

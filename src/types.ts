@@ -1,5 +1,12 @@
-export type LeaderboardVersion = "cb1" | "cb2" | "ob" | "s1" | "s2" | "s3";
-export type APIVersionParam =
+export type LeaderboardVersion =
+  | "cb1"
+  | "cb2"
+  | "ob"
+  | "s1"
+  | "s2"
+  | "s3"
+  | "s3worldtour";
+export type LeaderboardAPIVersionParam =
   | "cb1"
   | "closedbeta1"
   | "cb2"
@@ -12,15 +19,27 @@ export type APIVersionParam =
   | "season2"
   | "s3"
   | "season3"
+  | "s3worldtour"
   | "live";
-export type APIPlatformParam = "crossplay" | "steam" | "xbox" | "psn";
-export type APIRoute = {
+export type LeaderboardAPIPlatformParam =
+  | "crossplay"
+  | "steam"
+  | "xbox"
+  | "psn";
+export type LeaderboardAPIRoute = {
   leaderboardVersion: LeaderboardVersion;
   params: {
-    versions: APIVersionParam[];
-    platforms: APIPlatformParam[];
+    versions: LeaderboardAPIVersionParam[];
+    platforms: LeaderboardAPIPlatformParam[];
   };
-  fetchData: (platform: APIPlatformParam) => Promise<RawUser[] | null>;
+  fetchData: (
+    platform: LeaderboardAPIPlatformParam
+  ) => Promise<RawUser[] | null>;
+};
+
+export type FameLeague = {
+  fame: number;
+  name: string;
 };
 
 export type User = {
@@ -43,7 +62,8 @@ export type RawUser =
   | ClosedBeta2RawUser
   | OpenBetaRawUser
   | Season1RawUser
-  | Season2RawUser;
+  | Season2RawUser
+  | Season3RawUser;
 
 export type ClosedBeta1RawUser = {
   /** Rank */
@@ -142,6 +162,44 @@ export type Season2RawUser = {
   op: number;
   /** Cashouts but empty */
   c: number;
+  /** Steam name */
+  steam: string;
+  /** Xbox name */
+  xbox: string;
+  /** PSN name */
+  psn: string;
+};
+
+export type Season3RawUser = {
+  /** Rank */
+  r: number;
+  /** Name */
+  name: string;
+  /** Rank Index */
+  ri: number;
+  /** Rank Score */
+  p: number;
+  /** Old rank index? */
+  ori: number;
+  /** Old rank */
+  or: number;
+  /** Old Rank Score */
+  op: number;
+  /** Steam name */
+  steam: string;
+  /** Xbox name */
+  xbox: string;
+  /** PSN name */
+  psn: string;
+};
+
+export type Season3WorldTourRawUser = {
+  /** Rank */
+  r: number;
+  /** Name */
+  name: string;
+  /** Cashouts */
+  p: number;
   /** Steam name */
   steam: string;
   /** Xbox name */

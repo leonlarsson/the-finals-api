@@ -1,6 +1,9 @@
 import { Context } from "hono";
-import { apiRoutes } from "../../apis";
-import { APIPlatformParam, APIVersionParam, RawUser } from "../../types";
+import { apiRoutes } from "../../apis/leaderboard";
+import {
+  LeaderboardAPIPlatformParam,
+  LeaderboardAPIVersionParam,
+} from "../../types";
 import transformApiData from "../../utils/transformApiData";
 
 export default async (c: Context) => {
@@ -22,7 +25,9 @@ export default async (c: Context) => {
 
   // Get the API route that matches the version
   const apiRoute = apiRoutes.find(route =>
-    route.params.versions.includes(leaderboardVersion as APIVersionParam)
+    route.params.versions.includes(
+      leaderboardVersion as LeaderboardAPIVersionParam
+    )
   );
 
   // If no API route matches the version, return an error
@@ -38,7 +43,7 @@ export default async (c: Context) => {
 
   const routeRequiresPlatform = apiRoute.params.platforms.length > 0;
   const validPlatformProvided = apiRoute.params.platforms.includes(
-    platform as APIPlatformParam
+    platform as LeaderboardAPIPlatformParam
   );
 
   // If the API route requires a platform and no platform is provided, return an error
@@ -64,7 +69,9 @@ export default async (c: Context) => {
     );
 
   try {
-    const data = await apiRoute.fetchData(platform as APIPlatformParam);
+    const data = await apiRoute.fetchData(
+      platform as LeaderboardAPIPlatformParam
+    );
     if (data === null) {
       return c.json({ error: "No valid data returned :(" }, 500);
     }
@@ -88,6 +95,8 @@ export default async (c: Context) => {
     // Return data
     return c.json({
       meta: {
+        developerMessage:
+          "If you are using 'live' as the version, please know that it will always mean Season 2. Specify a version directly instead of using 'live' to avoid confusion.",
         leaderboardVersion: leaderboardVersion,
         leaderboardPlatform: platform,
         nameFilter,
