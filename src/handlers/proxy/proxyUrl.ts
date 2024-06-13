@@ -7,5 +7,5 @@ export default async (c: Context) => {
   const response = await fetch(url);
   const data = await response.json();
 
-  return c.json(data);
+  return c.json(data as any);
 };
