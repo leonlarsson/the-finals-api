@@ -74,10 +74,16 @@ export const apiRoutes: APIRoute[] = [
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
     fetchData: async (platform: APIPlatformParam) => {
-      // TODO: Store S2 data in R2 once the season is over
-      const url = `https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json`;
-      const response = await fetch(url);
-      return response.json();
+      // https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json
+      const imports = {
+        crossplay: () => import("./data/season2/crossplay.json"),
+        steam: () => import("./data/season2/steam.json"),
+        xbox: () => import("./data/season2/xbox.json"),
+        psn: () => import("./data/season2/psn.json"),
+      };
+
+      const data = await imports[platform]();
+      return data.default;
     },
   },
   // {

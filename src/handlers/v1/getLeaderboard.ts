@@ -71,7 +71,12 @@ export default async (c: Context) => {
 
     // Filter data by name query
     const filteredData = data.filter(user =>
-      [user.name, user.steam, user.xbox, user.psn].some(platformName =>
+      [
+        user.name,
+        "steam" in user ? user.steam : undefined,
+        "xbox" in user ? user.xbox : undefined,
+        "psn" in user ? user.psn : undefined,
+      ].some(platformName =>
         platformName?.toLowerCase().includes(nameFilter?.toLowerCase() ?? "")
       )
     );

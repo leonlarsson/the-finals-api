@@ -10,18 +10,19 @@ export default (
   data.map(user => ({
     rank: user.r,
     change: user.or - user.r,
-    leagueNumber: user.ri,
-    // If the user has a league number, use that to determine the league
-    // Otherwise, use the fame to determine the league
-    league: user.ri
-      ? leagueNumberToName(user.ri)
-      : fameToLeague(leaderboardVersion, user.f),
+    leagueNumber: "ri" in user ? user.ri : undefined,
+    league:
+      "ri" in user
+        ? leagueNumberToName(user.ri)
+        : "f" in user
+        ? fameToLeague(leaderboardVersion, user.f)
+        : "N/A",
     name: user.name,
-    steamName: user.steam,
-    xboxName: user.xbox,
-    psnName: user.psn,
-    xp: user.x,
-    level: user.mx,
-    cashouts: user.c,
-    fame: user.f,
+    steamName: "steam" in user ? user.steam : "",
+    xboxName: "xbox" in user ? user.xbox : "",
+    psnName: "psn" in user ? user.psn : "",
+    xp: "x" in user ? user.x : undefined,
+    level: "mx" in user ? user.mx : undefined,
+    cashouts: "c" in user ? user.c : undefined,
+    fame: "f" in user ? user.f : undefined,
   }));
