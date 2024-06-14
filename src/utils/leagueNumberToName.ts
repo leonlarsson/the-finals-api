@@ -23,6 +23,7 @@ export default (leagueNumber: number) => {
     18: "Diamond 3",
     19: "Diamond 2",
     20: "Diamond 1",
+    21: "Ruby",
   };
 
   return leagueMap[leagueNumber] ?? "Unknown";
