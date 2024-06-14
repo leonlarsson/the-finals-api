@@ -3,8 +3,6 @@ import { cors } from "hono/cors";
 import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import proxyUrl from "./handlers/proxy/proxyUrl";
-import get210Event from "./handlers/misc/get210Event";
-import getS3WorldTour from "./handlers/misc/getS3WorldTour";
 
 const app = new Hono();
 
@@ -17,9 +15,6 @@ app.get(
   cache("v1-leaderboard", 10),
   getLeaderboard
 );
-
-app.get("/s3worldtour", cache("s3worldtour", 10), getS3WorldTour);
-app.get("/210event", cache("210event", 30), get210Event);
 
 app.get("/proxy", proxyUrl);
 

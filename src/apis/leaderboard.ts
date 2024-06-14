@@ -4,7 +4,9 @@ import { openBetaSchema } from "../transformers/openBeta";
 import { season1Schema } from "../transformers/season1";
 import { season2Schema } from "../transformers/season2";
 import { season3Schema } from "../transformers/season3";
+import { season3WorldTourSchema } from "../transformers/season3WorldTour";
 import { LeaderboardAPIPlatformParam, LeaderboardAPIRoute } from "../types";
+import fetchS3WorldTourData from "../utils/fetchers/fetchS3WorldTourData";
 import fetchS3data from "../utils/fetchers/fetchS3data";
 
 export const apiRoutes: LeaderboardAPIRoute[] = [
@@ -106,5 +108,17 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return data;
     },
     zodSchema: season3Schema,
+  },
+  {
+    leaderboardVersion: "s3worldtour",
+    params: {
+      versions: ["s3worldtour", "season3worldtour"],
+      platforms: ["crossplay"],
+    },
+    fetchData: async () => {
+      const data = await fetchS3WorldTourData();
+      return data;
+    },
+    zodSchema: season3WorldTourSchema,
   },
 ] satisfies LeaderboardAPIRoute[];
