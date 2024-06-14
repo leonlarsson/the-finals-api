@@ -35,6 +35,7 @@ export default async (c: Context) => {
       {
         error: `Leaderboard version '${leaderboardVersion}' is not a valid version. Valid versions: ${apiRoutes
           .flatMap(x => x.params.versions)
+          .filter(x => x !== "live")
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       },
       404
