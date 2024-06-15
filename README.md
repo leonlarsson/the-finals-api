@@ -4,12 +4,31 @@ This API is currently just a wrapper around the official THE FINALS leaderboard 
 
 ### Usage
 
-There is a single endpoint, `/v1/leaderboard/:leaderboardVersion?/:platform?`, which returns a JSON object.
+There is a single endpoint, `/v1/leaderboard/:leaderboardVersion/:platform?`, which returns a JSON object. The standard is the following:
+
+```json
+{
+    "meta": {
+        "leaderboardVersion": "s3",
+        "leaderboardPlatform": "crossplay",
+        "...chosen parameters"
+    },
+    "count": "amount of entries in 'data'",
+    "data": [
+        {
+            "rank": 1,
+            "...rest of player data"
+        }
+    ]
+}
+```
+
+To know which properties each leaderboard returns, just try it and see. The data returned is also explicitly defined in the folder [/src/transformers](https://github.com/leonlarsson/the-finals-api/tree/main/src/transformers).
 
 #### Parameters
 
-- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, `s1`, `s2`, or `s3`. Always required. Note: There is also a `live` parameter, but this was a bad idea, so the `live` parameter will continue pointing at Season 2.
-- `platform`: The platform. Only required for versions `ob`, `s1`, `s2`, and `s3` Needs to be one of `crossplay`, `steam`, `xbox`, or `psn`. However, `s3` only supports `crossplay`.
+- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, `s1`, `s2`, `s3`, or `s3worldtour`. Always required. Note: There is also a `live` parameter, but this was a bad idea, so the `live` parameter will continue pointing at Season 2.
+- `platform`: The platform. Only required for versions `ob`, `s1`, `s2`, and `s3` Needs to be one of `crossplay`, `steam`, `xbox`, or `psn`. However, `s3` and `s3worldtour` only support `crossplay`.
 
 #### Query Parameters
 
