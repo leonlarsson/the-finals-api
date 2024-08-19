@@ -1,9 +1,7 @@
 import { Context } from "hono";
 
 export default async (c: Context) => {
-  const res = await fetch(
-    "https://id.embark.games/leaderboards/community-event-3-5"
-  );
+  const res = await fetch("https://id.embark.games/leaderboards/the-finals");
   const text = await res.text();
   const stringData = text.match(
     /<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/
