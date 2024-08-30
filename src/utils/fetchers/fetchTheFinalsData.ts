@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { theFinalsSchema } from "../../transformers/theFinals";
 
 export default async (c: Context) => {
-  const res = await fetch("https://id.embark.games/leaderboards/the-finals");
+  const res = await fetch("https://id.embark.games/leaderboards/wttf");
   const text = await res.text();
   const stringData = text.match(
     /<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/
