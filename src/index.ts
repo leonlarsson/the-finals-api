@@ -4,6 +4,7 @@ import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import proxyUrl from "./handlers/proxy/proxyUrl";
 import fetchTheFinalsData from "./utils/fetchers/fetchTheFinalsData";
+import fetchCe311 from "./utils/fetchers/fetchCe311";
 
 const app = new Hono();
 
@@ -18,6 +19,7 @@ app.get(
 );
 
 app.get("/the-finals", cache("the-finals", 10), fetchTheFinalsData);
+app.get("/ce311", cache("ce311", 10), fetchCe311);
 
 app.get("/proxy", proxyUrl);
 
