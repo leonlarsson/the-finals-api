@@ -3,7 +3,7 @@ import leagueNumberToName from "../utils/leagueNumberToName";
 
 export const season3Schema = z
   .object({
-    // 2024-08-30: Embark either messed up or dislike community tools
+    // 2024-08-30: Embark either messed up or dislike community tools. All keys are now numbers instead of somewhat descriptive strings. Empty platform names are now 0 instead of empty strings.
     // r: z.number(),
     // name: z.string(),
     // ri: z.number(),
