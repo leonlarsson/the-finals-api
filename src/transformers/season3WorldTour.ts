@@ -27,8 +27,8 @@ export const season3WorldTourSchema = z
     rank: data[1],
     name: data[3],
     steamName: data[6] === 0 ? "" : data[6],
-    xboxName: data[7] === 0 ? "" : data[7],
-    psnName: data[8] === 0 ? "" : data[8],
+    psnName: data[7] === 0 ? "" : data[7],
+    xboxName: data[8] === 0 ? "" : data[8],
     cashouts: data[5],
   }))
   .array();
