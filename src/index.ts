@@ -2,8 +2,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
-import getTheFinals from "./handlers/getTheFinals";
 import proxyUrl from "./handlers/proxy/proxyUrl";
+import fetchTheFinalsData from "./utils/fetchers/fetchTheFinalsData";
 
 const app = new Hono();
 
@@ -17,7 +17,7 @@ app.get(
   getLeaderboard
 );
 
-app.get("/the-finals", cache("the-finals", 10), getTheFinals);
+app.get("/the-finals", cache("the-finals", 10), fetchTheFinalsData);
 
 app.get("/proxy", proxyUrl);
 

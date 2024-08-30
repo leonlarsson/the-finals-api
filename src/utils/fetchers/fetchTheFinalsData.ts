@@ -1,4 +1,5 @@
 import { Context } from "hono";
+import { theFinalsSchema } from "../../transformers/theFinals";
 
 export default async (c: Context) => {
   const res = await fetch("https://id.embark.games/leaderboards/the-finals");
@@ -13,10 +14,8 @@ export default async (c: Context) => {
 
   try {
     const jsonData = JSON.parse(stringData);
-    return c.json({
-      entries: jsonData.props.pageProps.entries,
-      progress: jsonData.props.pageProps.progress,
-    });
+    const parsedData = theFinalsSchema.parse(jsonData.props.pageProps.entries);
+    return c.json(parsedData);
   } catch (error) {
     return c.json({ error: "Error parsing JSON" }, 500);
   }
