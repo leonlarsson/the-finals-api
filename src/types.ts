@@ -6,6 +6,10 @@ import { Season1User } from "./transformers/season1";
 import { Season2User } from "./transformers/season2";
 import { Season3User } from "./transformers/season3";
 
+export type Bindings = {
+  KV: KVNamespace;
+};
+
 // The LeaderboardId
 // One per leaderboard API version
 export type LeaderboardVersion =
