@@ -5,7 +5,7 @@ export default async (c: Context<{ Bindings: Bindings }>) => {
   const noticeMessage = await c.env.KV.get("tfl-notice");
 
   if (!noticeMessage) {
-    return c.json({ error: "No notice found" }, 404);
+    return c.json({ type: null, message: null });
   }
 
   const [type, message] = noticeMessage.split("|");

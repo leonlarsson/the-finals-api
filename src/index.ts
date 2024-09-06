@@ -23,7 +23,7 @@ app.get(
 app.get("/the-finals", cache("the-finals", 10), fetchTheFinalsData);
 app.get("/ce311", cache("ce311", 10), fetchCe311);
 
-app.get("/tfl-notice", cache("tfl-notice", 5), tflNotice);
+app.get("/tfl-notice", cache("tfl-notice", 1), tflNotice);
 
 app.get("/proxy", proxyUrl);
 
