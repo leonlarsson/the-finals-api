@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { Bindings } from "./types";
 import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import proxyUrl from "./handlers/proxy/proxyUrl";
@@ -8,7 +7,7 @@ import fetchTheFinalsData from "./utils/fetchers/fetchTheFinalsData";
 import fetchCe311 from "./utils/fetchers/fetchCe311";
 import tflNotice from "./handlers/tflNotice";
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: CloudflareBindings }>();
 
 // Enable CORS for all routes
 app.use("*", cors());
