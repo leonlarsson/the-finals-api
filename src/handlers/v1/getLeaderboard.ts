@@ -6,7 +6,7 @@ import {
   User,
 } from "../../types";
 
-export default async (c: Context) => {
+export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
   const { leaderboardVersion, platform } = c.req.param();
   const returnCountOnly = ["true", "1"].includes(c.req.query("count") ?? "");
   const nameFilter = c.req.query("name");
@@ -69,9 +69,10 @@ export default async (c: Context) => {
     );
 
   try {
-    const fetchedData = await apiRoute.fetchData(
-      platform as LeaderboardAPIPlatformParam
-    );
+    const fetchedData = await apiRoute.fetchData({
+      kv: c.env.KV,
+      platform: platform as LeaderboardAPIPlatformParam,
+    });
 
     // Validate and parse data with Zod schema
     const parseResult = apiRoute.zodSchema.safeParse(fetchedData);

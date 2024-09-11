@@ -46,13 +46,20 @@ export type LeaderboardAPIPlatformParam =
   | "xbox"
   | "psn";
 
+type LeaderboardAPIRouteFetchDataSettings = {
+  kv: KVNamespace;
+  platform: LeaderboardAPIPlatformParam;
+};
+
 export type LeaderboardAPIRoute = {
   leaderboardVersion: LeaderboardVersion;
   params: {
     versions: LeaderboardAPIVersionParam[];
     platforms: LeaderboardAPIPlatformParam[];
   };
-  fetchData: (platform: LeaderboardAPIPlatformParam) => Promise<any[] | null>;
+  fetchData: (
+    fetchSettings: LeaderboardAPIRouteFetchDataSettings
+  ) => Promise<unknown>;
   zodSchema: ZodSchema;
 };
 

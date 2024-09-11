@@ -5,9 +5,10 @@ import { season1Schema } from "../transformers/season1";
 import { season2Schema } from "../transformers/season2";
 import { season3Schema } from "../transformers/season3";
 import { season3WorldTourSchema } from "../transformers/season3WorldTour";
-import { LeaderboardAPIPlatformParam, LeaderboardAPIRoute } from "../types";
+import { LeaderboardAPIRoute } from "../types";
 import fetchS3WorldTourData from "../utils/fetchers/fetchS3WorldTourData";
 import fetchS3data from "../utils/fetchers/fetchS3data";
+import { getJsonFromKV } from "../utils/kv";
 
 export const apiRoutes: LeaderboardAPIRoute[] = [
   {
@@ -16,10 +17,9 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["cb1", "closedbeta1"],
       platforms: [],
     },
-    fetchData: async () => {
+    fetchData: async ({ kv }) => {
       // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard-beta-1.json
-      const data = await import("../data/closedbeta1/data.json");
-      return data.default;
+      return await getJsonFromKV(kv, "data_closedbeta1");
     },
     zodSchema: closedBeta1Schema,
   },
@@ -29,10 +29,9 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["cb2", "closedbeta2"],
       platforms: [],
     },
-    fetchData: async () => {
+    fetchData: async ({ kv }) => {
       // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard.json
-      const data = await import("../data/closedbeta2/data.json");
-      return data.default;
+      return await getJsonFromKV(kv, "data_closedbeta2");
     },
     zodSchema: closedBeta2Schema,
   },
@@ -42,17 +41,9 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["ob", "openbeta"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
-    fetchData: async (platform: LeaderboardAPIPlatformParam) => {
+    fetchData: async ({ kv, platform }) => {
       // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}.json
-      const imports = {
-        crossplay: () => import("../data/openbeta/crossplay.json"),
-        steam: () => import("../data/openbeta/steam.json"),
-        xbox: () => import("../data/openbeta/xbox.json"),
-        psn: () => import("../data/openbeta/psn.json"),
-      };
-
-      const data = await imports[platform]();
-      return data.default;
+      return await getJsonFromKV(kv, `data_openbeta_${platform}`);
     },
     zodSchema: openBetaSchema,
   },
@@ -62,17 +53,9 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s1", "season1"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
-    fetchData: async (platform: LeaderboardAPIPlatformParam) => {
+    fetchData: async ({ kv, platform }) => {
       // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}-discovery-live.json
-      const imports = {
-        crossplay: () => import("../data/season1/crossplay.json"),
-        steam: () => import("../data/season1/steam.json"),
-        xbox: () => import("../data/season1/xbox.json"),
-        psn: () => import("../data/season1/psn.json"),
-      };
-
-      const data = await imports[platform]();
-      return data.default;
+      return await getJsonFromKV(kv, `data_season1_${platform}`);
     },
     zodSchema: season1Schema,
   },
@@ -83,17 +66,9 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s2", "season2", "live"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
-    fetchData: async (platform: LeaderboardAPIPlatformParam) => {
+    fetchData: async ({ kv, platform }) => {
       // https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json
-      const imports = {
-        crossplay: () => import("../data/season2/crossplay.json"),
-        steam: () => import("../data/season2/steam.json"),
-        xbox: () => import("../data/season2/xbox.json"),
-        psn: () => import("../data/season2/psn.json"),
-      };
-
-      const data = await imports[platform]();
-      return data.default;
+      return await getJsonFromKV(kv, `data_season2_${platform}`);
     },
     zodSchema: season2Schema,
   },
@@ -104,8 +79,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       platforms: ["crossplay"],
     },
     fetchData: async () => {
-      const data = await fetchS3data();
-      return data;
+      return await fetchS3data();
     },
     zodSchema: season3Schema,
   },
@@ -116,8 +90,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       platforms: ["crossplay"],
     },
     fetchData: async () => {
-      const data = await fetchS3WorldTourData();
-      return data;
+      return await fetchS3WorldTourData();
     },
     zodSchema: season3WorldTourSchema,
   },
