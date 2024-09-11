@@ -50,9 +50,11 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
   if (routeRequiresPlatform && !validPlatformProvided)
     return c.json(
       {
-        error: `Leaderboard version '${leaderboardVersion}' requires a platform. Valid platforms: ${apiRoute.params.platforms.join(
+        error: `Leaderboard version '${leaderboardVersion}' requires a valid platform. Valid platforms: ${apiRoute.params.platforms.join(
           ", "
-        )}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
+        )}. Example: /v1/leaderboard/${leaderboardVersion}/${
+          apiRoute.params.platforms[0]
+        }`,
       },
       404
     );
