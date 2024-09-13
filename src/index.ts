@@ -4,6 +4,7 @@ import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import proxyUrl from "./handlers/proxy/proxyUrl";
 import tflNotice from "./handlers/tflNotice";
+import backup from "./handlers/backup";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -24,4 +25,13 @@ app.get("/tfl-notice", cache("tfl-notice", 1), tflNotice);
 
 app.get("/proxy", proxyUrl);
 
-export default app;
+export default {
+  fetch: app.fetch,
+  scheduled: (
+    _event: ScheduledEvent,
+    env: CloudflareBindings,
+    ctx: ExecutionContext
+  ) => {
+    ctx.waitUntil(backup(env.KV));
+  },
+};

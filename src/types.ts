@@ -64,6 +64,7 @@ export type LeaderboardAPIRoute = {
     versions: LeaderboardAPIVersionParam[];
     platforms: LeaderboardAPIPlatformParam[];
   };
+  includeInBackup?: boolean;
   fetchData: (
     fetchSettings: LeaderboardAPIRouteFetchDataSettings
   ) => Promise<unknown>;

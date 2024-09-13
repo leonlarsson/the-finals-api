@@ -23,7 +23,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       platforms: [],
     },
     fetchData: async ({ kv }) => {
-      // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard-beta-1.json
       return await getJsonFromKV(kv, "data_closedbeta1");
     },
     zodSchema: closedBeta1Schema,
@@ -36,7 +35,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       platforms: [],
     },
     fetchData: async ({ kv }) => {
-      // https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard.json
       return await getJsonFromKV(kv, "data_closedbeta2");
     },
     zodSchema: closedBeta2Schema,
@@ -49,7 +47,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
     fetchData: async ({ kv, platform }) => {
-      // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}.json
       return await getJsonFromKV(kv, `data_openbeta_${platform}`);
     },
     zodSchema: openBetaSchema,
@@ -62,7 +59,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
     fetchData: async ({ kv, platform }) => {
-      // https://storage.googleapis.com/embark-discovery-leaderboard/leaderboard-${platform}-discovery-live.json
       return await getJsonFromKV(kv, `data_season1_${platform}`);
     },
     zodSchema: season1Schema,
@@ -76,7 +72,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
     fetchData: async ({ kv, platform }) => {
-      // https://storage.googleapis.com/embark-discovery-leaderboard/s2-leaderboard-${platform}-discovery-live.json
       return await getJsonFromKV(kv, `data_season2_${platform}`);
     },
     zodSchema: season2Schema,
@@ -88,6 +83,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s3", "season3"],
       platforms: ["crossplay"],
     },
+    includeInBackup: true,
     fetchData: async () => {
       return await fetchS3data();
     },
@@ -100,6 +96,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s3worldtour", "season3worldtour"],
       platforms: ["crossplay"],
     },
+    includeInBackup: true,
     fetchData: async () => {
       return await fetchS3WorldTourData();
     },
@@ -114,6 +111,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["the-finals"],
       platforms: ["crossplay"],
     },
+    includeInBackup: true,
     fetchData: async () => {
       return await fetchTheFinalsData();
     },
@@ -126,6 +124,7 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["orf"],
       platforms: ["crossplay"],
     },
+    includeInBackup: true,
     fetchData: async () => {
       return await fetchOrfData();
     },
