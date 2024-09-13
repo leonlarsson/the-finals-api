@@ -3,8 +3,6 @@ import { cors } from "hono/cors";
 import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import proxyUrl from "./handlers/proxy/proxyUrl";
-import fetchTheFinalsData from "./utils/fetchers/fetchTheFinalsData";
-import fetchCe311 from "./utils/fetchers/fetchCe311";
 import tflNotice from "./handlers/tflNotice";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
@@ -19,8 +17,8 @@ app.get(
   getLeaderboard
 );
 
-app.get("/the-finals", cache("the-finals", 10), fetchTheFinalsData);
-app.get("/ce311", cache("ce311", 10), fetchCe311);
+// Redirect /the-finals to /v1/leaderboard/the-finals/crossplay
+app.get("/the-finals", c => c.redirect("/v1/leaderboard/the-finals/crossplay"));
 
 app.get("/tfl-notice", cache("tfl-notice", 1), tflNotice);
 

@@ -15,7 +15,10 @@ export type LeaderboardVersion =
   | "s1"
   | "s2"
   | "s3"
-  | "s3worldtour";
+  | "s3worldtour"
+  // Specials
+  | "the-finals"
+  | "orf";
 
 // The LeaderboardAPIVersionParam
 // This is the version parameter of the /leaderboard endpoint
@@ -35,7 +38,10 @@ export type LeaderboardAPIVersionParam =
   | "season3"
   | "s3worldtour"
   | "season3worldtour"
-  | "live";
+  | "live"
+  // Specials
+  | "the-finals"
+  | "orf";
 
 // The LeaderboardAPIPlatformParam
 // This is the platform parameter of the /leaderboard endpoint
@@ -52,6 +58,7 @@ type LeaderboardAPIRouteFetchDataSettings = {
 };
 
 export type LeaderboardAPIRoute = {
+  type: "leaderboard" | "special";
   leaderboardVersion: LeaderboardVersion;
   params: {
     versions: LeaderboardAPIVersionParam[];

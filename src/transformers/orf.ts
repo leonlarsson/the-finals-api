@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ce311Schema = z
+export const orfSchema = z
   .object({
     1: z.number(),
     3: z.string(),
