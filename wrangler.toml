@@ -9,3 +9,6 @@ kv_namespaces = [
 [triggers]
 # Run every 12 hours
 crons = ["0 */12 * * *"]
+
+[observability]
+enabled = true
