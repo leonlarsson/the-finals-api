@@ -1,4 +1,4 @@
-import { FameLeague, LeaderboardVersion } from "../types";
+import type { FameLeague, LeaderboardVersion } from "../types";
 
 const closedBeta1Leagues = [
   { fame: 0, name: "Bronze" },

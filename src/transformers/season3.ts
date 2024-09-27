@@ -23,7 +23,7 @@ export const season3Schema = z
     7: z.union([z.string(), z.number()]),
     8: z.union([z.string(), z.number()]),
   })
-  .transform(data => ({
+  .transform((data) => ({
     // 2024-08-30: Embark either messed up or dislike community tools
     // rank: data.r,
     // change: data.or - data.r,

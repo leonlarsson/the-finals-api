@@ -16,7 +16,7 @@ export const season3WorldTourSchema = z
     7: z.union([z.string(), z.number()]),
     8: z.union([z.string(), z.number()]),
   })
-  .transform(data => ({
+  .transform((data) => ({
     // 2024-08-30: Embark either messed up or dislike community tools
     // rank: data.r,
     // name: data.name,
@@ -33,6 +33,4 @@ export const season3WorldTourSchema = z
   }))
   .array();
 
-export type Season3WorldTourUser = z.infer<
-  typeof season3WorldTourSchema
->[number];
+export type Season3WorldTourUser = z.infer<typeof season3WorldTourSchema>[number];

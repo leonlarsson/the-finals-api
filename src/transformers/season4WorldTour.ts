@@ -9,7 +9,7 @@ export const season4WorldTourSchema = z
     7: z.union([z.string(), z.number()]),
     8: z.union([z.string(), z.number()]),
   })
-  .transform(data => ({
+  .transform((data) => ({
     rank: data[1],
     name: data[3],
     steamName: typeof data[6] === "number" ? "" : data[6],
@@ -19,6 +19,4 @@ export const season4WorldTourSchema = z
   }))
   .array();
 
-export type Season4WorldTourUser = z.infer<
-  typeof season4WorldTourSchema
->[number];
+export type Season4WorldTourUser = z.infer<typeof season4WorldTourSchema>[number];

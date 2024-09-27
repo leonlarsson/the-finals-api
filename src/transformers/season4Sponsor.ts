@@ -10,7 +10,7 @@ export const season4SponsorSchema = z
     9: z.string(),
     10: z.number(),
   })
-  .transform(data => ({
+  .transform((data) => ({
     rank: data[1],
     name: data[3],
     sponsor: data[9],

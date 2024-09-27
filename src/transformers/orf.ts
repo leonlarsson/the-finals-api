@@ -9,7 +9,7 @@ export const orfSchema = z
     7: z.union([z.string(), z.number()]),
     8: z.union([z.string(), z.number()]),
   })
-  .transform(data => ({
+  .transform((data) => ({
     rank: data[1],
     name: data[3],
     score: data[5],

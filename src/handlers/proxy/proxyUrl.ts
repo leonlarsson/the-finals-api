@@ -1,4 +1,4 @@
-import { Context } from "hono";
+import type { Context } from "hono";
 
 export default async (c: Context) => {
   const { url } = c.req.query();

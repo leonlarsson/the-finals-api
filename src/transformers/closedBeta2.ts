@@ -12,7 +12,7 @@ export const closedBeta2Schema = z
     mx: z.number(),
     c: z.number(),
   })
-  .transform(data => ({
+  .transform((data) => ({
     rank: data.r,
     change: data.or - data.r,
     name: data.name,

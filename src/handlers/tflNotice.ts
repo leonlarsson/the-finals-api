@@ -1,4 +1,4 @@
-import { Context } from "hono";
+import type { Context } from "hono";
 
 export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
   const noticeMessage = await c.env.KV.get("tfl-notice");

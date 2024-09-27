@@ -1,10 +1,6 @@
-import { Context } from "hono";
+import type { Context } from "hono";
 import { apiRoutes } from "../../apis/leaderboard";
-import {
-  LeaderboardAPIPlatformParam,
-  LeaderboardAPIVersionParam,
-  User,
-} from "../../types";
+import type { LeaderboardAPIPlatformParam, LeaderboardAPIVersionParam, User } from "../../types";
 
 export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
   const { leaderboardVersion, platform } = c.req.param();
@@ -16,17 +12,15 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
     return c.json(
       {
         error: `No leaderboard version provided. Valid versions: ${apiRoutes
-          .flatMap(x => x.params.versions)
+          .flatMap((x) => x.params.versions)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       },
-      404
+      404,
     );
 
   // Get the API route that matches the version
-  const apiRoute = apiRoutes.find(route =>
-    route.params.versions.includes(
-      leaderboardVersion as LeaderboardAPIVersionParam
-    )
+  const apiRoute = apiRoutes.find((route) =>
+    route.params.versions.includes(leaderboardVersion as LeaderboardAPIVersionParam),
   );
 
   // If no API route matches the version, return an error
@@ -34,29 +28,25 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
     return c.json(
       {
         error: `Leaderboard version '${leaderboardVersion}' is not a valid version. Valid versions: ${apiRoutes
-          .flatMap(x => x.params.versions)
-          .filter(x => x !== "live")
+          .flatMap((x) => x.params.versions)
+          .filter((x) => x !== "live")
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       },
-      404
+      404,
     );
 
   const routeRequiresPlatform = apiRoute.params.platforms.length > 0;
-  const validPlatformProvided = apiRoute.params.platforms.includes(
-    platform as LeaderboardAPIPlatformParam
-  );
+  const validPlatformProvided = apiRoute.params.platforms.includes(platform as LeaderboardAPIPlatformParam);
 
   // If the API route requires a platform and no platform is provided, return an error
   if (routeRequiresPlatform && !validPlatformProvided)
     return c.json(
       {
         error: `Leaderboard version '${leaderboardVersion}' requires a valid platform. Valid platforms: ${apiRoute.params.platforms.join(
-          ", "
-        )}. Example: /v1/leaderboard/${leaderboardVersion}/${
-          apiRoute.params.platforms[0]
-        }`,
+          ", ",
+        )}. Example: /v1/leaderboard/${leaderboardVersion}/${apiRoute.params.platforms[0]}`,
       },
-      404
+      404,
     );
 
   // If the API route requires a platform and the provided platform is not available, return an error
@@ -64,10 +54,10 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
     return c.json(
       {
         error: `Platform '${platform}' is not available for leaderboard version ${leaderboardVersion}. Valid platforms: ${apiRoute.params.versions.join(
-          ", "
+          ", ",
         )}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
       },
-      404
+      404,
     );
 
   try {
@@ -84,10 +74,9 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
 
     // Filter data by name query
     const filteredData = parseResult.data.filter((user: User) =>
-      [user.name, user.steamName, user.xboxName, user.psnName].some(
-        platformName =>
-          platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? "")
-      )
+      [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>
+        platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? ""),
+      ),
     );
 
     // Return data
@@ -113,7 +102,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
       {
         error: `An error occurred while fetching the leaderboard: ${apiRoute.leaderboardVersion}`,
       },
-      500
+      500,
     );
   }
 };

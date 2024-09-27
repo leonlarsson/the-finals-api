@@ -1,14 +1,14 @@
-import { ZodSchema } from "zod";
-import { ClosedBeta1User } from "./transformers/closedBeta1";
-import { ClosedBeta2User } from "./transformers/closedBeta2";
-import { OpenBetaUser } from "./transformers/openBeta";
-import { Season1User } from "./transformers/season1";
-import { Season2User } from "./transformers/season2";
-import { Season3User } from "./transformers/season3";
-import { Season3WorldTourUser } from "./transformers/season3WorldTour";
-import { Season4User } from "./transformers/season4";
-import { Season4WorldTourUser } from "./transformers/season4WorldTour";
-import { Season4SponsorUser } from "./transformers/season4Sponsor";
+import type { ZodSchema } from "zod";
+import type { ClosedBeta1User } from "./transformers/closedBeta1";
+import type { ClosedBeta2User } from "./transformers/closedBeta2";
+import type { OpenBetaUser } from "./transformers/openBeta";
+import type { Season1User } from "./transformers/season1";
+import type { Season2User } from "./transformers/season2";
+import type { Season3User } from "./transformers/season3";
+import type { Season3WorldTourUser } from "./transformers/season3WorldTour";
+import type { Season4User } from "./transformers/season4";
+import type { Season4SponsorUser } from "./transformers/season4Sponsor";
+import type { Season4WorldTourUser } from "./transformers/season4WorldTour";
 
 // The LeaderboardId
 // One per leaderboard API version
@@ -59,11 +59,7 @@ export type LeaderboardAPIVersionParam =
 // The LeaderboardAPIPlatformParam
 // This is the platform parameter of the /leaderboard endpoint
 // One leaderboard API version can have multiple platform params
-export type LeaderboardAPIPlatformParam =
-  | "crossplay"
-  | "steam"
-  | "xbox"
-  | "psn";
+export type LeaderboardAPIPlatformParam = "crossplay" | "steam" | "xbox" | "psn";
 
 type LeaderboardAPIRouteFetchDataSettings = {
   kv: KVNamespace;
@@ -78,9 +74,7 @@ export type LeaderboardAPIRoute = {
     platforms: LeaderboardAPIPlatformParam[];
   };
   includeInBackup?: boolean;
-  fetchData: (
-    fetchSettings: LeaderboardAPIRouteFetchDataSettings
-  ) => Promise<unknown>;
+  fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
   zodSchema: ZodSchema;
 };
 

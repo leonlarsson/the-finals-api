@@ -15,7 +15,7 @@ export const season2Schema = z
     xbox: z.string(),
     psn: z.string(),
   })
-  .transform(data => ({
+  .transform((data) => ({
     rank: data.r,
     change: data.or - data.r,
     name: data.name,

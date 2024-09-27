@@ -1,11 +1,8 @@
 import { apiRoutes } from "../apis/leaderboard";
-import { LeaderboardAPIPlatformParam, LeaderboardAPIRoute } from "../types";
+import type { LeaderboardAPIPlatformParam, LeaderboardAPIRoute } from "../types";
 
 export default async (kv: KVNamespace) => {
-  const backupData = async (
-    route: LeaderboardAPIRoute,
-    platform: LeaderboardAPIPlatformParam
-  ) => {
+  const backupData = async (route: LeaderboardAPIRoute, platform: LeaderboardAPIPlatformParam) => {
     // Fetch data
     const data = await route.fetchData({ kv, platform });
 
@@ -25,7 +22,7 @@ export default async (kv: KVNamespace) => {
   };
 
   // For each route
-  for (const route of apiRoutes.filter(r => r.includeInBackup)) {
+  for (const route of apiRoutes.filter((r) => r.includeInBackup)) {
     const platforms = route.params.platforms;
 
     // If route has no platforms, platform param doesn't really matter

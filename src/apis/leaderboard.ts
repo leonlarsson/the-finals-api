@@ -10,7 +10,7 @@ import { season4Schema } from "../transformers/season4";
 import { season4SponsorSchema } from "../transformers/season4Sponsor";
 import { season4WorldTourSchema } from "../transformers/season4WorldTour";
 import { theFinalsSchema } from "../transformers/theFinals";
-import { LeaderboardAPIRoute } from "../types";
+import type { LeaderboardAPIRoute } from "../types";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
 import fetchS4Data from "../utils/fetchers/fetchS4Data";
 import fetchS4SponsorData from "../utils/fetchers/fetchS4SponsorData";

@@ -12,7 +12,7 @@ export const season4Schema = z
     7: z.union([z.string(), z.number()]),
     8: z.union([z.string(), z.number()]),
   })
-  .transform(data => ({
+  .transform((data) => ({
     rank: data[1],
     change: data[2],
     name: data[3],
