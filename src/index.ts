@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { cache } from "./middleware/cache";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
-import proxyUrl from "./handlers/proxy/proxyUrl";
 import tflNotice from "./handlers/tflNotice";
 import backup from "./handlers/backup";
 
@@ -23,7 +22,7 @@ app.get("/the-finals", c => c.redirect("/v1/leaderboard/the-finals/crossplay"));
 
 app.get("/tfl-notice", cache("tfl-notice", 1), tflNotice);
 
-app.get("/proxy", proxyUrl);
+// app.get("/proxy", proxyUrl);
 
 export default {
   fetch: app.fetch,
