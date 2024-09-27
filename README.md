@@ -56,3 +56,7 @@ To know which properties each leaderboard returns, just try it and see. The data
 #### Get the data from the Season 3 crossplay leaderboard
 
 `https://api.the-finals-leaderboard.com/v1/leaderboard/s3/crossplay`
+
+#### Get the data from the Season 4 crossplay leaderboard
+
+`https://api.the-finals-leaderboard.com/v1/leaderboard/s4/crossplay`
