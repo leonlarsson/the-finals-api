@@ -6,12 +6,15 @@ import { season1Schema } from "../transformers/season1";
 import { season2Schema } from "../transformers/season2";
 import { season3Schema } from "../transformers/season3";
 import { season3WorldTourSchema } from "../transformers/season3WorldTour";
+import { season4Schema } from "../transformers/season4";
+import { season4SponsorSchema } from "../transformers/season4Sponsor";
+import { season4WorldTourSchema } from "../transformers/season4WorldTour";
 import { theFinalsSchema } from "../transformers/theFinals";
 import { LeaderboardAPIRoute } from "../types";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
-import fetchS3WorldTourData from "../utils/fetchers/fetchS3WorldTourData";
-import fetchS3data from "../utils/fetchers/fetchS3data";
-import fetchTheFinalsData from "../utils/fetchers/fetchTheFinalsData";
+import fetchS4Data from "../utils/fetchers/fetchS4Data";
+import fetchS4SponsorData from "../utils/fetchers/fetchS4SponsorData";
+import fetchS4WorldTourData from "../utils/fetchers/fetchS4WorldTourData";
 import { getJsonFromKV } from "../utils/kv";
 
 export const apiRoutes: LeaderboardAPIRoute[] = [
@@ -83,9 +86,8 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s3", "season3"],
       platforms: ["crossplay"],
     },
-    includeInBackup: true,
-    fetchData: async () => {
-      return await fetchS3data();
+    fetchData: async ({ kv, platform }) => {
+      return await getJsonFromKV(kv, `data_season3_${platform}`);
     },
     zodSchema: season3Schema,
   },
@@ -96,11 +98,49 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s3worldtour", "season3worldtour"],
       platforms: ["crossplay"],
     },
-    includeInBackup: true,
-    fetchData: async () => {
-      return await fetchS3WorldTourData();
+    fetchData: async ({ kv, platform }) => {
+      return await getJsonFromKV(kv, `data_season3worldtour_${platform}`);
     },
     zodSchema: season3WorldTourSchema,
+  },
+  {
+    type: "leaderboard",
+    leaderboardVersion: "s4",
+    params: {
+      versions: ["s4", "season4"],
+      platforms: ["crossplay"],
+    },
+    includeInBackup: true,
+    fetchData: async () => {
+      return await fetchS4Data();
+    },
+    zodSchema: season4Schema,
+  },
+  {
+    type: "leaderboard",
+    leaderboardVersion: "s4worldtour",
+    params: {
+      versions: ["s4worldtour", "season4worldtour"],
+      platforms: ["crossplay"],
+    },
+    includeInBackup: true,
+    fetchData: async () => {
+      return await fetchS4WorldTourData();
+    },
+    zodSchema: season4WorldTourSchema,
+  },
+  {
+    type: "leaderboard",
+    leaderboardVersion: "s4sponsor",
+    params: {
+      versions: ["s4sponsor", "season4sponsor"],
+      platforms: ["crossplay"],
+    },
+    includeInBackup: true,
+    fetchData: async () => {
+      return await fetchS4SponsorData();
+    },
+    zodSchema: season4SponsorSchema,
   },
 
   // Special leaderboards. Any non-main leaderboards such as events
@@ -111,9 +151,8 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["the-finals"],
       platforms: ["crossplay"],
     },
-    includeInBackup: true,
-    fetchData: async () => {
-      return await fetchTheFinalsData();
+    fetchData: async ({ kv, platform }) => {
+      return await getJsonFromKV(kv, `data_the-finals_${platform}`);
     },
     zodSchema: theFinalsSchema,
   },

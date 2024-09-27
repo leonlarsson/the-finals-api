@@ -5,6 +5,10 @@ import { OpenBetaUser } from "./transformers/openBeta";
 import { Season1User } from "./transformers/season1";
 import { Season2User } from "./transformers/season2";
 import { Season3User } from "./transformers/season3";
+import { Season3WorldTourUser } from "./transformers/season3WorldTour";
+import { Season4User } from "./transformers/season4";
+import { Season4WorldTourUser } from "./transformers/season4WorldTour";
+import { Season4SponsorUser } from "./transformers/season4Sponsor";
 
 // The LeaderboardId
 // One per leaderboard API version
@@ -16,6 +20,9 @@ export type LeaderboardVersion =
   | "s2"
   | "s3"
   | "s3worldtour"
+  | "s4"
+  | "s4worldtour"
+  | "s4sponsor"
   // Specials
   | "the-finals"
   | "orf";
@@ -38,6 +45,12 @@ export type LeaderboardAPIVersionParam =
   | "season3"
   | "s3worldtour"
   | "season3worldtour"
+  | "s4"
+  | "season4"
+  | "s4worldtour"
+  | "season4worldtour"
+  | "s4sponsor"
+  | "season4sponsor"
   | "live"
   // Specials
   | "the-finals"
@@ -82,4 +95,8 @@ export type User =
   | OpenBetaUser
   | Season1User
   | Season2User
-  | Season3User;
+  | Season3User
+  | Season3WorldTourUser
+  | Season4User
+  | Season4WorldTourUser
+  | Season4SponsorUser;
