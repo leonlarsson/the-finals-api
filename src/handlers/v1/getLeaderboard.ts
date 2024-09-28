@@ -1,4 +1,5 @@
 import type { Context } from "hono";
+import { ZodError } from "zod";
 import { apiRoutes } from "../../apis/leaderboard";
 import type { LeaderboardAPIPlatformParam, LeaderboardAPIVersionParam, User } from "../../types";
 
@@ -69,7 +70,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
     // Validate and parse data with Zod schema
     const parseResult = apiRoute.zodSchema.safeParse(fetchedData);
     if (!parseResult.success) {
-      throw new Error(parseResult.error.toString());
+      throw new ZodError(parseResult.error.issues);
     }
 
     // Filter data by name query
@@ -98,9 +99,11 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
     });
   } catch (error) {
     console.log("Error in getLeaderboard:", error);
+    const isZodError = error instanceof ZodError;
     return c.json(
       {
-        error: `An error occurred while fetching the leaderboard: ${apiRoute.leaderboardVersion}`,
+        error: `${isZodError ? "A data validation error occurred while fetching the leaderboard This means unexpected data came in from Embark." : "An error occurred in the getLeaderboard handler."} Leaderboard: ${apiRoute.leaderboardVersion}`,
+        zodError: isZodError ? error : undefined,
       },
       500,
     );
