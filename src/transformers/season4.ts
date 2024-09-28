@@ -1,5 +1,6 @@
 import { z } from "zod";
 import leagueNumberToName from "../utils/leagueNumberToName";
+import nameFallback from "../utils/nameFallback";
 
 export const season4Schema = z
   .object({
@@ -16,10 +17,10 @@ export const season4Schema = z
   .transform((data) => ({
     rank: data[1],
     change: data[2],
-    name: data[3] || "Unknown#0000",
-    steamName: data[6] || "",
-    psnName: data[7] || "",
-    xboxName: data[8] || "",
+    name: nameFallback(data[3], "Unknown#0000"),
+    steamName: nameFallback(data[6]),
+    psnName: nameFallback(data[7]),
+    xboxName: nameFallback(data[8]),
     leagueNumber: data[4],
     league: leagueNumberToName(data[4]),
     rankScore: data[5],
