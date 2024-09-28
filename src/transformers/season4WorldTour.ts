@@ -12,10 +12,10 @@ export const season4WorldTourSchema = z
   })
   .transform((data) => ({
     rank: data[1],
-    name: typeof data[3] === "number" ? "Unknown#0000" : data[3],
-    steamName: typeof data[6] === "number" ? "" : data[6],
-    psnName: typeof data[7] === "number" ? "" : data[7],
-    xboxName: typeof data[8] === "number" ? "" : data[8],
+    name: data[3] || "Unknown#0000",
+    steamName: data[6] || "",
+    psnName: data[7] || "",
+    xboxName: data[8] || "",
     cashouts: data[5],
   }))
   .array();
