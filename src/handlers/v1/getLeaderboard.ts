@@ -98,7 +98,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
       data: returnCountOnly ? [] : filteredData,
     });
   } catch (error) {
-    console.log("Error in getLeaderboard:", error);
+    console.error("Error in getLeaderboard:", error);
     const isZodError = error instanceof ZodError;
     return c.json(
       {
