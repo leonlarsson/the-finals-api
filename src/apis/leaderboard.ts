@@ -93,6 +93,18 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
   },
   {
     type: "leaderboard",
+    leaderboardVersion: "s3original",
+    params: {
+      versions: ["s3original", "season3original"],
+      platforms: ["crossplay"],
+    },
+    fetchData: async ({ kv, platform }) => {
+      return await getJsonFromKV(kv, `data_season3_${platform}_original`);
+    },
+    zodSchema: season3Schema,
+  },
+  {
+    type: "leaderboard",
     leaderboardVersion: "s3worldtour",
     params: {
       versions: ["s3worldtour", "season3worldtour"],
