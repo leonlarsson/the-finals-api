@@ -76,6 +76,10 @@ export type LeaderboardAPIRoute = {
     versions: LeaderboardAPIVersionParam[];
     platforms: LeaderboardAPIPlatformParam[];
   };
+  metadata: {
+    title: string;
+    description: string;
+  };
   includeInBackup?: boolean;
   fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
   zodSchema: ZodSchema;

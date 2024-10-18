@@ -25,6 +25,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["cb1", "closedbeta1"],
       platforms: [],
     },
+    metadata: {
+      title: "Closed Beta 1",
+      description: "The first closed beta of THE FINALS.",
+    },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta1");
     },
@@ -36,6 +40,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     params: {
       versions: ["cb2", "closedbeta2"],
       platforms: [],
+    },
+    metadata: {
+      title: "Closed Beta 2",
+      description: "The second closed beta of THE FINALS.",
     },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta2");
@@ -49,6 +57,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["ob", "openbeta"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
+    metadata: {
+      title: "Open Beta",
+      description: "The open beta of THE FINALS.",
+    },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_openbeta_${platform}`);
     },
@@ -60,6 +72,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     params: {
       versions: ["s1", "season1"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
+    },
+    metadata: {
+      title: "Season 1",
+      description: "The first season of THE FINALS.",
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season1_${platform}`);
@@ -74,6 +90,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s2", "season2", "live"],
       platforms: ["crossplay", "steam", "xbox", "psn"],
     },
+    metadata: {
+      title: "Season 2",
+      description: "The second season of THE FINALS.",
+    },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season2_${platform}`);
     },
@@ -85,6 +105,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     params: {
       versions: ["s3", "season3"],
       platforms: ["crossplay"],
+    },
+    metadata: {
+      title: "Season 3",
+      description: "The third season of THE FINALS.",
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}`);
@@ -98,6 +122,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s3original", "season3original"],
       platforms: ["crossplay"],
     },
+    metadata: {
+      title: "Season 3 - Original",
+      description: "The third season of THE FINALS. Pre-purge.",
+    },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}_original`);
     },
@@ -110,6 +138,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s3worldtour", "season3worldtour"],
       platforms: ["crossplay"],
     },
+    metadata: {
+      title: "Season 3 World Tour",
+      description: "The third season of THE FINALS - World Tour.",
+    },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3worldtour_${platform}`);
     },
@@ -121,6 +153,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     params: {
       versions: ["s4", "season4"],
       platforms: ["crossplay"],
+    },
+    metadata: {
+      title: "Season 4",
+      description: "The fourth season of THE FINALS.",
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -135,6 +171,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["s4worldtour", "season4worldtour"],
       platforms: ["crossplay"],
     },
+    metadata: {
+      title: "Season 4 World Tour",
+      description: "The fourth season of THE FINALS - World Tour.",
+    },
     includeInBackup: true,
     fetchData: async () => {
       return await fetchS4WorldTourData();
@@ -147,6 +187,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     params: {
       versions: ["s4sponsor", "season4sponsor"],
       platforms: ["crossplay"],
+    },
+    metadata: {
+      title: "Season 4 Sponsor",
+      description: "The fourth season of THE FINALS - Sponsor.",
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -163,6 +207,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       versions: ["the-finals"],
       platforms: ["crossplay"],
     },
+    metadata: {
+      title: "THE FINALS",
+      description: "TBD.",
+    },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_the-finals_${platform}`);
     },
@@ -174,6 +222,10 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     params: {
       versions: ["orf"],
       platforms: ["crossplay"],
+    },
+    metadata: {
+      title: "ÖRF",
+      description: "The ÖRF leaderboard.",
     },
     includeInBackup: true,
     fetchData: async () => {
