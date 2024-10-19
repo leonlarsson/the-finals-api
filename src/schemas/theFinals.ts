@@ -1,11 +1,10 @@
 import { z } from "zod";
 import nameFallback from "../utils/nameFallback";
 
-export const season4WorldTourSchema = z
+export const theFinalsSchema = z
   .object({
     1: z.number(),
-    // For some reason, the name can come back as a 0 (number) instead of a string. Example: {"1":4059,"2":57070,"3":0,"4":11,"5":25114,"6":"ඞ ⁧ AK","7":0,"8":0}
-    3: z.union([z.string(), z.number()]),
+    3: z.string(),
     5: z.number(),
     6: z.union([z.string(), z.number()]),
     7: z.union([z.string(), z.number()]),
@@ -13,12 +12,22 @@ export const season4WorldTourSchema = z
   })
   .transform((data) => ({
     rank: data[1],
-    name: nameFallback(data[3], "Unknown#0000"),
+    name: data[3],
+    tournamentWins: data[5],
     steamName: nameFallback(data[6]),
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
-    cashouts: data[5],
   }))
   .array();
 
-export type Season4WorldTourUser = z.infer<typeof season4WorldTourSchema>[number];
+export type TheFinalsUser = z.infer<typeof theFinalsSchema>[number];
+
+// This is passed to OpenAPI
+export const theFinalsUserSchema = z.object({
+  rank: z.number(),
+  name: z.string(),
+  tournamentWins: z.number(),
+  steamName: z.string(),
+  psnName: z.string(),
+  xboxName: z.string(),
+}) satisfies z.ZodType<TheFinalsUser>;

@@ -1,8 +1,8 @@
 import { apiRoutes } from "../apis/leaderboard";
-import type { LeaderboardAPIPlatformParam, LeaderboardAPIRoute } from "../types";
+import type { LeaderboardAPIRoute, LeaderboardPlatforms } from "../types";
 
 export default async (kv: KVNamespace) => {
-  const backupData = async (route: LeaderboardAPIRoute, platform: LeaderboardAPIPlatformParam) => {
+  const backupData = async (route: LeaderboardAPIRoute, platform: LeaderboardPlatforms) => {
     // Fetch data
     const data = await route.fetchData({ kv, platform });
 

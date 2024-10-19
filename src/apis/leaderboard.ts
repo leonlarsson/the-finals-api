@@ -1,15 +1,15 @@
-import { closedBeta1Schema } from "../transformers/closedBeta1";
-import { closedBeta2Schema } from "../transformers/closedBeta2";
-import { openBetaSchema } from "../transformers/openBeta";
-import { orfSchema } from "../transformers/orf";
-import { season1Schema } from "../transformers/season1";
-import { season2Schema } from "../transformers/season2";
-import { season3Schema } from "../transformers/season3";
-import { season3WorldTourSchema } from "../transformers/season3WorldTour";
-import { season4Schema } from "../transformers/season4";
-import { season4SponsorSchema } from "../transformers/season4Sponsor";
-import { season4WorldTourSchema } from "../transformers/season4WorldTour";
-import { theFinalsSchema } from "../transformers/theFinals";
+import { closedBeta1Schema, closedBeta1UserSchema } from "../schemas/closedBeta1";
+import { closedBeta2Schema, closedBeta2UserSchema } from "../schemas/closedBeta2";
+import { openBetaSchema, openBetaUserSchema } from "../schemas/openBeta";
+import { orfSchema, orfUserSchema } from "../schemas/orf";
+import { season1Schema, season1UserSchema } from "../schemas/season1";
+import { season2Schema, season2UserSchema } from "../schemas/season2";
+import { season3Schema, season3UserSchema } from "../schemas/season3";
+import { season3WorldTourSchema, season3WorldTourUserSchema } from "../schemas/season3WorldTour";
+import { season4Schema, season4UserSchema } from "../schemas/season4";
+import { season4SponsorSchema, season4SponsorUserSchema } from "../schemas/season4Sponsor";
+import { season4WorldTourSchema, season4WorldTourUserSchema } from "../schemas/season4WorldTour";
+import { theFinalsSchema, theFinalsUserSchema } from "../schemas/theFinals";
 import type { LeaderboardAPIRoute } from "../types";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
 import fetchS4Data from "../utils/fetchers/fetchS4Data";
@@ -21,10 +21,8 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
   {
     type: "leaderboard",
     leaderboardVersion: "cb1",
-    params: {
-      versions: ["cb1", "closedbeta1"],
-      platforms: [],
-    },
+    leaderboardVersionAliases: ["closedbeta1"],
+    availablePlatforms: [],
     metadata: {
       title: "Closed Beta 1",
       description: "The first closed beta of THE FINALS.",
@@ -33,14 +31,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, "data_closedbeta1");
     },
     zodSchema: closedBeta1Schema,
+    zodSchemaOpenApi: closedBeta1UserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "cb2",
-    params: {
-      versions: ["cb2", "closedbeta2"],
-      platforms: [],
-    },
+    leaderboardVersionAliases: ["closedbeta2"],
+    availablePlatforms: [],
     metadata: {
       title: "Closed Beta 2",
       description: "The second closed beta of THE FINALS.",
@@ -49,14 +46,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, "data_closedbeta2");
     },
     zodSchema: closedBeta2Schema,
+    zodSchemaOpenApi: closedBeta2UserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "ob",
-    params: {
-      versions: ["ob", "openbeta"],
-      platforms: ["crossplay", "steam", "xbox", "psn"],
-    },
+    leaderboardVersionAliases: ["openbeta"],
+    availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
     metadata: {
       title: "Open Beta",
       description: "The open beta of THE FINALS.",
@@ -65,14 +61,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, `data_openbeta_${platform}`);
     },
     zodSchema: openBetaSchema,
+    zodSchemaOpenApi: openBetaUserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s1",
-    params: {
-      versions: ["s1", "season1"],
-      platforms: ["crossplay", "steam", "xbox", "psn"],
-    },
+    leaderboardVersionAliases: ["season1"],
+    availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
     metadata: {
       title: "Season 1",
       description: "The first season of THE FINALS.",
@@ -81,15 +76,14 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, `data_season1_${platform}`);
     },
     zodSchema: season1Schema,
+    zodSchemaOpenApi: season1UserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s2",
-    params: {
-      // "live" was a horrible idea, but it's here now. It will remain on S2
-      versions: ["s2", "season2", "live"],
-      platforms: ["crossplay", "steam", "xbox", "psn"],
-    },
+    // "live" was a horrible idea, but it's here now. It will remain on S2
+    leaderboardVersionAliases: ["season2", "live"],
+    availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
     metadata: {
       title: "Season 2",
       description: "The second season of THE FINALS.",
@@ -98,14 +92,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, `data_season2_${platform}`);
     },
     zodSchema: season2Schema,
+    zodSchemaOpenApi: season2UserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s3",
-    params: {
-      versions: ["s3", "season3"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: ["season3"],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "Season 3",
       description: "The third season of THE FINALS.",
@@ -114,14 +107,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, `data_season3_${platform}`);
     },
     zodSchema: season3Schema,
+    zodSchemaOpenApi: season3UserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s3original",
-    params: {
-      versions: ["s3original", "season3original"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: ["season3original"],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "Season 3 - Original",
       description: "The third season of THE FINALS. Pre-purge.",
@@ -130,14 +122,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, `data_season3_${platform}_original`);
     },
     zodSchema: season3Schema,
+    zodSchemaOpenApi: season3UserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s3worldtour",
-    params: {
-      versions: ["s3worldtour", "season3worldtour"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: ["season3worldtour"],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "Season 3 World Tour",
       description: "The third season of THE FINALS - World Tour.",
@@ -146,14 +137,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, `data_season3worldtour_${platform}`);
     },
     zodSchema: season3WorldTourSchema,
+    zodSchemaOpenApi: season3WorldTourUserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s4",
-    params: {
-      versions: ["s4", "season4"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: ["season4"],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "Season 4",
       description: "The fourth season of THE FINALS.",
@@ -163,14 +153,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await fetchS4Data();
     },
     zodSchema: season4Schema,
+    zodSchemaOpenApi: season4UserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s4worldtour",
-    params: {
-      versions: ["s4worldtour", "season4worldtour"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: ["season4worldtour"],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "Season 4 World Tour",
       description: "The fourth season of THE FINALS - World Tour.",
@@ -180,14 +169,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await fetchS4WorldTourData();
     },
     zodSchema: season4WorldTourSchema,
+    zodSchemaOpenApi: season4WorldTourUserSchema,
   },
   {
     type: "leaderboard",
     leaderboardVersion: "s4sponsor",
-    params: {
-      versions: ["s4sponsor", "season4sponsor"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: ["season4sponsor"],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "Season 4 Sponsor",
       description: "The fourth season of THE FINALS - Sponsor.",
@@ -197,16 +185,15 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await fetchS4SponsorData();
     },
     zodSchema: season4SponsorSchema,
+    zodSchemaOpenApi: season4SponsorUserSchema,
   },
 
   // Special leaderboards. Any non-main leaderboards such as events
   {
     type: "special",
     leaderboardVersion: "the-finals",
-    params: {
-      versions: ["the-finals"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: [],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "THE FINALS",
       description: "TBD.",
@@ -215,14 +202,13 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await getJsonFromKV(kv, `data_the-finals_${platform}`);
     },
     zodSchema: theFinalsSchema,
+    zodSchemaOpenApi: theFinalsUserSchema,
   },
   {
     type: "special",
     leaderboardVersion: "orf",
-    params: {
-      versions: ["orf"],
-      platforms: ["crossplay"],
-    },
+    leaderboardVersionAliases: [],
+    availablePlatforms: ["crossplay"],
     metadata: {
       title: "ÖRF",
       description: "The ÖRF leaderboard.",
@@ -232,5 +218,6 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
       return await fetchOrfData();
     },
     zodSchema: orfSchema,
+    zodSchemaOpenApi: orfUserSchema,
   },
 ] satisfies LeaderboardAPIRoute[];

@@ -28,3 +28,18 @@ export const closedBeta1Schema = z
   .array();
 
 export type ClosedBeta1User = z.infer<typeof closedBeta1Schema>[number];
+
+// This is passed to OpenAPI
+export const closedBeta1UserSchema = z.object({
+  rank: z.number(),
+  change: z.number(),
+  name: z.string(),
+  steamName: z.string(),
+  xboxName: z.string(),
+  psnName: z.string(),
+  league: z.string(),
+  fame: z.number(),
+  xp: z.number(),
+  level: z.number(),
+  cashouts: z.number(),
+}) satisfies z.ZodType<ClosedBeta1User>;

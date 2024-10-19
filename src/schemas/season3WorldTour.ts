@@ -1,23 +1,17 @@
 import { z } from "zod";
-import leagueNumberToName from "../utils/leagueNumberToName";
+import nameFallback from "../utils/nameFallback";
 
-export const season3Schema = z
+export const season3WorldTourSchema = z
   .object({
     // 2024-08-30: Embark either messed up or dislike community tools. All keys are now numbers instead of somewhat descriptive strings. Empty platform names are now 0 instead of empty strings.
     // r: z.number(),
     // name: z.string(),
-    // ri: z.number(),
     // p: z.number(),
-    // ori: z.number(),
-    // or: z.number(),
-    // op: z.number(),
     // steam: z.string(),
     // xbox: z.string(),
     // psn: z.string(),
     1: z.number(),
-    2: z.number(),
     3: z.string(),
-    4: z.number(),
     5: z.number(),
     6: z.union([z.string(), z.number()]),
     7: z.union([z.string(), z.number()]),
@@ -26,24 +20,28 @@ export const season3Schema = z
   .transform((data) => ({
     // 2024-08-30: Embark either messed up or dislike community tools
     // rank: data.r,
-    // change: data.or - data.r,
     // name: data.name,
     // steamName: data.steam,
     // xboxName: data.xbox,
     // psnName: data.psn,
-    // leagueNumber: data.ri,
-    // league: leagueNumberToName(data.ri),
-    // rankScore: data.p,
+    // cashouts: data.p,
     rank: data[1],
-    change: data[2],
     name: data[3],
-    steamName: typeof data[6] === "number" ? "" : data[6],
-    psnName: typeof data[7] === "number" ? "" : data[7],
-    xboxName: typeof data[8] === "number" ? "" : data[8],
-    leagueNumber: data[4],
-    league: leagueNumberToName(data[4]),
-    rankScore: data[5],
+    steamName: nameFallback(data[6]),
+    psnName: nameFallback(data[7]),
+    xboxName: nameFallback(data[8]),
+    cashouts: data[5],
   }))
   .array();
 
-export type Season3User = z.infer<typeof season3Schema>[number];
+export type Season3WorldTourUser = z.infer<typeof season3WorldTourSchema>[number];
+
+// This is passed to OpenAPI
+export const season3WorldTourUserSchema = z.object({
+  rank: z.number(),
+  name: z.string(),
+  steamName: z.string(),
+  xboxName: z.string(),
+  psnName: z.string(),
+  cashouts: z.number(),
+}) satisfies z.ZodType<Season3WorldTourUser>;

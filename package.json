@@ -8,7 +8,9 @@
     "biome": "npx @biomejs/biome check --write ."
   },
   "dependencies": {
-    "hono": "^4.6.1",
+    "@hono/zod-openapi": "^0.16.4",
+    "@scalar/hono-api-reference": "^0.5.155",
+    "hono": "^4.6.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {

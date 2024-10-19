@@ -1,14 +1,16 @@
 import type { ZodSchema } from "zod";
-import type { ClosedBeta1User } from "./transformers/closedBeta1";
-import type { ClosedBeta2User } from "./transformers/closedBeta2";
-import type { OpenBetaUser } from "./transformers/openBeta";
-import type { Season1User } from "./transformers/season1";
-import type { Season2User } from "./transformers/season2";
-import type { Season3User } from "./transformers/season3";
-import type { Season3WorldTourUser } from "./transformers/season3WorldTour";
-import type { Season4User } from "./transformers/season4";
-import type { Season4SponsorUser } from "./transformers/season4Sponsor";
-import type { Season4WorldTourUser } from "./transformers/season4WorldTour";
+import type { ClosedBeta1User } from "./schemas/closedBeta1";
+import type { ClosedBeta2User } from "./schemas/closedBeta2";
+import type { OpenBetaUser } from "./schemas/openBeta";
+import type { OrfUser } from "./schemas/orf";
+import type { Season1User } from "./schemas/season1";
+import type { Season2User } from "./schemas/season2";
+import type { Season3User } from "./schemas/season3";
+import type { Season3WorldTourUser } from "./schemas/season3WorldTour";
+import type { Season4User } from "./schemas/season4";
+import type { Season4SponsorUser } from "./schemas/season4Sponsor";
+import type { Season4WorldTourUser } from "./schemas/season4WorldTour";
+import type { TheFinalsUser } from "./schemas/theFinals";
 
 // The LeaderboardId
 // One per leaderboard API version
@@ -28,54 +30,21 @@ export type LeaderboardVersion =
   | "the-finals"
   | "orf";
 
-// The LeaderboardAPIVersionParam
-// This is the version parameter of the /leaderboard endpoint
-// One leaderboard API version can have multiple versions params
-export type LeaderboardAPIVersionParam =
-  | "cb1"
-  | "closedbeta1"
-  | "cb2"
-  | "closedbeta2"
-  | "ob"
-  | "openbeta"
-  | "s1"
-  | "season1"
-  | "s2"
-  | "season2"
-  | "s3"
-  | "s3original"
-  | "season3"
-  | "season3original"
-  | "s3worldtour"
-  | "season3worldtour"
-  | "s4"
-  | "season4"
-  | "s4worldtour"
-  | "season4worldtour"
-  | "s4sponsor"
-  | "season4sponsor"
-  | "live"
-  // Specials
-  | "the-finals"
-  | "orf";
-
-// The LeaderboardAPIPlatformParam
+// The LeaderboardPlatforms
 // This is the platform parameter of the /leaderboard endpoint
 // One leaderboard API version can have multiple platform params
-export type LeaderboardAPIPlatformParam = "crossplay" | "steam" | "xbox" | "psn";
+export type LeaderboardPlatforms = "crossplay" | "steam" | "xbox" | "psn";
 
 type LeaderboardAPIRouteFetchDataSettings = {
   kv: KVNamespace;
-  platform: LeaderboardAPIPlatformParam;
+  platform: LeaderboardPlatforms;
 };
 
 export type LeaderboardAPIRoute = {
   type: "leaderboard" | "special";
   leaderboardVersion: LeaderboardVersion;
-  params: {
-    versions: LeaderboardAPIVersionParam[];
-    platforms: LeaderboardAPIPlatformParam[];
-  };
+  leaderboardVersionAliases: string[];
+  availablePlatforms: LeaderboardPlatforms[];
   metadata: {
     title: string;
     description: string;
@@ -83,6 +52,7 @@ export type LeaderboardAPIRoute = {
   includeInBackup?: boolean;
   fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
   zodSchema: ZodSchema;
+  zodSchemaOpenApi: ZodSchema;
 };
 
 export type FameLeague = {
@@ -90,6 +60,7 @@ export type FameLeague = {
   name: string;
 };
 
+/** User consists of all the different user structures from leaderboards. */
 export type User =
   | ClosedBeta1User
   | ClosedBeta2User
@@ -100,4 +71,6 @@ export type User =
   | Season3WorldTourUser
   | Season4User
   | Season4WorldTourUser
-  | Season4SponsorUser;
+  | Season4SponsorUser
+  | TheFinalsUser
+  | OrfUser;

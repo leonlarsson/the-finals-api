@@ -1,10 +1,10 @@
 import type { Context } from "hono";
 import { ZodError } from "zod";
 import { apiRoutes } from "../../apis/leaderboard";
-import type { LeaderboardAPIPlatformParam, LeaderboardAPIVersionParam, User } from "../../types";
+import type { LeaderboardPlatforms, LeaderboardVersion, User } from "../../types";
 
-export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
-  const { leaderboardVersion, platform } = c.req.param();
+export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardVersion: LeaderboardVersion) => {
+  const { platform } = c.req.param();
   const returnCountOnly = ["true", "1"].includes(c.req.query("count") ?? "");
   const nameFilter = c.req.query("name");
 
@@ -13,39 +13,36 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
     return c.json(
       {
         error: `No leaderboard version provided. Valid versions: ${apiRoutes
-          .flatMap((x) => x.params.versions)
+          .map((x) => x.leaderboardVersion)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       },
       404,
     );
 
   // Get the API route that matches the version
-  const apiRoute = apiRoutes.find((route) =>
-    route.params.versions.includes(leaderboardVersion as LeaderboardAPIVersionParam),
-  );
+  const apiRoute = apiRoutes.find((route) => route.leaderboardVersion === leaderboardVersion);
 
   // If no API route matches the version, return an error
   if (!apiRoute)
     return c.json(
       {
         error: `Leaderboard version '${leaderboardVersion}' is not a valid version. Valid versions: ${apiRoutes
-          .flatMap((x) => x.params.versions)
-          .filter((x) => x !== "live")
+          .map((x) => x.leaderboardVersion)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       },
       404,
     );
 
-  const routeRequiresPlatform = apiRoute.params.platforms.length > 0;
-  const validPlatformProvided = apiRoute.params.platforms.includes(platform as LeaderboardAPIPlatformParam);
+  const routeRequiresPlatform = apiRoute.availablePlatforms.length > 0;
+  const validPlatformProvided = apiRoute.availablePlatforms.includes(platform as LeaderboardPlatforms);
 
   // If the API route requires a platform and no platform is provided, return an error
   if (routeRequiresPlatform && !validPlatformProvided)
     return c.json(
       {
-        error: `Leaderboard version '${leaderboardVersion}' requires a valid platform. Valid platforms: ${apiRoute.params.platforms.join(
+        error: `Leaderboard version '${leaderboardVersion}' requires a valid platform. Valid platforms: ${apiRoute.availablePlatforms.join(
           ", ",
-        )}. Example: /v1/leaderboard/${leaderboardVersion}/${apiRoute.params.platforms[0]}`,
+        )}. Example: /v1/leaderboard/${leaderboardVersion}/${apiRoute.availablePlatforms[0]}`,
       },
       404,
     );
@@ -54,9 +51,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
   if (routeRequiresPlatform && platform && !validPlatformProvided)
     return c.json(
       {
-        error: `Platform '${platform}' is not available for leaderboard version ${leaderboardVersion}. Valid platforms: ${apiRoute.params.versions.join(
-          ", ",
-        )}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
+        error: `Platform '${platform}' is not available for leaderboard version ${leaderboardVersion}. Valid platforms: ${apiRoute.leaderboardVersion}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
       },
       404,
     );
@@ -64,7 +59,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
   try {
     const fetchedData = await apiRoute.fetchData({
       kv: c.env.KV,
-      platform: platform as LeaderboardAPIPlatformParam,
+      platform: platform as LeaderboardPlatforms,
     });
 
     // Validate and parse data with Zod schema
@@ -81,22 +76,19 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>) => {
     );
 
     // Return data
-    return c.json({
-      meta: {
-        ...(leaderboardVersion === "live"
-          ? {
-              developerMessage:
-                "Please know that using 'live' as the version will always point to Season 2. Specify a version directly instead of using 'live' to avoid confusion.",
-            }
-          : {}),
-        leaderboardVersion: apiRoute.leaderboardVersion,
-        leaderboardPlatform: platform,
-        nameFilter,
-        returnCountOnly,
+    return c.json(
+      {
+        meta: {
+          leaderboardVersion: apiRoute.leaderboardVersion,
+          leaderboardPlatform: platform,
+          nameFilter,
+          returnCountOnly,
+        },
+        count: filteredData.length,
+        data: returnCountOnly ? [] : filteredData,
       },
-      count: filteredData.length,
-      data: returnCountOnly ? [] : filteredData,
-    });
+      200,
+    );
   } catch (error) {
     console.error("Error in getLeaderboard:", error);
     const isZodError = error instanceof ZodError;
