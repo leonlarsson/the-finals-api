@@ -1,6 +1,11 @@
 import type { Context } from "hono";
-import { ZodError } from "zod";
+import { ZodError, type z } from "zod";
 import { apiRoutes } from "../../apis/leaderboard";
+import type {
+  leaderboard200ResponseSchema,
+  leaderboard404ResponseSchema,
+  leaderboard500ResponseSchema,
+} from "../../schemas/responses";
 import type { LeaderboardPlatforms, LeaderboardVersion, User } from "../../types";
 
 export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardVersion: LeaderboardVersion) => {
@@ -15,7 +20,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
         error: `No leaderboard version provided. Valid versions: ${apiRoutes
           .map((x) => x.leaderboardVersion)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
-      },
+      } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
 
@@ -29,7 +34,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
         error: `Leaderboard version '${leaderboardVersion}' is not a valid version. Valid versions: ${apiRoutes
           .map((x) => x.leaderboardVersion)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
-      },
+      } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
 
@@ -43,7 +48,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
         error: `Leaderboard version '${leaderboardVersion}' requires a valid platform. Valid platforms: ${apiRoute.availablePlatforms.join(
           ", ",
         )}. Example: /v1/leaderboard/${leaderboardVersion}/${apiRoute.availablePlatforms[0]}`,
-      },
+      } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
 
@@ -52,7 +57,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
     return c.json(
       {
         error: `Platform '${platform}' is not available for leaderboard version ${leaderboardVersion}. Valid platforms: ${apiRoute.leaderboardVersion}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
-      },
+      } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
 
@@ -86,17 +91,18 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
         },
         count: filteredData.length,
         data: returnCountOnly ? [] : filteredData,
-      },
+      } satisfies z.infer<ReturnType<typeof leaderboard200ResponseSchema>>,
       200,
     );
   } catch (error) {
     console.error("Error in getLeaderboard:", error);
     const isZodError = error instanceof ZodError;
+
     return c.json(
       {
-        error: `${isZodError ? "A data validation error occurred while fetching the leaderboard This means unexpected data came in from Embark." : "An error occurred in the getLeaderboard handler."} Leaderboard: ${apiRoute.leaderboardVersion}`,
+        error: `${isZodError ? "A data validation error occurred while fetching the leaderboard. This means unexpected data came in from Embark." : "An error occurred in the getLeaderboard handler."} Leaderboard: ${apiRoute.leaderboardVersion}`,
         zodError: isZodError ? error : undefined,
-      },
+      } satisfies z.infer<typeof leaderboard500ResponseSchema>,
       500,
     );
   }
