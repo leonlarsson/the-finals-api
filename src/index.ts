@@ -1,4 +1,4 @@
-import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
 import { apiRoutes } from "./apis/leaderboard";
@@ -26,13 +26,13 @@ apiRoutes.forEach((apiRoute) => {
       ? `/v1/leaderboard/${apiRoute.leaderboardVersion}/{platform}`
       : `/v1/leaderboard/${apiRoute.leaderboardVersion}`,
     request: {
-      params: standardPlatformPathParam(apiRoute.leaderboardVersion, apiRoute.availablePlatforms),
+      params: standardPlatformPathParam(apiRoute),
       query: standarQueryParams(),
     },
     tags: apiRoute.type === "leaderboard" ? ["Leaderboards"] : ["Specials"],
     summary: apiRoute.metadata.title,
     description: apiRoute.metadata.description,
-    responses: standardLeaderboardResponses(apiRoute.zodSchemaOpenApi),
+    responses: standardLeaderboardResponses(apiRoute),
   });
 
   // Handler

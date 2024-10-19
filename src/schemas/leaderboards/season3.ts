@@ -1,6 +1,18 @@
 import { z } from "zod";
-import leagueNumberToName from "../utils/leagueNumberToName";
-import nameFallback from "../utils/nameFallback";
+import leagueNumberToName from "../../utils/leagueNumberToName";
+import nameFallback from "../../utils/nameFallback";
+import {
+  cashoutsPropertySchema,
+  changePropertySchema,
+  leagueNumberPropertySchema,
+  leaguePropertySchema,
+  namePropertySchema,
+  psnNamePropertySchema,
+  rankPropertySchema,
+  rankScorePropertySchema,
+  steamNamePropertySchema,
+  xboxNamePropertySchema,
+} from "./userProperties";
 
 export const season3Schema = z
   .object({
@@ -49,17 +61,20 @@ export const season3Schema = z
 
 export type Season3User = z.infer<typeof season3Schema>[number];
 
-// This is passed to OpenAPI
+// This is passed to the OpenAPI spec
 export const season3UserSchema = z
   .object({
-    rank: z.number(),
-    change: z.number(),
-    name: z.string(),
-    steamName: z.string(),
-    xboxName: z.string(),
-    psnName: z.string(),
-    leagueNumber: z.number(),
-    league: z.string(),
-    rankScore: z.number(),
+    rank: rankPropertySchema,
+    change: changePropertySchema,
+    name: namePropertySchema,
+    steamName: steamNamePropertySchema,
+    psnName: psnNamePropertySchema,
+    xboxName: xboxNamePropertySchema,
+    leagueNumber: leagueNumberPropertySchema,
+    league: leaguePropertySchema,
+    rankScore: rankScorePropertySchema,
   })
-  .array() satisfies z.ZodType<Season3User[]>;
+  .openapi("Season3User", {
+    title: "Season 3 User",
+    description: "A user in the Season 3 leaderboard.",
+  }) satisfies z.ZodType<Season3User>;

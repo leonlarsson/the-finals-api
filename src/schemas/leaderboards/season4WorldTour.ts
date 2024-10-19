@@ -1,5 +1,13 @@
 import { z } from "zod";
-import nameFallback from "../utils/nameFallback";
+import nameFallback from "../../utils/nameFallback";
+import {
+  cashoutsPropertySchema,
+  namePropertySchema,
+  psnNamePropertySchema,
+  rankPropertySchema,
+  steamNamePropertySchema,
+  xboxNamePropertySchema,
+} from "./userProperties";
 
 export const season4WorldTourSchema = z
   .object({
@@ -23,14 +31,17 @@ export const season4WorldTourSchema = z
 
 export type Season4WorldTourUser = z.infer<typeof season4WorldTourSchema>[number];
 
-// This is passed to OpenAPI
+// This is passed to the OpenAPI spec
 export const season4WorldTourUserSchema = z
   .object({
-    rank: z.number(),
-    name: z.string(),
-    steamName: z.string(),
-    xboxName: z.string(),
-    psnName: z.string(),
-    cashouts: z.number(),
+    rank: rankPropertySchema,
+    name: namePropertySchema,
+    steamName: steamNamePropertySchema,
+    psnName: psnNamePropertySchema,
+    xboxName: xboxNamePropertySchema,
+    cashouts: cashoutsPropertySchema,
   })
-  .array() satisfies z.ZodType<Season4WorldTourUser[]>;
+  .openapi("Season4WorldTourUser", {
+    title: "Season 4 World Tour User",
+    description: "A user in the Season 4 World Tour leaderboard.",
+  }) satisfies z.ZodType<Season4WorldTourUser>;

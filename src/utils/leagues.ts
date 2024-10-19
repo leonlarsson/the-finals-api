@@ -34,7 +34,6 @@ const closedBeta2Leagues = [
   { fame: 23_750, name: "Diamond 1" },
 ] satisfies FameLeague[];
 
-// TODO: Values from https://twitter.com/Party_Rooster - Will still chase with Embark
 const season1Leagues = [
   { fame: 0, name: "Bronze 4" },
   { fame: 250, name: "Bronze 3" },

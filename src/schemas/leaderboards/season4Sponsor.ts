@@ -1,5 +1,14 @@
 import { z } from "zod";
-import nameFallback from "../utils/nameFallback";
+import nameFallback from "../../utils/nameFallback";
+import {
+  fansPropertySchema,
+  namePropertySchema,
+  psnNamePropertySchema,
+  rankPropertySchema,
+  sponsorPropertySchema,
+  steamNamePropertySchema,
+  xboxNamePropertySchema,
+} from "./userProperties";
 
 export const season4SponsorSchema = z
   .object({
@@ -25,15 +34,18 @@ export const season4SponsorSchema = z
 
 export type Season4SponsorUser = z.infer<typeof season4SponsorSchema>[number];
 
-// This is passed to OpenAPI
+// This is passed to the OpenAPI spec
 export const season4SponsorUserSchema = z
   .object({
-    rank: z.number(),
-    name: z.string(),
-    sponsor: z.string(),
-    fans: z.number(),
-    steamName: z.string(),
-    xboxName: z.string(),
-    psnName: z.string(),
+    rank: rankPropertySchema,
+    name: namePropertySchema,
+    steamName: steamNamePropertySchema,
+    psnName: psnNamePropertySchema,
+    xboxName: xboxNamePropertySchema,
+    sponsor: sponsorPropertySchema,
+    fans: fansPropertySchema,
   })
-  .array() satisfies z.ZodType<Season4SponsorUser[]>;
+  .openapi("Season4SponsorUser", {
+    title: "Season 4 Sponsor User",
+    description: "A user in the Season 4 Sponsor leaderboard.",
+  }) satisfies z.ZodType<Season4SponsorUser>;
