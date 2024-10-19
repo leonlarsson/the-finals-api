@@ -1,6 +1,6 @@
 # THE FINALS API
 
-This API is currently just a wrapper around the official THE FINALS leaderboard API from Embark.
+This API provides leaderboard data from all leaderboards of [THE FINALS](https://www.reachthefinals.com/).
 
 ### Usage
 
@@ -23,12 +23,12 @@ There is a single endpoint, `/v1/leaderboard/:leaderboardVersion/:platform?`, wh
 }
 ```
 
-To know which properties each leaderboard returns, just try it and see. The data returned is also explicitly defined in the folder [/src/transformers](https://github.com/leonlarsson/the-finals-api/tree/main/src/transformers).
+To know which properties each leaderboard returns, visit https://api.the-finals-leaderboard.com/. The data returned is also explicitly defined in the folder [/src/schema](https://github.com/leonlarsson/the-finals-api/tree/main/src/schemas).
 
 #### Parameters
 
-- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, `s1`, `s2`, `s3`, or `s3worldtour`. Always required. Note: There is also a `live` parameter, but this was a bad idea, so the `live` parameter will continue pointing at Season 2.
-- `platform`: The platform. Only required for versions `ob`, `s1`, `s2`, and `s3` Needs to be one of `crossplay`, `steam`, `xbox`, or `psn`. However, `s3` and `s3worldtour` only support `crossplay`.
+- `leaderboardVersion`: The leaderboard version. One of `cb1`, `cb2`, `ob`, `s1`, `s2`, `s3`, `s3worldtour`, `s4`, `s4worldtour`, `s4sponsor`, `the-finals`, or `orf`. Always required.
+- `platform`: The platform. Only required for some version. Visit https://api.the-finals-leaderboard.com/ to see which platforms are available for each version.
 
 #### Query Parameters
 
