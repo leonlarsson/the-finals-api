@@ -23,11 +23,13 @@ export const orfSchema = z
 export type OrfUser = z.infer<typeof orfSchema>[number];
 
 // This is passed to OpenAPI
-export const orfUserSchema = z.object({
-  rank: z.number(),
-  name: z.string(),
-  score: z.number(),
-  steamName: z.string(),
-  psnName: z.string(),
-  xboxName: z.string(),
-}) satisfies z.ZodType<OrfUser>;
+export const orfUserSchema = z
+  .object({
+    rank: z.number(),
+    name: z.string(),
+    score: z.number(),
+    steamName: z.string(),
+    psnName: z.string(),
+    xboxName: z.string(),
+  })
+  .array() satisfies z.ZodType<OrfUser[]>;

@@ -23,11 +23,13 @@ export const theFinalsSchema = z
 export type TheFinalsUser = z.infer<typeof theFinalsSchema>[number];
 
 // This is passed to OpenAPI
-export const theFinalsUserSchema = z.object({
-  rank: z.number(),
-  name: z.string(),
-  tournamentWins: z.number(),
-  steamName: z.string(),
-  psnName: z.string(),
-  xboxName: z.string(),
-}) satisfies z.ZodType<TheFinalsUser>;
+export const theFinalsUserSchema = z
+  .object({
+    rank: z.number(),
+    name: z.string(),
+    tournamentWins: z.number(),
+    steamName: z.string(),
+    psnName: z.string(),
+    xboxName: z.string(),
+  })
+  .array() satisfies z.ZodType<TheFinalsUser[]>;

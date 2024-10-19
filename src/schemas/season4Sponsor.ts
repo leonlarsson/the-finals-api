@@ -26,12 +26,14 @@ export const season4SponsorSchema = z
 export type Season4SponsorUser = z.infer<typeof season4SponsorSchema>[number];
 
 // This is passed to OpenAPI
-export const season4SponsorUserSchema = z.object({
-  rank: z.number(),
-  name: z.string(),
-  sponsor: z.string(),
-  fans: z.number(),
-  steamName: z.string(),
-  xboxName: z.string(),
-  psnName: z.string(),
-}) satisfies z.ZodType<Season4SponsorUser>;
+export const season4SponsorUserSchema = z
+  .object({
+    rank: z.number(),
+    name: z.string(),
+    sponsor: z.string(),
+    fans: z.number(),
+    steamName: z.string(),
+    xboxName: z.string(),
+    psnName: z.string(),
+  })
+  .array() satisfies z.ZodType<Season4SponsorUser[]>;

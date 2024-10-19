@@ -50,14 +50,16 @@ export const season3Schema = z
 export type Season3User = z.infer<typeof season3Schema>[number];
 
 // This is passed to OpenAPI
-export const season3UserSchema = z.object({
-  rank: z.number(),
-  change: z.number(),
-  name: z.string(),
-  steamName: z.string(),
-  xboxName: z.string(),
-  psnName: z.string(),
-  leagueNumber: z.number(),
-  league: z.string(),
-  rankScore: z.number(),
-}) satisfies z.ZodType<Season3User>;
+export const season3UserSchema = z
+  .object({
+    rank: z.number(),
+    change: z.number(),
+    name: z.string(),
+    steamName: z.string(),
+    xboxName: z.string(),
+    psnName: z.string(),
+    leagueNumber: z.number(),
+    league: z.string(),
+    rankScore: z.number(),
+  })
+  .array() satisfies z.ZodType<Season3User[]>;
