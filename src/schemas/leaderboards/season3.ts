@@ -2,7 +2,6 @@ import { z } from "zod";
 import leagueNumberToName from "../../utils/leagueNumberToName";
 import nameFallback from "../../utils/nameFallback";
 import {
-  cashoutsPropertySchema,
   changePropertySchema,
   leagueNumberPropertySchema,
   leaguePropertySchema,

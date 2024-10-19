@@ -13,7 +13,7 @@ export default async (kv: KVNamespace) => {
     if (success) {
       // Append _platform if route has platforms
       const key =
-        route.params.platforms.length === 0
+        route.availablePlatforms.length === 0
           ? `backup_${route.leaderboardVersion}`
           : `backup_${route.leaderboardVersion}_${platform}`;
 
@@ -23,7 +23,7 @@ export default async (kv: KVNamespace) => {
 
   // For each route
   for (const route of apiRoutes.filter((r) => r.includeInBackup)) {
-    const platforms = route.params.platforms;
+    const platforms = route.availablePlatforms;
 
     // If route has no platforms, platform param doesn't really matter
     // If it does, backup data for each platform

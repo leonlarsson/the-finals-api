@@ -3,7 +3,6 @@ import leagueNumberToName from "../../utils/leagueNumberToName";
 import {
   cashoutsPropertySchema,
   changePropertySchema,
-  famePropertySchema,
   leagueNumberPropertySchema,
   leaguePropertySchema,
   namePropertySchema,
