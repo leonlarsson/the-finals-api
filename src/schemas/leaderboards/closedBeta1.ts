@@ -12,7 +12,7 @@ import {
   steamNamePropertySchema,
   xboxNamePropertySchema,
   xpPropertySchema,
-} from "./userProperties";
+} from "../userProperties";
 
 export const closedBeta1Schema = z
   .object({

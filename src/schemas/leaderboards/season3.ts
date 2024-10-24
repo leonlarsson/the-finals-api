@@ -11,7 +11,7 @@ import {
   rankScorePropertySchema,
   steamNamePropertySchema,
   xboxNamePropertySchema,
-} from "./userProperties";
+} from "../userProperties";
 
 export const season3Schema = z
   .object({

@@ -7,7 +7,7 @@ import {
   scorePropertySchema,
   steamNamePropertySchema,
   xboxNamePropertySchema,
-} from "./userProperties";
+} from "../userProperties";
 
 export const orfSchema = z
   .object({

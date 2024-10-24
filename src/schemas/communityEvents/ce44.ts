@@ -7,7 +7,7 @@ import {
   scorePropertySchema,
   steamNamePropertySchema,
   xboxNamePropertySchema,
-} from "../leaderboards/userProperties";
+} from "../userProperties";
 import { communityEventProgressSchema } from "./communityEventProgress";
 
 export const ce44Schema = z.object({

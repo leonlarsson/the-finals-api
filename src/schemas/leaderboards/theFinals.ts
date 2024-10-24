@@ -7,7 +7,7 @@ import {
   steamNamePropertySchema,
   tournamentWinsPropertySchema,
   xboxNamePropertySchema,
-} from "./userProperties";
+} from "../userProperties";
 
 export const theFinalsSchema = z
   .object({

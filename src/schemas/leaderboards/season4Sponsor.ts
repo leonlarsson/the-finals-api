@@ -8,7 +8,7 @@ import {
   sponsorPropertySchema,
   steamNamePropertySchema,
   xboxNamePropertySchema,
-} from "./userProperties";
+} from "../userProperties";
 
 export const season4SponsorSchema = z
   .object({
