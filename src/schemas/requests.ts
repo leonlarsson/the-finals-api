@@ -23,8 +23,8 @@ export const leaderboardCountQuerySchema = z
       name: "count",
       in: "query",
     },
-    example: "false",
-    description: "Return only the count of the leaderboard. Default: false",
+    example: "true",
+    description: "Return only the count of the leaderboard.",
   });
 
 export const leaderboardNameQuerySchema = z
