@@ -33,20 +33,20 @@ leaderboardApiRoutes.forEach((apiRoute) => {
   const route = createRoute({
     method: "get",
     path: apiRoute.availablePlatforms.length
-      ? `/v1/leaderboard/${apiRoute.leaderboardVersion}/{platform}`
-      : `/v1/leaderboard/${apiRoute.leaderboardVersion}`,
+      ? `/v1/leaderboard/${apiRoute.id}/{platform}`
+      : `/v1/leaderboard/${apiRoute.id}`,
     request: {
       params: standardPlatformPathParam(apiRoute),
       query: standarQueryParams(),
     },
-    tags: [apiRoute.type.charAt(0).toUpperCase() + apiRoute.type.slice(1)],
-    summary: apiRoute.metadata.title,
+    tags: apiRoute.metadata.tags,
+    summary: apiRoute.metadata.summary,
     description: apiRoute.metadata.description,
     responses: standardLeaderboardResponses(apiRoute),
   });
 
   // Handler
-  app.openapi(route, (c) => getLeaderboard(c, apiRoute.leaderboardVersion));
+  app.openapi(route, (c) => getLeaderboard(c, apiRoute.id));
 });
 
 // Create OpenAPI routes for all community event routes
@@ -54,32 +54,30 @@ communityEventApiRoutes.forEach((apiRoute) => {
   const route = createRoute({
     method: "get",
     path: apiRoute.availablePlatforms.length
-      ? `/v1/community-event/${apiRoute.leaderboardVersion}/{platform}`
-      : `/v1/community-event/${apiRoute.leaderboardVersion}`,
+      ? `/v1/community-event/${apiRoute.id}/{platform}`
+      : `/v1/community-event/${apiRoute.id}`,
     request: {
       params: standardPlatformPathParam(apiRoute),
       query: standarQueryParams(),
     },
-    tags: [apiRoute.type.charAt(0).toUpperCase() + apiRoute.type.slice(1)],
-    summary: apiRoute.metadata.title,
+    tags: apiRoute.metadata.tags,
+    summary: apiRoute.metadata.summary,
     description: apiRoute.metadata.description,
     responses: standardCommunityEventResponses(apiRoute),
   });
 
   // Handler
-  app.openapi(route, (c) => getCommunityEvent(c, apiRoute.leaderboardVersion));
+  app.openapi(route, (c) => getCommunityEvent(c, apiRoute.id));
 });
 
-// Redirect all version aliases
+// Redirect all legacy version aliases
 leaderboardApiRoutes.forEach((apiRoute) => {
-  apiRoute.leaderboardVersionAliases.forEach((versionAlias) => {
+  apiRoute.legacyIds?.forEach((versionAlias) => {
     app.get(`/v1/leaderboard/${versionAlias}/:platform?`, (c) => {
       const platform = c.req.param("platform");
       const query = c.req.query();
       const queryString = new URLSearchParams(query).toString();
-      const redirectUrl = platform
-        ? `/v1/leaderboard/${apiRoute.leaderboardVersion}/${platform}`
-        : `/v1/leaderboard/${apiRoute.leaderboardVersion}`;
+      const redirectUrl = platform ? `/v1/leaderboard/${apiRoute.id}/${platform}` : `/v1/leaderboard/${apiRoute.id}`;
       return c.redirect(queryString ? `${redirectUrl}?${queryString}` : redirectUrl);
     });
   });

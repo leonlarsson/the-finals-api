@@ -24,11 +24,11 @@ export const season4SponsorSchema = z
   .transform((data) => ({
     rank: data[1],
     name: nameFallback(data[3], "Unknown#0000"),
-    sponsor: data[9],
-    fans: data[10],
     steamName: nameFallback(data[6]),
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
+    sponsor: data[9],
+    fans: data[10],
   }))
   .array();
 

@@ -6,33 +6,33 @@ import type {
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../../schemas/responses";
-import type { LeaderboardPlatforms, LeaderboardVersion, User } from "../../types";
+import type { LeaderboardPlatforms, User } from "../../types";
 
-export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardVersion: LeaderboardVersion) => {
+export default async (c: Context<{ Bindings: CloudflareBindings }>, id: string) => {
   const { platform } = c.req.param();
   const returnCountOnly = ["true", "1"].includes(c.req.query("count") ?? "");
   const nameFilter = c.req.query("name");
 
   // If no leaderboard version is provided, return an error
-  if (!leaderboardVersion)
+  if (!id)
     return c.json(
       {
         error: `No leaderboard version provided. Valid versions: ${leaderboardApiRoutes
-          .map((x) => x.leaderboardVersion)
+          .map((x) => x.id)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
 
   // Get the API route that matches the version
-  const apiRoute = leaderboardApiRoutes.find((route) => route.leaderboardVersion === leaderboardVersion);
+  const apiRoute = leaderboardApiRoutes.find((route) => route.id === id);
 
   // If no API route matches the version, return an error
   if (!apiRoute)
     return c.json(
       {
-        error: `Leaderboard version '${leaderboardVersion}' is not a valid version. Valid versions: ${leaderboardApiRoutes
-          .map((x) => x.leaderboardVersion)
+        error: `Leaderboard version '${id}' is not a valid version. Valid versions: ${leaderboardApiRoutes
+          .map((x) => x.id)
           .join(", ")}. Example: /v1/leaderboard/cb1`,
       } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
@@ -45,9 +45,9 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
   if (routeRequiresPlatform && !validPlatformProvided)
     return c.json(
       {
-        error: `Leaderboard version '${leaderboardVersion}' requires a valid platform. Valid platforms: ${apiRoute.availablePlatforms.join(
+        error: `Leaderboard version '${id}' requires a valid platform. Valid platforms: ${apiRoute.availablePlatforms.join(
           ", ",
-        )}. Example: /v1/leaderboard/${leaderboardVersion}/${apiRoute.availablePlatforms[0]}`,
+        )}. Example: /v1/leaderboard/${id}/${apiRoute.availablePlatforms[0]}`,
       } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
@@ -56,7 +56,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
   if (routeRequiresPlatform && platform && !validPlatformProvided)
     return c.json(
       {
-        error: `Platform '${platform}' is not available for leaderboard version ${leaderboardVersion}. Valid platforms: ${apiRoute.leaderboardVersion}. Example: /v1/leaderboard/${leaderboardVersion}/steam`,
+        error: `Platform '${platform}' is not available for leaderboard version ${id}. Valid platforms: ${apiRoute.id}. Example: /v1/leaderboard/${id}/steam`,
       } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
@@ -84,7 +84,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
     return c.json(
       {
         meta: {
-          leaderboardVersion: apiRoute.leaderboardVersion,
+          leaderboardVersion: apiRoute.id,
           leaderboardPlatform: platform,
           nameFilter,
           returnCountOnly,
@@ -100,7 +100,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, leaderboardV
 
     return c.json(
       {
-        error: `${isZodError ? "A data validation error occurred while fetching the leaderboard. This means unexpected data came in from Embark." : "An error occurred in the getLeaderboard handler."} Leaderboard: ${apiRoute.leaderboardVersion}`,
+        error: `${isZodError ? "A data validation error occurred while fetching the leaderboard. This means unexpected data came in from Embark." : "An error occurred in the getLeaderboard handler."} Leaderboard: ${apiRoute.id}`,
         zodError: isZodError ? error : undefined,
       } satisfies z.infer<typeof leaderboard500ResponseSchema>,
       500,

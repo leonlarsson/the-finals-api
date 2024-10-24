@@ -10,7 +10,7 @@ import {
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../schemas/responses";
-import type { CommunityEventAPIRoute, LeaderboardAPIRoute } from "../types";
+import type { BaseAPIRoute } from "../types";
 
 export const standarQueryParams = () =>
   z.object({
@@ -18,10 +18,10 @@ export const standarQueryParams = () =>
     name: leaderboardNameQuerySchema,
   });
 
-export const standardPlatformPathParam = (apiRoute: LeaderboardAPIRoute | CommunityEventAPIRoute) =>
+export const standardPlatformPathParam = (apiRoute: BaseAPIRoute) =>
   apiRoute.availablePlatforms.length ? z.object({ platform: leaderboardPlatformParamSchema(apiRoute) }) : undefined;
 
-export const standardLeaderboardResponses = (apiRoute: LeaderboardAPIRoute) => ({
+export const standardLeaderboardResponses = (apiRoute: BaseAPIRoute) => ({
   200: {
     content: {
       "application/json": {
@@ -48,7 +48,7 @@ export const standardLeaderboardResponses = (apiRoute: LeaderboardAPIRoute) => (
   },
 });
 
-export const standardCommunityEventResponses = (apiRoute: CommunityEventAPIRoute) => ({
+export const standardCommunityEventResponses = (apiRoute: BaseAPIRoute) => ({
   200: {
     content: {
       "application/json": {

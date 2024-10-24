@@ -23,10 +23,10 @@ export const ce44Schema = z.object({
     .transform((data) => ({
       rank: data[1],
       name: data[3],
-      score: data[5],
       steamName: nameFallback(data[6]),
       psnName: nameFallback(data[7]),
       xboxName: nameFallback(data[8]),
+      score: data[5],
     }))
     .array(),
   progress: communityEventProgressSchema,

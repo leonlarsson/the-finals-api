@@ -1,4 +1,3 @@
-import { ce44ResponseSchema, ce44Schema } from "../schemas/communityEvents/ce44";
 import { closedBeta1Schema, closedBeta1UserSchema } from "../schemas/leaderboards/closedBeta1";
 import { closedBeta2Schema, closedBeta2UserSchema } from "../schemas/leaderboards/closedBeta2";
 import { openBetaSchema, openBetaUserSchema } from "../schemas/leaderboards/openBeta";
@@ -11,23 +10,22 @@ import { season4Schema, season4UserSchema } from "../schemas/leaderboards/season
 import { season4SponsorSchema, season4SponsorUserSchema } from "../schemas/leaderboards/season4Sponsor";
 import { season4WorldTourSchema, season4WorldTourUserSchema } from "../schemas/leaderboards/season4WorldTour";
 import { theFinalsSchema, theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
-import type { LeaderboardAPIRoute } from "../types";
-import fetchCe44Data from "../utils/fetchers/fetchCe44Data";
+import type { BaseAPIRoute } from "../types";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
 import fetchS4Data from "../utils/fetchers/fetchS4Data";
 import fetchS4SponsorData from "../utils/fetchers/fetchS4SponsorData";
 import fetchS4WorldTourData from "../utils/fetchers/fetchS4WorldTourData";
 import { getJsonFromKV } from "../utils/kv";
 
-export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
+export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
-    type: "leaderboard",
-    leaderboardVersion: "cb1",
-    leaderboardVersionAliases: ["closedbeta1"],
+    id: "cb1",
+    legacyIds: ["closedbeta1"],
     availablePlatforms: [],
     metadata: {
-      title: "Closed Beta 1",
+      summary: "Closed Beta 1",
       description: "Get leaderboard data from the first closed beta of THE FINALS.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta1");
@@ -36,13 +34,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: closedBeta1UserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "cb2",
-    leaderboardVersionAliases: ["closedbeta2"],
+    id: "cb2",
+    legacyIds: ["closedbeta2"],
     availablePlatforms: [],
     metadata: {
-      title: "Closed Beta 2",
+      summary: "Closed Beta 2",
       description: "Get leaderboard data from the second closed beta of THE FINALS.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta2");
@@ -51,13 +49,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: closedBeta2UserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "ob",
-    leaderboardVersionAliases: ["openbeta"],
+    id: "ob",
+    legacyIds: ["openbeta"],
     availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
     metadata: {
-      title: "Open Beta",
+      summary: "Open Beta",
       description: "Get leaderboard data from the open beta of THE FINALS.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_openbeta_${platform}`);
@@ -66,13 +64,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: openBetaUserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s1",
-    leaderboardVersionAliases: ["season1"],
+    id: "s1",
+    legacyIds: ["season1"],
     availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
     metadata: {
-      title: "Season 1",
+      summary: "Season 1",
       description: "Get leaderboard data from the first season of THE FINALS.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season1_${platform}`);
@@ -81,14 +79,14 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: season1UserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s2",
+    id: "s2",
     // "live" was a horrible idea, but it's here now. It will remain on S2
-    leaderboardVersionAliases: ["season2", "live"],
+    legacyIds: ["season2", "live"],
     availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
     metadata: {
-      title: "Season 2",
+      summary: "Season 2",
       description: "Get leaderboard data from the second season of THE FINALS.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season2_${platform}`);
@@ -97,13 +95,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: season2UserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s3",
-    leaderboardVersionAliases: ["season3"],
+    id: "s3",
+    legacyIds: ["season3"],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "Season 3",
+      summary: "Season 3",
       description: "Get leaderboard data from the third season of THE FINALS.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}`);
@@ -112,13 +110,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: season3UserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s3original",
-    leaderboardVersionAliases: ["season3original"],
+    id: "s3original",
+    legacyIds: ["season3original"],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "Season 3 - Original",
+      summary: "Season 3 - Original",
       description: "Get leaderboard data from the third season of THE FINALS. Pre-purge.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}_original`);
@@ -127,13 +125,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: season3UserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s3worldtour",
-    leaderboardVersionAliases: ["season3worldtour"],
+    id: "s3worldtour",
+    legacyIds: ["season3worldtour"],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "Season 3 World Tour",
+      summary: "Season 3 World Tour",
       description: "Get leaderboard data from the third season of THE FINALS - World Tour.",
+      tags: ["Leaderboard"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3worldtour_${platform}`);
@@ -142,13 +140,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: season3WorldTourUserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s4",
-    leaderboardVersionAliases: ["season4"],
+    id: "s4",
+    legacyIds: ["season4"],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "Season 4",
+      summary: "Season 4",
       description: "Get leaderboard data from the fourth season of THE FINALS.",
+      tags: ["Leaderboard"],
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -158,13 +156,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: season4UserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s4worldtour",
-    leaderboardVersionAliases: ["season4worldtour"],
+    id: "s4worldtour",
+    legacyIds: ["season4worldtour"],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "Season 4 World Tour",
+      summary: "Season 4 World Tour",
       description: "Get leaderboard data from the fourth season of THE FINALS - World Tour.",
+      tags: ["Leaderboard"],
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -174,13 +172,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: season4WorldTourUserSchema,
   },
   {
-    type: "leaderboard",
-    leaderboardVersion: "s4sponsor",
-    leaderboardVersionAliases: ["season4sponsor"],
+    id: "s4sponsor",
+    legacyIds: ["season4sponsor"],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "Season 4 Sponsor",
+      summary: "Season 4 Sponsor",
       description: "Get leaderboard data from the fourth season of THE FINALS - Sponsor.",
+      tags: ["Leaderboard"],
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -192,13 +190,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
 
   // Special leaderboards. Any non-main leaderboards such as events
   {
-    type: "special",
-    leaderboardVersion: "the-finals",
-    leaderboardVersionAliases: [],
+    id: "the-finals",
+    legacyIds: [],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "THE FINALS",
+      summary: "THE FINALS",
       description: "Get leaderboard data from the 'The Finals'.",
+      tags: ["Leaderboard - Special"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_the-finals_${platform}`);
@@ -207,13 +205,13 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchemaOpenApi: theFinalsUserSchema,
   },
   {
-    type: "special",
-    leaderboardVersion: "orf",
-    leaderboardVersionAliases: [],
+    id: "orf",
+    legacyIds: [],
     availablePlatforms: ["crossplay"],
     metadata: {
-      title: "ÖRF",
+      summary: "ÖRF",
       description: "Get leaderboard data from the ÖRF leaderboard.",
+      tags: ["Leaderboard - Special"],
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -222,4 +220,4 @@ export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
     zodSchema: orfSchema,
     zodSchemaOpenApi: orfUserSchema,
   },
-] as const satisfies LeaderboardAPIRoute[];
+] satisfies BaseAPIRoute[];

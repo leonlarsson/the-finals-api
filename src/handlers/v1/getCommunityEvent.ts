@@ -6,9 +6,9 @@ import type {
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../../schemas/responses";
-import type { CommunityEventVersion, LeaderboardPlatforms, User } from "../../types";
+import type { LeaderboardPlatforms, User } from "../../types";
 
-export default async (c: Context<{ Bindings: CloudflareBindings }>, communityEventVersion: CommunityEventVersion) => {
+export default async (c: Context<{ Bindings: CloudflareBindings }>, communityEventVersion: string) => {
   const { platform } = c.req.param();
   const returnCountOnly = ["true", "1"].includes(c.req.query("count") ?? "");
   const nameFilter = c.req.query("name");
@@ -18,28 +18,27 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, communityEve
     return c.json(
       {
         error: `No community event version provided. Valid versions: ${communityEventApiRoutes
-          .map((x) => x.leaderboardVersion)
+          .map((x) => x.id)
           .join(", ")}. Example: /v1/community-event/cb1`,
       } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
 
   // Get the API route that matches the version
-  const apiRoute = communityEventApiRoutes.find((route) => route.leaderboardVersion === communityEventVersion);
+  const apiRoute = communityEventApiRoutes.find((route) => route.id === communityEventVersion);
 
   // If no API route matches the version, return an error
   if (!apiRoute)
     return c.json(
       {
         error: `Community event version '${communityEventVersion}' is not a valid version. Valid versions: ${communityEventApiRoutes
-          .map((x) => x.leaderboardVersion)
+          .map((x) => x.id)
           .join(", ")}. Example: /v1/community-event/cb1`,
       } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
 
   const routeRequiresPlatform = apiRoute.availablePlatforms.length > 0;
-  // @ts-ignore Cannot be bothed with this
   const validPlatformProvided = apiRoute.availablePlatforms.includes(platform as LeaderboardPlatforms);
 
   // If the API route requires a platform and no platform is provided, return an error
@@ -57,7 +56,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, communityEve
   if (routeRequiresPlatform && platform && !validPlatformProvided)
     return c.json(
       {
-        error: `Platform '${platform}' is not available for community event version ${communityEventVersion}. Valid platforms: ${apiRoute.leaderboardVersion}. Example: /v1/community-event/${communityEventVersion}/steam`,
+        error: `Platform '${platform}' is not available for community event version ${communityEventVersion}. Valid platforms: ${apiRoute.id}. Example: /v1/community-event/${communityEventVersion}/steam`,
       } satisfies z.infer<typeof leaderboard404ResponseSchema>,
       404,
     );
@@ -85,7 +84,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, communityEve
     return c.json(
       {
         meta: {
-          leaderboardVersion: apiRoute.leaderboardVersion,
+          leaderboardVersion: apiRoute.id,
           leaderboardPlatform: platform,
           nameFilter,
           returnCountOnly,
@@ -104,7 +103,7 @@ export default async (c: Context<{ Bindings: CloudflareBindings }>, communityEve
 
     return c.json(
       {
-        error: `${isZodError ? "A data validation error occurred while fetching the community event. This means unexpected data came in from Embark." : "An error occurred in the getCommunityEvent handler."} Community event: ${apiRoute.leaderboardVersion}`,
+        error: `${isZodError ? "A data validation error occurred while fetching the community event. This means unexpected data came in from Embark." : "An error occurred in the getCommunityEvent handler."} Community event: ${apiRoute.id}`,
         zodError: isZodError ? error : undefined,
       } satisfies z.infer<typeof leaderboard500ResponseSchema>,
       500,

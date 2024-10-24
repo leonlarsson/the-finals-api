@@ -1,10 +1,10 @@
 import { z } from "zod";
-import type { CommunityEventAPIRoute, LeaderboardAPIRoute } from "../types";
+import type { BaseAPIRoute } from "../types";
 
-export const leaderboardPlatformParamSchema = (apiRoute: LeaderboardAPIRoute | CommunityEventAPIRoute) =>
+export const leaderboardPlatformParamSchema = (apiRoute: BaseAPIRoute) =>
   z
     .enum(apiRoute.availablePlatforms as [string, ...string[]], {
-      message: `This leaderboard requires one of the following platforms: ${apiRoute.availablePlatforms.join(", ")}. Example: /v1/leaderboard/${apiRoute.leaderboardVersion}/${apiRoute.availablePlatforms[0]}`,
+      message: `This leaderboard requires one of the following platforms: ${apiRoute.availablePlatforms.join(", ")}. Example: /v1/leaderboard/${apiRoute.id}/${apiRoute.availablePlatforms[0]}`,
     })
     .openapi({
       param: {

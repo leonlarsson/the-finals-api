@@ -21,10 +21,10 @@ export const theFinalsSchema = z
   .transform((data) => ({
     rank: data[1],
     name: data[3],
-    tournamentWins: data[5],
     steamName: nameFallback(data[6]),
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
+    tournamentWins: data[5],
   }))
   .array();
 

@@ -12,26 +12,6 @@ import type { Season4SponsorUser } from "./schemas/leaderboards/season4Sponsor";
 import type { Season4WorldTourUser } from "./schemas/leaderboards/season4WorldTour";
 import type { TheFinalsUser } from "./schemas/leaderboards/theFinals";
 
-// The LeaderboardId
-// One per leaderboard API version
-export type LeaderboardVersion =
-  | "cb1"
-  | "cb2"
-  | "ob"
-  | "s1"
-  | "s2"
-  | "s3"
-  | "s3original"
-  | "s3worldtour"
-  | "s4"
-  | "s4worldtour"
-  | "s4sponsor"
-  // Specials
-  | "the-finals"
-  | "orf";
-
-export type CommunityEventVersion = "ce44";
-
 // The LeaderboardPlatforms
 // This is the platform parameter of the /leaderboard endpoint
 // One leaderboard API version can have multiple platform params
@@ -42,35 +22,20 @@ type LeaderboardAPIRouteFetchDataSettings = {
   platform: LeaderboardPlatforms;
 };
 
-export type LeaderboardAPIRoute = {
-  type: "leaderboard" | "special";
-  leaderboardVersion: LeaderboardVersion;
-  leaderboardVersionAliases: string[];
+export interface BaseAPIRoute {
+  id: string;
+  legacyIds?: string[];
   availablePlatforms: LeaderboardPlatforms[];
   metadata: {
-    title: string;
+    summary: string;
     description: string;
+    tags: string[];
   };
   includeInBackup?: boolean;
   fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
   zodSchema: ZodSchema;
   zodSchemaOpenApi: ZodSchema;
-};
-
-export type CommunityEventAPIRoute = {
-  type: "event";
-  leaderboardVersion: CommunityEventVersion;
-  leaderboardVersionAliases: string[];
-  availablePlatforms: LeaderboardPlatforms[];
-  metadata: {
-    title: string;
-    description: string;
-  };
-  includeInBackup?: boolean;
-  fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
-  zodSchema: ZodSchema;
-  zodSchemaOpenApi: ZodSchema;
-};
+}
 
 export type FameLeague = {
   fame: number;
