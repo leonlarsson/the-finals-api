@@ -1,12 +1,19 @@
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
-import { apiRoutes } from "./apis/leaderboard";
+import { communityEventApiRoutes } from "./apis/communityEvents";
+import { leaderboardApiRoutes } from "./apis/leaderboard";
 import backup from "./handlers/backup";
 import tflNotice from "./handlers/tflNotice";
+import getCommunityEvent from "./handlers/v1/getCommunityEvent";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import { cache } from "./middleware/cache";
-import { standarQueryParams, standardLeaderboardResponses, standardPlatformPathParam } from "./utils/openApiStandards";
+import {
+  standarQueryParams,
+  standardCommunityEventResponses,
+  standardLeaderboardResponses,
+  standardPlatformPathParam,
+} from "./utils/openApiStandards";
 
 const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
 
@@ -16,10 +23,13 @@ app.use("*", cors());
 // Cache all leaderboard routes
 app.use("/v1/leaderboard/*", cache("v1-leaderboard", 10));
 
+// Cache all community event routes
+app.use("/v1/community-event/*", cache("v1-community-event", 10));
+
 // Routes
 
 // Create OpenAPI routes for all leaderboard routes
-apiRoutes.forEach((apiRoute) => {
+leaderboardApiRoutes.forEach((apiRoute) => {
   const route = createRoute({
     method: "get",
     path: apiRoute.availablePlatforms.length
@@ -29,7 +39,7 @@ apiRoutes.forEach((apiRoute) => {
       params: standardPlatformPathParam(apiRoute),
       query: standarQueryParams(),
     },
-    tags: apiRoute.type === "leaderboard" ? ["Leaderboards"] : ["Specials"],
+    tags: [apiRoute.type.charAt(0).toUpperCase() + apiRoute.type.slice(1)],
     summary: apiRoute.metadata.title,
     description: apiRoute.metadata.description,
     responses: standardLeaderboardResponses(apiRoute),
@@ -39,8 +49,29 @@ apiRoutes.forEach((apiRoute) => {
   app.openapi(route, (c) => getLeaderboard(c, apiRoute.leaderboardVersion));
 });
 
+// Create OpenAPI routes for all community event routes
+communityEventApiRoutes.forEach((apiRoute) => {
+  const route = createRoute({
+    method: "get",
+    path: apiRoute.availablePlatforms.length
+      ? `/v1/community-event/${apiRoute.leaderboardVersion}/{platform}`
+      : `/v1/community-event/${apiRoute.leaderboardVersion}`,
+    request: {
+      params: standardPlatformPathParam(apiRoute),
+      query: standarQueryParams(),
+    },
+    tags: [apiRoute.type.charAt(0).toUpperCase() + apiRoute.type.slice(1)],
+    summary: apiRoute.metadata.title,
+    description: apiRoute.metadata.description,
+    responses: standardCommunityEventResponses(apiRoute),
+  });
+
+  // Handler
+  app.openapi(route, (c) => getCommunityEvent(c, apiRoute.leaderboardVersion));
+});
+
 // Redirect all version aliases
-apiRoutes.forEach((apiRoute) => {
+leaderboardApiRoutes.forEach((apiRoute) => {
   apiRoute.leaderboardVersionAliases.forEach((versionAlias) => {
     app.get(`/v1/leaderboard/${versionAlias}/:platform?`, (c) => {
       const platform = c.req.param("platform");

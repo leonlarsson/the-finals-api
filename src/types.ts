@@ -30,6 +30,8 @@ export type LeaderboardVersion =
   | "the-finals"
   | "orf";
 
+export type CommunityEventVersion = "ce44";
+
 // The LeaderboardPlatforms
 // This is the platform parameter of the /leaderboard endpoint
 // One leaderboard API version can have multiple platform params
@@ -43,6 +45,21 @@ type LeaderboardAPIRouteFetchDataSettings = {
 export type LeaderboardAPIRoute = {
   type: "leaderboard" | "special";
   leaderboardVersion: LeaderboardVersion;
+  leaderboardVersionAliases: string[];
+  availablePlatforms: LeaderboardPlatforms[];
+  metadata: {
+    title: string;
+    description: string;
+  };
+  includeInBackup?: boolean;
+  fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
+  zodSchema: ZodSchema;
+  zodSchemaOpenApi: ZodSchema;
+};
+
+export type CommunityEventAPIRoute = {
+  type: "event";
+  leaderboardVersion: CommunityEventVersion;
   leaderboardVersionAliases: string[];
   availablePlatforms: LeaderboardPlatforms[];
   metadata: {

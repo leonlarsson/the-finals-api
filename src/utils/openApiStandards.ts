@@ -5,11 +5,12 @@ import {
   leaderboardPlatformParamSchema,
 } from "../schemas/requests";
 import {
+  communityEvent200ResponseSchema,
   leaderboard200ResponseSchema,
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../schemas/responses";
-import type { LeaderboardAPIRoute } from "../types";
+import type { CommunityEventAPIRoute, LeaderboardAPIRoute } from "../types";
 
 export const standarQueryParams = () =>
   z.object({
@@ -17,7 +18,7 @@ export const standarQueryParams = () =>
     name: leaderboardNameQuerySchema,
   });
 
-export const standardPlatformPathParam = (apiRoute: LeaderboardAPIRoute) =>
+export const standardPlatformPathParam = (apiRoute: LeaderboardAPIRoute | CommunityEventAPIRoute) =>
   apiRoute.availablePlatforms.length ? z.object({ platform: leaderboardPlatformParamSchema(apiRoute) }) : undefined;
 
 export const standardLeaderboardResponses = (apiRoute: LeaderboardAPIRoute) => ({
@@ -36,6 +37,33 @@ export const standardLeaderboardResponses = (apiRoute: LeaderboardAPIRoute) => (
       },
     },
     description: "Leaderboard or platform was not found",
+  },
+  500: {
+    content: {
+      "application/json": {
+        schema: leaderboard500ResponseSchema,
+      },
+    },
+    description: "An error occurred",
+  },
+});
+
+export const standardCommunityEventResponses = (apiRoute: CommunityEventAPIRoute) => ({
+  200: {
+    content: {
+      "application/json": {
+        schema: communityEvent200ResponseSchema(apiRoute.zodSchemaOpenApi),
+      },
+    },
+    description: "Retrieve the community event entries and progress",
+  },
+  404: {
+    content: {
+      "application/json": {
+        schema: leaderboard404ResponseSchema,
+      },
+    },
+    description: "Community event or platform was not found",
   },
   500: {
     content: {

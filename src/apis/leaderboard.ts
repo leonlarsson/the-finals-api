@@ -1,3 +1,4 @@
+import { ce44ResponseSchema, ce44Schema } from "../schemas/communityEvents/ce44";
 import { closedBeta1Schema, closedBeta1UserSchema } from "../schemas/leaderboards/closedBeta1";
 import { closedBeta2Schema, closedBeta2UserSchema } from "../schemas/leaderboards/closedBeta2";
 import { openBetaSchema, openBetaUserSchema } from "../schemas/leaderboards/openBeta";
@@ -11,13 +12,14 @@ import { season4SponsorSchema, season4SponsorUserSchema } from "../schemas/leade
 import { season4WorldTourSchema, season4WorldTourUserSchema } from "../schemas/leaderboards/season4WorldTour";
 import { theFinalsSchema, theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { LeaderboardAPIRoute } from "../types";
+import fetchCe44Data from "../utils/fetchers/fetchCe44Data";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
 import fetchS4Data from "../utils/fetchers/fetchS4Data";
 import fetchS4SponsorData from "../utils/fetchers/fetchS4SponsorData";
 import fetchS4WorldTourData from "../utils/fetchers/fetchS4WorldTourData";
 import { getJsonFromKV } from "../utils/kv";
 
-export const apiRoutes: LeaderboardAPIRoute[] = [
+export const leaderboardApiRoutes: LeaderboardAPIRoute[] = [
   {
     type: "leaderboard",
     leaderboardVersion: "cb1",
@@ -220,4 +222,4 @@ export const apiRoutes: LeaderboardAPIRoute[] = [
     zodSchema: orfSchema,
     zodSchemaOpenApi: orfUserSchema,
   },
-] satisfies LeaderboardAPIRoute[];
+] as const satisfies LeaderboardAPIRoute[];

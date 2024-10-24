@@ -9,9 +9,9 @@ export const changePropertySchema = z
 export const namePropertySchema = z
   .string()
   .openapi({ description: "The user's Embark name.", examples: ["Mozzy#3563", "SomeCoolOtter#8264"] });
-export const steamNamePropertySchema = z.string().openapi({ description: "The user's Steam name." });
-export const xboxNamePropertySchema = z.string().openapi({ description: "The user's Xbox name." });
-export const psnNamePropertySchema = z.string().openapi({ description: "The user's PlayStation name." });
+export const steamNamePropertySchema = z.string().openapi({ description: "The user's Steam name.", example: "Mozzy" });
+export const xboxNamePropertySchema = z.string().openapi({ description: "The user's Xbox name.", example: "" });
+export const psnNamePropertySchema = z.string().openapi({ description: "The user's PlayStation name.", example: "" });
 export const leaguePropertySchema = z.string().openapi({ description: "The user's league.", example: "Diamond 4" });
 export const leagueNumberPropertySchema = z.number().openapi({ description: "The user's league number.", example: 20 });
 export const famePropertySchema = z.number().openapi({ description: "The user's fame points." });
