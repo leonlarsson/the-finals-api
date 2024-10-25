@@ -12,6 +12,11 @@ import type { Season4SponsorUser } from "./schemas/leaderboards/season4Sponsor";
 import type { Season4WorldTourUser } from "./schemas/leaderboards/season4WorldTour";
 import type { TheFinalsUser } from "./schemas/leaderboards/theFinals";
 
+export interface CloudflareBindings {
+  KV: KVNamespace;
+  AUTH_TOKEN: string;
+}
+
 // The LeaderboardPlatforms
 // This is the platform parameter of the /leaderboard endpoint
 // One leaderboard API version can have multiple platform params
