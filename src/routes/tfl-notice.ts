@@ -2,10 +2,10 @@ import { createRoute, z } from "@hono/zod-openapi";
 import type { App } from "..";
 import { authentication } from "../middleware/authentication";
 import { cache } from "../middleware/cache";
+import type { Tags } from "../types";
 
 const path = "/tfl-notice";
-const summary = "Notice";
-const tags = ["the-finals-leaderboard.com"];
+const tags = ["the-finals-leaderboard.com"] satisfies Tags[];
 
 const returnSchema = z.object({
   type: z.string().nullable().openapi({ description: "The type of notice.", example: "psa" }),
@@ -21,7 +21,7 @@ export const registerTflNoticeRoutes = (app: App) => {
     path,
     middleware: [cache("tfl-notice", 1)],
     tags,
-    summary,
+    summary: "Get notice",
     description: "Get the latest notice on the-finals-leaderboard.com",
     responses: {
       200: {
@@ -40,7 +40,7 @@ export const registerTflNoticeRoutes = (app: App) => {
     path,
     middleware: [authentication],
     tags,
-    summary,
+    summary: "Set notice",
     description: "Set the latest notice on the-finals-leaderboard.com",
     request: {
       body: {

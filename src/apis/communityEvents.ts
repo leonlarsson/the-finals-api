@@ -9,7 +9,7 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Community Event 4.4",
       description: "Get leaderboard data from Community event 4.4.",
-      tags: ["Community Event"],
+      tags: ["Community Events"],
     },
     includeInBackup: true,
     fetchData: ({ kv, platform }) => {

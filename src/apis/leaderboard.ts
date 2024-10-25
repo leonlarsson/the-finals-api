@@ -25,7 +25,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Closed Beta 1",
       description: "Get leaderboard data from the first closed beta of THE FINALS.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta1");
@@ -40,7 +40,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Closed Beta 2",
       description: "Get leaderboard data from the second closed beta of THE FINALS.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta2");
@@ -55,7 +55,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Open Beta",
       description: "Get leaderboard data from the open beta of THE FINALS.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_openbeta_${platform}`);
@@ -70,7 +70,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 1",
       description: "Get leaderboard data from the first season of THE FINALS.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season1_${platform}`);
@@ -86,7 +86,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 2",
       description: "Get leaderboard data from the second season of THE FINALS.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season2_${platform}`);
@@ -101,7 +101,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 3",
       description: "Get leaderboard data from the third season of THE FINALS.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}`);
@@ -116,7 +116,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 3 - Original",
       description: "Get leaderboard data from the third season of THE FINALS. Pre-purge.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}_original`);
@@ -131,7 +131,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 3 World Tour",
       description: "Get leaderboard data from the third season of THE FINALS - World Tour.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3worldtour_${platform}`);
@@ -146,7 +146,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 4",
       description: "Get leaderboard data from the fourth season of THE FINALS.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -162,7 +162,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 4 World Tour",
       description: "Get leaderboard data from the fourth season of THE FINALS - World Tour.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -178,7 +178,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "Season 4 Sponsor",
       description: "Get leaderboard data from the fourth season of THE FINALS - Sponsor.",
-      tags: ["Leaderboard"],
+      tags: ["Leaderboards"],
     },
     includeInBackup: true,
     fetchData: async () => {
@@ -196,7 +196,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "THE FINALS",
       description: "Get leaderboard data from the 'The Finals'.",
-      tags: ["Leaderboard - Special"],
+      tags: ["Leaderboards - Special"],
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_the-finals_${platform}`);
@@ -211,7 +211,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     metadata: {
       summary: "ÖRF",
       description: "Get leaderboard data from the ÖRF leaderboard.",
-      tags: ["Leaderboard - Special"],
+      tags: ["Leaderboards - Special"],
     },
     includeInBackup: true,
     fetchData: async () => {

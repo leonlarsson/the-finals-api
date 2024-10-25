@@ -24,10 +24,34 @@ registerTflNoticeRoutes(app);
 
 // The OpenAPI spec will be available at /openapi.json
 app.doc("/openapi.json", {
+  tags: [
+    {
+      name: "Leaderboards",
+      description: "Endpoints for the main leaderboards.",
+    },
+    {
+      name: "Leaderboards - Special",
+      description: "Endpoints for special leaderboards, such as minigame leaderboards or ungrouped leaderboards.",
+    },
+    {
+      name: "Community Events",
+      description: "Endpoints for community events.",
+    },
+    {
+      name: "the-finals-leaderboard.com",
+      description:
+        "Endpoints for things that concern [the-finals-leaderboard.com](https://the-finals-leaderboard.com).",
+    },
+  ],
   openapi: "3.0.0",
   info: {
     version: "1.0.0",
     title: "THE FINALS API",
+    description:
+      "The API specification for [leonlarsson/the-finals-api](ttps://github.com/leonlarsson/the-finals-api).<br />Here you can browse and test all available endpoints.<br /><br />This is the API that powers [the-finals-leaderboard.com](https://the-finals-leaderboard.com) and many others.",
+    contact: {
+      url: "https://github.com/leonlarsson/the-finals-api",
+    },
   },
 });
 
@@ -40,7 +64,7 @@ app.get(
     },
     pageTitle: "THE FINALS API",
     favicon: "https://the-finals-leaderboard.com/favicon.png",
-    theme: "saturn",
+    theme: "default",
     layout: "modern",
   }),
 );

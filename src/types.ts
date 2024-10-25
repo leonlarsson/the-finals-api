@@ -34,7 +34,7 @@ export interface BaseAPIRoute {
   metadata: {
     summary: string;
     description: string;
-    tags: string[];
+    tags: Tags[];
   };
   includeInBackup?: boolean;
   fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
@@ -61,3 +61,5 @@ export type User =
   | Season4SponsorUser
   | TheFinalsUser
   | OrfUser;
+
+export type Tags = "Leaderboards" | "Leaderboards - Special" | "Community Events" | "the-finals-leaderboard.com";
