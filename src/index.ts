@@ -3,11 +3,13 @@ import { apiReference } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
 import { communityEventApiRoutes } from "./apis/communityEvents";
 import { leaderboardApiRoutes } from "./apis/leaderboard";
+import { registerAuthComponent } from "./components/auth";
 import backup from "./handlers/backup";
-import tflNotice from "./handlers/tflNotice";
 import getCommunityEvent from "./handlers/v1/getCommunityEvent";
 import getLeaderboard from "./handlers/v1/getLeaderboard";
 import { cache } from "./middleware/cache";
+import { registerTflNoticeRoutes } from "./routes/tfl-notice";
+import type { CloudflareBindings } from "./types";
 import {
   standarQueryParams,
   standardCommunityEventResponses,
@@ -16,6 +18,7 @@ import {
 } from "./utils/openApiStandards";
 
 const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
+export type App = typeof app;
 
 // Enable CORS for all routes
 app.use("*", cors());
@@ -25,6 +28,8 @@ app.use("/v1/leaderboard/*", cache("v1-leaderboard", 10));
 
 // Cache all community event routes
 app.use("/v1/community-event/*", cache("v1-community-event", 10));
+
+registerAuthComponent(app);
 
 // Routes
 
@@ -83,8 +88,8 @@ leaderboardApiRoutes.forEach((apiRoute) => {
   });
 });
 
-// THE Finals Leaderboard Notice
-app.get("/tfl-notice", cache("tfl-notice", 1), tflNotice);
+// THE FINALS Leaderboard Notice
+registerTflNoticeRoutes(app);
 
 // The OpenAPI spec will be available at /openapi.json
 app.doc("/openapi.json", {
