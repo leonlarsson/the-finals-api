@@ -44,6 +44,12 @@ app.doc("/openapi.json", {
     },
   ],
   openapi: "3.0.0",
+  servers: [
+    {
+      url: "https://api.the-finals-leaderboard.com",
+      description: "Cloudflare Worker",
+    },
+  ],
   info: {
     version: "1.0.0",
     title: "THE FINALS API",
