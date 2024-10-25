@@ -5,7 +5,7 @@ import fetchCe44Data from "../utils/fetchers/fetchCe44Data";
 export const communityEventApiRoutes: BaseAPIRoute[] = [
   {
     id: "ce44",
-    availablePlatforms: ["crossplay"],
+    availablePlatforms: [],
     metadata: {
       summary: "Community Event 4.4",
       description: "Get leaderboard data from Community event 4.4.",

@@ -1,4 +1,4 @@
-import type { FameLeague, LeaderboardVersion } from "../types";
+import type { FameLeague } from "../types";
 
 const closedBeta1Leagues = [
   { fame: 0, name: "Bronze" },
@@ -66,4 +66,4 @@ export default {
   cb2: closedBeta2Leagues,
   ob: closedBeta2Leagues,
   s1: season1Leagues,
-} as Record<LeaderboardVersion, FameLeague[]>;
+} as Record<string, FameLeague[]>;

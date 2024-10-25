@@ -5,13 +5,11 @@ import {
   changePropertySchema,
   famePropertySchema,
   leaguePropertySchema,
-  levelPropertySchema,
   namePropertySchema,
   psnNamePropertySchema,
   rankPropertySchema,
   steamNamePropertySchema,
   xboxNamePropertySchema,
-  xpPropertySchema,
 } from "../userProperties";
 
 export const openBetaSchema = z

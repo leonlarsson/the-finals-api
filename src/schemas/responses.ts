@@ -1,5 +1,4 @@
 import { type ZodSchema, z } from "zod";
-import { communityEventProgressSchema } from "./communityEvents/communityEventProgress";
 import { responseMetaSchema } from "./responseMeta";
 
 export const leaderboard200ResponseSchema = (leaderboardUserSchema: ZodSchema) =>
