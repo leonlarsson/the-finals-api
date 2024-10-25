@@ -5,6 +5,7 @@ export const responseMetaSchema = z
     leaderboardVersion: z.string().openapi({ description: "The leaderboard version selected.", example: "s4" }),
     leaderboardPlatform: z
       .string()
+      .optional()
       .openapi({ description: "The leaderboard platform selected.", example: "crossplay" }),
     nameFilter: z.string().optional().openapi({ description: "The chosen name filter.", example: "ttv" }),
     returnCountOnly: z

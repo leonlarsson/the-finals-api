@@ -1,21 +1,12 @@
-import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
+import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
-import { communityEventApiRoutes } from "./apis/communityEvents";
-import { leaderboardApiRoutes } from "./apis/leaderboard";
 import { registerAuthComponent } from "./components/auth";
 import backup from "./handlers/backup";
-import getCommunityEvent from "./handlers/v1/getCommunityEvent";
-import getLeaderboard from "./handlers/v1/getLeaderboard";
-import { cache } from "./middleware/cache";
+import { registerCommunityEventRoutes } from "./routes/community-event";
+import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
 import type { CloudflareBindings } from "./types";
-import {
-  standarQueryParams,
-  standardCommunityEventResponses,
-  standardLeaderboardResponses,
-  standardPlatformPathParam,
-} from "./utils/openApiStandards";
 
 const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
 export type App = typeof app;
@@ -23,72 +14,12 @@ export type App = typeof app;
 // Enable CORS for all routes
 app.use("*", cors());
 
-// Cache all leaderboard routes
-app.use("/v1/leaderboard/*", cache("v1-leaderboard", 10));
-
-// Cache all community event routes
-app.use("/v1/community-event/*", cache("v1-community-event", 10));
-
+// Register components
 registerAuthComponent(app);
 
-// Routes
-
-// Create OpenAPI routes for all leaderboard routes
-leaderboardApiRoutes.forEach((apiRoute) => {
-  const route = createRoute({
-    method: "get",
-    path: apiRoute.availablePlatforms.length
-      ? `/v1/leaderboard/${apiRoute.id}/{platform}`
-      : `/v1/leaderboard/${apiRoute.id}`,
-    request: {
-      params: standardPlatformPathParam(apiRoute),
-      query: standarQueryParams(),
-    },
-    tags: apiRoute.metadata.tags,
-    summary: apiRoute.metadata.summary,
-    description: apiRoute.metadata.description,
-    responses: standardLeaderboardResponses(apiRoute),
-  });
-
-  // Handler
-  app.openapi(route, (c) => getLeaderboard(c, apiRoute.id));
-});
-
-// Create OpenAPI routes for all community event routes
-communityEventApiRoutes.forEach((apiRoute) => {
-  const route = createRoute({
-    method: "get",
-    path: apiRoute.availablePlatforms.length
-      ? `/v1/community-event/${apiRoute.id}/{platform}`
-      : `/v1/community-event/${apiRoute.id}`,
-    request: {
-      params: standardPlatformPathParam(apiRoute),
-      query: standarQueryParams(),
-    },
-    tags: apiRoute.metadata.tags,
-    summary: apiRoute.metadata.summary,
-    description: apiRoute.metadata.description,
-    responses: standardCommunityEventResponses(apiRoute),
-  });
-
-  // Handler
-  app.openapi(route, (c) => getCommunityEvent(c, apiRoute.id));
-});
-
-// Redirect all legacy version aliases
-leaderboardApiRoutes.forEach((apiRoute) => {
-  apiRoute.legacyIds?.forEach((versionAlias) => {
-    app.get(`/v1/leaderboard/${versionAlias}/:platform?`, (c) => {
-      const platform = c.req.param("platform");
-      const query = c.req.query();
-      const queryString = new URLSearchParams(query).toString();
-      const redirectUrl = platform ? `/v1/leaderboard/${apiRoute.id}/${platform}` : `/v1/leaderboard/${apiRoute.id}`;
-      return c.redirect(queryString ? `${redirectUrl}?${queryString}` : redirectUrl);
-    });
-  });
-});
-
-// THE FINALS Leaderboard Notice
+// Register routes
+registerLeaderboardRoutes(app);
+registerCommunityEventRoutes(app);
 registerTflNoticeRoutes(app);
 
 // The OpenAPI spec will be available at /openapi.json
