@@ -9,7 +9,7 @@ export const responseMetaSchema = z
     nameFilter: z.string().optional().openapi({ description: "The chosen name filter.", example: "ttv" }),
     returnCountOnly: z
       .boolean()
-      .openapi({ description: "Whether the response only contains the count of the leaderboard." }),
+      .openapi({ description: "Whether the response only contains the count of the leaderboard.", example: false }),
   })
   .openapi({
     title: "Response Meta",
