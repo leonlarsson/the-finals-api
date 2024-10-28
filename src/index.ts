@@ -54,7 +54,7 @@ app.doc("/openapi.json", {
     version: "1.0.0",
     title: "THE FINALS API",
     description:
-      "The API specification for [leonlarsson/the-finals-api](ttps://github.com/leonlarsson/the-finals-api).<br />Here you can browse and test all available endpoints.<br /><br />This is the API that powers [the-finals-leaderboard.com](https://the-finals-leaderboard.com) and many others.",
+      "The API specification for [leonlarsson/the-finals-api](https://github.com/leonlarsson/the-finals-api).<br />Here you can browse and test all available endpoints.<br /><br />This is the API that powers [the-finals-leaderboard.com](https://the-finals-leaderboard.com) and many others.",
     contact: {
       url: "https://github.com/leonlarsson/the-finals-api",
     },
