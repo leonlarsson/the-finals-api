@@ -28,8 +28,6 @@ export const orfSchema = z
   }))
   .array();
 
-export type OrfUser = z.infer<typeof orfSchema>[number];
-
 // This is passed to the OpenAPI spec
 export const orfUserSchema = z
   .object({
@@ -43,4 +41,4 @@ export const orfUserSchema = z
   .openapi("ÖRFUser", {
     title: "ÖRF User",
     description: "A user in the ÖRF leaderboard.",
-  }) satisfies z.ZodType<OrfUser>;
+  }) satisfies z.ZodType<z.infer<typeof orfSchema>[number]>;

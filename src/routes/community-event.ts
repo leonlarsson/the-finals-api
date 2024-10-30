@@ -8,7 +8,7 @@ import type {
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../schemas/responses";
-import type { LeaderboardPlatforms, User } from "../types";
+import type { BaseUser, LeaderboardPlatforms } from "../types";
 import {
   standarQueryParams,
   standardCommunityEventResponses,
@@ -81,7 +81,7 @@ export const registerCommunityEventRoutes = (app: App) => {
         }
 
         // Filter data by name query
-        const filteredEntries = parseResult.data.entries.filter((user: User) =>
+        const filteredEntries = parseResult.data.entries.filter((user: BaseUser) =>
           [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>
             platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? ""),
           ),

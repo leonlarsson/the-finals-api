@@ -38,8 +38,6 @@ export const season4Schema = z
   }))
   .array();
 
-export type Season4User = z.infer<typeof season4Schema>[number];
-
 // This is passed to the OpenAPI spec
 export const season4UserSchema = z
   .object({
@@ -56,4 +54,4 @@ export const season4UserSchema = z
   .openapi("Season4User", {
     title: "Season 4 User",
     description: "A user in the Season 4 leaderboard.",
-  }) satisfies z.ZodType<Season4User>;
+  }) satisfies z.ZodType<z.infer<typeof season4Schema>[number]>;

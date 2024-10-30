@@ -37,8 +37,6 @@ export const openBetaSchema = z
   }))
   .array();
 
-export type OpenBetaUser = z.infer<typeof openBetaSchema>[number];
-
 // This is passed to the OpenAPI spec
 export const openBetaUserSchema = z
   .object({
@@ -55,4 +53,4 @@ export const openBetaUserSchema = z
   .openapi("OpenBetaUser", {
     title: "Open Beta User",
     description: "A user in the Open Beta leaderboard.",
-  }) satisfies z.ZodType<OpenBetaUser>;
+  }) satisfies z.ZodType<z.infer<typeof openBetaSchema>[number]>;

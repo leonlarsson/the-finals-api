@@ -28,8 +28,6 @@ export const theFinalsSchema = z
   }))
   .array();
 
-export type TheFinalsUser = z.infer<typeof theFinalsSchema>[number];
-
 // This is passed to the OpenAPI spec
 export const theFinalsUserSchema = z
   .object({
@@ -43,4 +41,4 @@ export const theFinalsUserSchema = z
   .openapi("TheFinalsUser", {
     title: "The Finals User",
     description: "A user in the 'The Finals' leaderboard.",
-  }) satisfies z.ZodType<TheFinalsUser>;
+  }) satisfies z.ZodType<z.infer<typeof theFinalsSchema>[number]>;

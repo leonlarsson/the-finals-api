@@ -42,8 +42,6 @@ export const season3WorldTourSchema = z
   }))
   .array();
 
-export type Season3WorldTourUser = z.infer<typeof season3WorldTourSchema>[number];
-
 // This is passed to the OpenAPI spec
 export const season3WorldTourUserSchema = z
   .object({
@@ -57,4 +55,4 @@ export const season3WorldTourUserSchema = z
   .openapi("Season3WorldTourUser", {
     title: "Season 3 World Tour User",
     description: "A user in the Season 3 World Tour leaderboard.",
-  }) satisfies z.ZodType<Season3WorldTourUser>;
+  }) satisfies z.ZodType<z.infer<typeof season3WorldTourSchema>[number]>;

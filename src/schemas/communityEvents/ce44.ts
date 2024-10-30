@@ -32,8 +32,6 @@ export const ce44Schema = z.object({
   progress: communityEventProgressSchema,
 });
 
-export type CE44Schema = z.infer<typeof ce44Schema>;
-
 // This is passed to the OpenAPI spec
 export const ce44ResponseSchema = z.object({
   entries: z
@@ -48,4 +46,4 @@ export const ce44ResponseSchema = z.object({
     .openapi("CE44User", { title: "Community Event 4.4 User", description: "A user in Community Event 4.4." })
     .array(),
   progress: communityEventProgressSchema,
-}) satisfies z.ZodType<CE44Schema>;
+}) satisfies z.ZodType<z.infer<typeof ce44Schema>>;

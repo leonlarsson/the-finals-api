@@ -8,7 +8,7 @@ import type {
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../schemas/responses";
-import type { LeaderboardPlatforms, User } from "../types";
+import type { BaseUser, LeaderboardPlatforms } from "../types";
 import { standarQueryParams, standardLeaderboardResponses, standardPlatformPathParam } from "../utils/openApiStandards";
 
 export const registerLeaderboardRoutes = (app: App) => {
@@ -77,7 +77,7 @@ export const registerLeaderboardRoutes = (app: App) => {
         }
 
         // Filter data by name query
-        const filteredData = parseResult.data.filter((user: User) =>
+        const filteredData = parseResult.data.filter((user: BaseUser) =>
           [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>
             platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? ""),
           ),
