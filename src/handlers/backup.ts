@@ -12,7 +12,7 @@ export default async (kv: KVNamespace) => {
 
     // If data is valid, backup to KV
     if (success) {
-      const eventBit = route.metadata.tags.includes("Community Event") ? "event_" : "";
+      const eventBit = route.metadata.tags.includes("Community Events") ? "event_" : "";
 
       // Append _platform if route has platforms
       const key =
