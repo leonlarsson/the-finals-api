@@ -47,7 +47,11 @@ app.doc("/openapi.json", {
   servers: [
     {
       url: "https://api.the-finals-leaderboard.com",
-      description: "Cloudflare Worker",
+      description: "Production Cloudflare Worker",
+    },
+    {
+      url: "http://127.0.0.1:8787",
+      description: "Local Development Environment",
     },
   ],
   info: {
