@@ -2,11 +2,11 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
 import { registerAuthComponent } from "./components/auth";
-import backup from "./handlers/backup";
 import { registerCommunityEventRoutes } from "./routes/community-event";
 import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
 import type { CloudflareBindings } from "./types";
+import backup from "./utils/backup";
 
 const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
 export type App = typeof app;
