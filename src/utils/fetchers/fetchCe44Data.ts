@@ -3,18 +3,18 @@ export default async () => {
   const text = await res.text();
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
 
+  if (!res.ok) {
+    throw new Error(`Failed to fetch data. URL ${res.url} returned status ${res.status}`);
+  }
+
   if (!stringData) {
-    return null;
+    throw new Error(`Failed to find __NEXT_DATA__ script tag on URL ${res.url}`);
   }
 
-  try {
-    const jsonData = JSON.parse(stringData);
+  const jsonData = JSON.parse(stringData);
 
-    return {
-      entries: jsonData.props.pageProps.entries,
-      progress: jsonData.props.pageProps.progress,
-    };
-  } catch (error) {
-    return null;
-  }
+  return {
+    entries: jsonData.props.pageProps.entries,
+    progress: jsonData.props.pageProps.progress,
+  };
 };

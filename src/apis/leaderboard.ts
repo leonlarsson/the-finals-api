@@ -11,6 +11,7 @@ import { season4SponsorSchema, season4SponsorUserSchema } from "../schemas/leade
 import { season4WorldTourSchema, season4WorldTourUserSchema } from "../schemas/leaderboards/season4WorldTour";
 import { theFinalsSchema, theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute } from "../types";
+import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
 import fetchS4Data from "../utils/fetchers/fetchS4Data";
 import fetchS4SponsorData from "../utils/fetchers/fetchS4SponsorData";
@@ -149,8 +150,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     includeInBackup: true,
-    fetchData: async () => {
-      return await fetchS4Data();
+    fetchData: async ({ kv, platform }) => {
+      return fetchWithKVFallback(fetchS4Data, kv, `backup_s4_${platform}`);
     },
     zodSchema: season4Schema,
     zodSchemaOpenApi: season4UserSchema,
@@ -165,8 +166,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     includeInBackup: true,
-    fetchData: async () => {
-      return await fetchS4WorldTourData();
+    fetchData: async ({ kv, platform }) => {
+      return await fetchWithKVFallback(fetchS4WorldTourData, kv, `backup_s4worldtour_${platform}`);
     },
     zodSchema: season4WorldTourSchema,
     zodSchemaOpenApi: season4WorldTourUserSchema,
@@ -181,8 +182,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     includeInBackup: true,
-    fetchData: async () => {
-      return await fetchS4SponsorData();
+    fetchData: async ({ kv, platform }) => {
+      return await fetchWithKVFallback(fetchS4SponsorData, kv, `backup_s4sponsor_${platform}`);
     },
     zodSchema: season4SponsorSchema,
     zodSchemaOpenApi: season4SponsorUserSchema,
@@ -214,8 +215,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards - Special"],
     },
     includeInBackup: true,
-    fetchData: async () => {
-      return await fetchOrfData();
+    fetchData: async ({ kv, platform }) => {
+      return fetchWithKVFallback(fetchOrfData, kv, `backup_orf_${platform}`);
     },
     zodSchema: orfSchema,
     zodSchemaOpenApi: orfUserSchema,
