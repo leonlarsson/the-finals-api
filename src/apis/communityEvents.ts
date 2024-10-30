@@ -9,7 +9,7 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
     availablePlatforms: [],
     metadata: {
       summary: "Community Event 4.4",
-      description: "Get leaderboard data from Community event 4.4.",
+      description: "Get leaderboard data from Community event 4.4.<br/>**Goal: Start 3.5 million cashouts.**",
       tags: ["Community Events"],
     },
     includeInBackup: true,
