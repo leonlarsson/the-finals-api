@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import type { App } from "..";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { cache } from "../middleware/cache";
+import { withSearchParams } from "../middleware/withSearchParams";
 import type {
   leaderboard200ResponseSchema,
   leaderboard404ResponseSchema,
@@ -19,7 +20,7 @@ export const registerLeaderboardRoutes = (app: App) => {
       path: apiRoute.availablePlatforms.length
         ? `/v1/leaderboard/${apiRoute.id}/{platform}`
         : `/v1/leaderboard/${apiRoute.id}`,
-      middleware: [cache("v1-leaderboard", 10)],
+      middleware: [withSearchParams(["name", "count"]), cache("v1-leaderboard", 10)],
       request: {
         params: standardPlatformPathParam(apiRoute),
         query: standarQueryParams(),

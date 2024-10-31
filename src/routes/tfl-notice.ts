@@ -2,6 +2,7 @@ import { createRoute, z } from "@hono/zod-openapi";
 import type { App } from "..";
 import { authentication } from "../middleware/authentication";
 import { cache } from "../middleware/cache";
+import { withSearchParams } from "../middleware/withSearchParams";
 import type { Tags } from "../types";
 
 const path = "/tfl-notice";
@@ -19,7 +20,7 @@ export const registerTflNoticeRoutes = (app: App) => {
   const getRoute = createRoute({
     method: "get",
     path,
-    middleware: [cache("tfl-notice", 1)],
+    middleware: [withSearchParams(), cache("tfl-notice", 1)],
     tags,
     summary: "Get notice",
     description: "Get the latest notice on the-finals-leaderboard.com",

@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import type { App } from "..";
 import { communityEventApiRoutes } from "../apis/communityEvents";
 import { cache } from "../middleware/cache";
+import { withSearchParams } from "../middleware/withSearchParams";
 import type {
   communityEvent200ResponseSchema,
   leaderboard404ResponseSchema,
@@ -23,7 +24,7 @@ export const registerCommunityEventRoutes = (app: App) => {
       path: apiRoute.availablePlatforms.length
         ? `/v1/community-event/${apiRoute.id}/{platform}`
         : `/v1/community-event/${apiRoute.id}`,
-      middleware: [cache("v1-community-event", 10)],
+      middleware: [withSearchParams(["name", "count"]), cache("v1-community-event", 10)],
       request: {
         params: standardPlatformPathParam(apiRoute),
         query: standarQueryParams(),
