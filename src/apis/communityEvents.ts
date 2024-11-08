@@ -11,7 +11,6 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from Community event 4.4.<br/>**Goal: Start 3.5 million cashouts.**",
       tags: ["Community Events"],
     },
-    includeInBackup: true,
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_event_ce44");
     },
