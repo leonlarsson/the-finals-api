@@ -23,6 +23,8 @@ export interface BaseAPIRoute {
     summary: string;
     description: string;
     tags: Tags[];
+    /** The amount of minutes to cache the route using the cache middleware */
+    cacheMinutes?: number;
   };
   includeInBackup?: boolean;
   fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;

@@ -18,6 +18,9 @@ import fetchS4SponsorData from "../utils/fetchers/fetchS4SponsorData";
 import fetchS4WorldTourData from "../utils/fetchers/fetchS4WorldTourData";
 import { getJsonFromKV } from "../utils/kv";
 
+// 20_160 minutes is 14 days
+const oldLeaderboardCacheMinutes = 20_160;
+
 export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "cb1",
@@ -27,6 +30,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Closed Beta 1",
       description: "Get leaderboard data from the first closed beta of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta1");
@@ -42,6 +46,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Closed Beta 2",
       description: "Get leaderboard data from the second closed beta of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv }) => {
       return await getJsonFromKV(kv, "data_closedbeta2");
@@ -57,6 +62,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Open Beta",
       description: "Get leaderboard data from the open beta of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_openbeta_${platform}`);
@@ -72,6 +78,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 1",
       description: "Get leaderboard data from the first season of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season1_${platform}`);
@@ -88,6 +95,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 2",
       description: "Get leaderboard data from the second season of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season2_${platform}`);
@@ -103,6 +111,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 3",
       description: "Get leaderboard data from the third season of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}`);
@@ -118,6 +127,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 3 - Original",
       description: "Get leaderboard data from the third season of THE FINALS. Pre-purge.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3_${platform}_original`);
@@ -133,6 +143,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 3 World Tour",
       description: "Get leaderboard data from the third season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season3worldtour_${platform}`);
@@ -198,6 +209,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "THE FINALS",
       description: "Get leaderboard data from the 'The Finals'.",
       tags: ["Leaderboards - Special"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_the-finals_${platform}`);

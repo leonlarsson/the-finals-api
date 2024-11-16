@@ -20,7 +20,10 @@ export const registerLeaderboardRoutes = (app: App) => {
       path: apiRoute.availablePlatforms.length
         ? `/v1/leaderboard/${apiRoute.id}/{platform}`
         : `/v1/leaderboard/${apiRoute.id}`,
-      middleware: [withSearchParams(["name", "count"]), cache("v1-leaderboard", 10)],
+      middleware: [
+        withSearchParams(["name", "count"]),
+        cache(`v1-leaderboard-${apiRoute.id}`, apiRoute.metadata.cacheMinutes ?? 10),
+      ],
       request: {
         params: standardPlatformPathParam(apiRoute),
         query: standarQueryParams(),
