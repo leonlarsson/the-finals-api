@@ -102,8 +102,8 @@ export const registerCommunityEventRoutes = (app: App) => {
             },
             count: filteredEntries.length,
             data: {
-              entries: returnCountOnly ? [] : filteredEntries,
               progress: parseResult.data.progress,
+              entries: returnCountOnly ? [] : filteredEntries,
             },
           } satisfies z.infer<ReturnType<typeof communityEvent200ResponseSchema>>,
           200,

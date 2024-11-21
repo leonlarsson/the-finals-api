@@ -55,7 +55,7 @@ export const standardCommunityEventResponses = (apiRoute: BaseAPIRoute) => ({
         schema: communityEvent200ResponseSchema(apiRoute.zodSchemaOpenApi),
       },
     },
-    description: "Retrieve the community event entries and progress",
+    description: "Retrieve the community event progress and entries",
   },
   404: {
     content: {

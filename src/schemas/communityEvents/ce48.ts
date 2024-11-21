@@ -10,11 +10,12 @@ import {
 } from "../userProperties";
 import { communityEventProgressSchema } from "./communityEventProgress";
 
-export const ce44Schema = z.object({
+export const ce48Schema = z.object({
   entries: z
     .object({
       1: z.number(),
-      3: z.string(),
+      // Same username issue as Season 4
+      3: z.union([z.string(), z.number()]),
       5: z.number(),
       6: z.union([z.string(), z.number()]),
       7: z.union([z.string(), z.number()]),
@@ -22,7 +23,7 @@ export const ce44Schema = z.object({
     })
     .transform((data) => ({
       rank: data[1],
-      name: data[3],
+      name: nameFallback(data[3], "Unknown#0000"),
       steamName: nameFallback(data[6]),
       psnName: nameFallback(data[7]),
       xboxName: nameFallback(data[8]),
@@ -33,7 +34,7 @@ export const ce44Schema = z.object({
 });
 
 // This is passed to the OpenAPI spec
-export const ce44ResponseSchema = z.object({
+export const ce48ResponseSchema = z.object({
   progress: communityEventProgressSchema,
   entries: z
     .object({
@@ -44,6 +45,6 @@ export const ce44ResponseSchema = z.object({
       xboxName: xboxNamePropertySchema,
       score: scorePropertySchema,
     })
-    .openapi("CE44User", { title: "Community Event 4.4 User", description: "A user in Community Event 4.4." })
+    .openapi("CE48User", { title: "Community Event 4.8 User", description: "A user in Community Event 4.8." })
     .array(),
-}) satisfies z.ZodType<z.infer<typeof ce44Schema>>;
+}) satisfies z.ZodType<z.infer<typeof ce48Schema>>;
