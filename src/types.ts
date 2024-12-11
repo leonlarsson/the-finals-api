@@ -1,9 +1,16 @@
 import type { ZodSchema } from "zod";
 
-export interface CloudflareBindings {
+interface CloudflareBindings {
   KV: KVNamespace;
   AUTH_TOKEN: string;
 }
+
+export type Env = {
+  Bindings: CloudflareBindings;
+  Variables: {
+    leaderboardDataSource: "fetch" | "kv" | "backup";
+  };
+};
 
 // The LeaderboardPlatforms
 // This is the platform parameter of the /leaderboard endpoint

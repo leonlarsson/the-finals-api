@@ -1,18 +1,22 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
+import { contextStorage } from "hono/context-storage";
 import { cors } from "hono/cors";
 import { registerAuthComponent } from "./components/auth";
 import { registerCommunityEventRoutes } from "./routes/community-event";
 import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
-import type { CloudflareBindings } from "./types";
+import type { Env } from "./types";
 import backup from "./utils/backup";
 
-const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
+const app = new OpenAPIHono<Env>();
 export type App = typeof app;
 
 // Enable CORS for all routes
-app.use("*", cors());
+app.use(cors());
+
+// Enable context storage for all routes
+app.use(contextStorage());
 
 // Register components
 registerAuthComponent(app);
@@ -84,7 +88,7 @@ app.notFound((c) => c.redirect("/", 302));
 
 export default {
   fetch: app.fetch,
-  scheduled: (_event: ScheduledEvent, env: CloudflareBindings, ctx: ExecutionContext) => {
+  scheduled: (_event: ScheduledEvent, env: Env["Bindings"], ctx: ExecutionContext) => {
     ctx.waitUntil(backup(env.KV));
   },
 };

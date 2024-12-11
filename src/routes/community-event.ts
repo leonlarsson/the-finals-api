@@ -97,6 +97,7 @@ export const registerCommunityEventRoutes = (app: App) => {
             meta: {
               leaderboardVersion: apiRoute.id,
               leaderboardPlatform: platform,
+              dataSource: c.get("leaderboardDataSource"),
               nameFilter,
               returnCountOnly,
             },

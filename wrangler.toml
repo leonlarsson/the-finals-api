@@ -1,6 +1,7 @@
 name = "the-finals-api"
 main = "src/index.ts"
 compatibility_date = "2023-12-18"
+compatibility_flags = ["nodejs_compat"]
 
 kv_namespaces = [
     { binding = "KV", id = "17b5f20386244ab985c8a6189b830595", preview_id = "17b5f20386244ab985c8a6189b830595" },

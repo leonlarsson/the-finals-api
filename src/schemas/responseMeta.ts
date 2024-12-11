@@ -7,6 +7,11 @@ export const responseMetaSchema = z
       .string()
       .optional()
       .openapi({ description: "The leaderboard platform selected.", example: "crossplay" }),
+    dataSource: z.enum(["fetch", "kv", "backup"]).openapi({
+      description:
+        "The data source used.<br/><b>Fetch</b>: data was fetched from Embark.<br/><b>KV</b>: Data was fetched from KV (static storage).<br/><b>Backup</b>: Data was fetched from a backup KV, because the fetch to Embark failed.",
+      example: "fetch",
+    }),
     nameFilter: z.string().optional().openapi({ description: "The chosen name filter.", example: "ttv" }),
     returnCountOnly: z
       .boolean()

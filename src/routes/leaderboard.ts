@@ -9,7 +9,7 @@ import type {
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../schemas/responses";
-import type { BaseUser, LeaderboardPlatforms } from "../types";
+import type { BaseUser, Env, LeaderboardPlatforms } from "../types";
 import { standarQueryParams, standardLeaderboardResponses, standardPlatformPathParam } from "../utils/openApiStandards";
 
 export const registerLeaderboardRoutes = (app: App) => {
@@ -93,6 +93,7 @@ export const registerLeaderboardRoutes = (app: App) => {
             meta: {
               leaderboardVersion: apiRoute.id,
               leaderboardPlatform: platform,
+              dataSource: c.get("leaderboardDataSource"),
               nameFilter,
               returnCountOnly,
             },

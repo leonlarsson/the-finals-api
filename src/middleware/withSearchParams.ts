@@ -1,9 +1,9 @@
 import { createMiddleware } from "hono/factory";
-import type { CloudflareBindings } from "../types";
+import type { Env } from "../types";
 
 /** Middleware `withSearchParams` removes all search params from the URL that are not in the paramsToKeep array. Passing nothing means all params will be stripped */
 export const withSearchParams = (paramsToKeep: string[] = []) =>
-  createMiddleware<{ Bindings: CloudflareBindings }>(async (c, next) => {
+  createMiddleware<Env>(async (c, next) => {
     const url = new URL(c.req.url);
     let foundInvalidSearchParams = false;
 
