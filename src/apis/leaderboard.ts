@@ -226,7 +226,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5Data, kv, `backup_${this.id}_${platform}`);
+      return fetchWithKVFallback(fetchS5SponsorData, kv, `backup_${this.id}_${platform}`);
     },
     zodSchema: season5SponsorSchema,
     zodSchemaOpenApi: season5SponsorUserSchema,
