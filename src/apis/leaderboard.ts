@@ -9,13 +9,14 @@ import { season3WorldTourSchema, season3WorldTourUserSchema } from "../schemas/l
 import { season4Schema, season4UserSchema } from "../schemas/leaderboards/season4";
 import { season4SponsorSchema, season4SponsorUserSchema } from "../schemas/leaderboards/season4Sponsor";
 import { season4WorldTourSchema, season4WorldTourUserSchema } from "../schemas/leaderboards/season4WorldTour";
+import { season5Schema, season5UserSchema } from "../schemas/leaderboards/season5";
+import { season5SponsorSchema, season5SponsorUserSchema } from "../schemas/leaderboards/season5Sponsor";
 import { theFinalsSchema, theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
-import fetchS4Data from "../utils/fetchers/fetchS4Data";
-import fetchS4SponsorData from "../utils/fetchers/fetchS4SponsorData";
-import fetchS4WorldTourData from "../utils/fetchers/fetchS4WorldTourData";
+import fetchS5Data from "../utils/fetchers/fetchS5Data";
+import fetchS5SponsorData from "../utils/fetchers/fetchS5SponsorData";
 import { getJsonFromKV } from "../utils/kv";
 
 // 20_160 minutes is 14 days
@@ -160,9 +161,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fourth season of THE FINALS.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
     fetchData: async ({ kv, platform }) => {
-      return fetchWithKVFallback(fetchS4Data, kv, `backup_s4_${platform}`);
+      return await getJsonFromKV(kv, `data_season4_${platform}`);
     },
     zodSchema: season4Schema,
     zodSchemaOpenApi: season4UserSchema,
@@ -176,9 +176,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fourth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
     fetchData: async ({ kv, platform }) => {
-      return await fetchWithKVFallback(fetchS4WorldTourData, kv, `backup_s4worldtour_${platform}`);
+      return await getJsonFromKV(kv, `data_season4worldtour_${platform}`);
     },
     zodSchema: season4WorldTourSchema,
     zodSchemaOpenApi: season4WorldTourUserSchema,
@@ -192,12 +191,44 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fourth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
     fetchData: async ({ kv, platform }) => {
-      return await fetchWithKVFallback(fetchS4SponsorData, kv, `backup_s4sponsor_${platform}`);
+      return await getJsonFromKV(kv, `data_season4sponsor_${platform}`);
     },
     zodSchema: season4SponsorSchema,
     zodSchemaOpenApi: season4SponsorUserSchema,
+  },
+
+  {
+    id: "s5",
+    legacyIds: ["season5"],
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "Season 5",
+      description: "Get leaderboard data from the fifth season of THE FINALS.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async ({ kv, platform }) => {
+      return fetchWithKVFallback(fetchS5Data, kv, `backup_s5_${platform}`);
+    },
+    zodSchema: season5Schema,
+    zodSchemaOpenApi: season5UserSchema,
+  },
+  {
+    id: "s5sponsor",
+    legacyIds: ["season5sponsor"],
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "Season 5 Sponsor",
+      description: "Get leaderboard data from the fifth season of THE FINALS - Sponsor.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async ({ kv, platform }) => {
+      return fetchWithKVFallback(fetchS5SponsorData, kv, `backup_s5sponsor_${platform}`);
+    },
+    zodSchema: season5SponsorSchema,
+    zodSchemaOpenApi: season5SponsorUserSchema,
   },
 
   // Special leaderboards. Any non-main leaderboards such as events
