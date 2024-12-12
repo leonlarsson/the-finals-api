@@ -33,8 +33,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv }) => {
-      return await getJsonFromKV(kv, "data_closedbeta1");
+    fetchData: async function ({ kv }) {
+      return await getJsonFromKV(kv, `data_${this.id}`);
     },
     zodSchema: closedBeta1Schema,
     zodSchemaOpenApi: closedBeta1UserSchema,
@@ -49,8 +49,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv }) => {
-      return await getJsonFromKV(kv, "data_closedbeta2");
+    fetchData: async function ({ kv }) {
+      return await getJsonFromKV(kv, `data_${this.id}`);
     },
     zodSchema: closedBeta2Schema,
     zodSchemaOpenApi: closedBeta2UserSchema,
@@ -65,8 +65,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_openbeta_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: openBetaSchema,
     zodSchemaOpenApi: openBetaUserSchema,
@@ -81,8 +81,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season1_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season1Schema,
     zodSchemaOpenApi: season1UserSchema,
@@ -98,8 +98,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season2_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season2Schema,
     zodSchemaOpenApi: season2UserSchema,
@@ -114,8 +114,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season3_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season3Schema,
     zodSchemaOpenApi: season3UserSchema,
@@ -130,8 +130,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season3_${platform}_original`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season3Schema,
     zodSchemaOpenApi: season3UserSchema,
@@ -146,8 +146,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season3worldtour_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season3WorldTourSchema,
     zodSchemaOpenApi: season3WorldTourUserSchema,
@@ -162,8 +162,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season4_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season4Schema,
     zodSchemaOpenApi: season4UserSchema,
@@ -178,8 +178,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season4worldtour_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season4WorldTourSchema,
     zodSchemaOpenApi: season4WorldTourUserSchema,
@@ -194,8 +194,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_season4sponsor_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: season4SponsorSchema,
     zodSchemaOpenApi: season4SponsorUserSchema,
@@ -203,7 +203,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
 
   {
     id: "s5",
-    legacyIds: ["season5"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 5",
@@ -211,15 +210,14 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     includeInBackup: true,
-    fetchData: async ({ kv, platform }) => {
-      return fetchWithKVFallback(fetchS5Data, kv, `backup_s5_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchS5Data, kv, `backup_${this.id}_${platform}`);
     },
     zodSchema: season5Schema,
     zodSchemaOpenApi: season5UserSchema,
   },
   {
     id: "s5sponsor",
-    legacyIds: ["season5sponsor"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 5 Sponsor",
@@ -227,8 +225,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     includeInBackup: true,
-    fetchData: async ({ kv, platform }) => {
-      return fetchWithKVFallback(fetchS5SponsorData, kv, `backup_s5sponsor_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchS5Data, kv, `backup_${this.id}_${platform}`);
     },
     zodSchema: season5SponsorSchema,
     zodSchemaOpenApi: season5SponsorUserSchema,
@@ -245,8 +243,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards - Special"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv, platform }) => {
-      return await getJsonFromKV(kv, `data_the-finals_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchema: theFinalsSchema,
     zodSchemaOpenApi: theFinalsUserSchema,
@@ -261,8 +259,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards - Special"],
     },
     includeInBackup: true,
-    fetchData: async ({ kv, platform }) => {
-      return fetchWithKVFallback(fetchOrfData, kv, `backup_orf_${platform}`);
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchOrfData, kv, `backup_${this.id}_${platform}`);
     },
     zodSchema: orfSchema,
     zodSchemaOpenApi: orfUserSchema,

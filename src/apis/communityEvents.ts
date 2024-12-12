@@ -16,8 +16,8 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
       tags: ["Community Events"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv }) => {
-      return await getJsonFromKV(kv, "data_event_ce44");
+    fetchData: async function ({ kv }) {
+      return await getJsonFromKV(kv, `data_event_${this.id}`);
     },
     zodSchema: ce44Schema,
     zodSchemaOpenApi: ce44ResponseSchema,
@@ -32,8 +32,8 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
       tags: ["Community Events"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    fetchData: async ({ kv }) => {
-      return await getJsonFromKV(kv, "data_event_ce48");
+    fetchData: async function ({ kv }) {
+      return await getJsonFromKV(kv, `data_event_${this.id}`);
     },
     zodSchema: ce48Schema,
     zodSchemaOpenApi: ce48ResponseSchema,
