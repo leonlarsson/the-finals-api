@@ -9,7 +9,7 @@ export default async () => {
       resStatus: res.status,
       resStatusText: res.statusText,
       resUrl: res.url,
-      resText: await res.text(),
+      resText: text,
     });
     throw new Error(`Failed to fetch data. URL ${res.url} returned status ${res.status}`);
   }
