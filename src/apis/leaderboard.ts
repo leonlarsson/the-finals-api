@@ -160,6 +160,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 4",
       description: "Get leaderboard data from the fourth season of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season4_${platform}`);
@@ -175,6 +176,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 4 World Tour",
       description: "Get leaderboard data from the fourth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season4worldtour_${platform}`);
@@ -190,6 +192,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 4 Sponsor",
       description: "Get leaderboard data from the fourth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     fetchData: async ({ kv, platform }) => {
       return await getJsonFromKV(kv, `data_season4sponsor_${platform}`);
