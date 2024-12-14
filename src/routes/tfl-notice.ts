@@ -5,7 +5,7 @@ import { cache } from "../middleware/cache";
 import { withSearchParams } from "../middleware/withSearchParams";
 import type { Tags } from "../types";
 
-const path = "/tfl-notice";
+const path = "/tfl/notice";
 const tags = ["the-finals-leaderboard.com"] satisfies Tags[];
 
 const returnSchema = z.object({
