@@ -3,6 +3,7 @@ import { apiReference } from "@scalar/hono-api-reference";
 import { contextStorage } from "hono/context-storage";
 import { cors } from "hono/cors";
 import { registerAuthComponent } from "./components/auth";
+import { authentication } from "./middleware/authentication";
 import { registerCommunityEventRoutes } from "./routes/community-event";
 import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
@@ -92,3 +93,10 @@ export default {
     ctx.waitUntil(backup(env.KV));
   },
 };
+
+// Just a test
+app.get("/backup-via-workflow", authentication, async (c) => {
+  await c.env.BACKUP_WORKFLOW.create();
+});
+
+export { BackupWorkflow } from "./workflows/backup";

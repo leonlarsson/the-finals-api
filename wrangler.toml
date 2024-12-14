@@ -13,3 +13,8 @@ crons = ["0 */1 * * *"]
 
 [observability]
 enabled = true
+
+[[workflows]]
+name = "backup-workflow"
+binding = "BACKUP_WORKFLOW"
+class_name = "BackupWorkflow"

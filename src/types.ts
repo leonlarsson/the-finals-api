@@ -2,6 +2,7 @@ import type { ZodSchema } from "zod";
 
 interface CloudflareBindings {
   KV: KVNamespace;
+  BACKUP_WORKFLOW: Workflow;
   AUTH_TOKEN: string;
 }
 
