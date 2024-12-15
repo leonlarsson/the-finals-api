@@ -10,13 +10,26 @@ import { season4Schema, season4UserSchema } from "../schemas/leaderboards/season
 import { season4SponsorSchema, season4SponsorUserSchema } from "../schemas/leaderboards/season4Sponsor";
 import { season4WorldTourSchema, season4WorldTourUserSchema } from "../schemas/leaderboards/season4WorldTour";
 import { season5Schema, season5UserSchema } from "../schemas/leaderboards/season5";
+import { season5BankItSchema, season5BankItUserSchema } from "../schemas/leaderboards/season5BankIt";
+import { season5PowerShiftSchema, season5PowerShiftUserSchema } from "../schemas/leaderboards/season5PowerShift";
+import { season5QuickQashSchema, season5QuickQashUserSchema } from "../schemas/leaderboards/season5QuickCash";
 import { season5SponsorSchema, season5SponsorUserSchema } from "../schemas/leaderboards/season5Sponsor";
+import {
+  season5TerminalAttackSchema,
+  season5TerminalAttackUserSchema,
+} from "../schemas/leaderboards/season5TerminalAttack";
+import { season5WorldTourSchema, season5WorldTourUserSchema } from "../schemas/leaderboards/season5WorldTour";
 import { theFinalsSchema, theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
 import fetchOrfData from "../utils/fetchers/fetchOrfData";
+import fetchS5BankitData from "../utils/fetchers/fetchS5BankitData";
 import fetchS5Data from "../utils/fetchers/fetchS5Data";
+import fetchS5PowerShiftData from "../utils/fetchers/fetchS5PowerShiftData";
+import fetchS5QuickCashData from "../utils/fetchers/fetchS5QuickCashData";
 import fetchS5SponsorData from "../utils/fetchers/fetchS5SponsorData";
+import fetchS5TerminalAttackData from "../utils/fetchers/fetchS5TerminalAttackData";
+import fetchS5WorldTourData from "../utils/fetchers/fetchS5WorldTourData";
 import { getJsonFromKV } from "../utils/kv";
 
 // 20_160 minutes is 14 days
@@ -230,6 +243,81 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchema: season5SponsorSchema,
     zodSchemaOpenApi: season5SponsorUserSchema,
+  },
+  {
+    id: "s5worldtour",
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "Season 5 World Tour",
+      description: "Get leaderboard data from the fifth season of THE FINALS - World Tour.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchS5WorldTourData, kv, `backup_${this.id}_${platform}`);
+    },
+    zodSchema: season5WorldTourSchema,
+    zodSchemaOpenApi: season5WorldTourUserSchema,
+  },
+  {
+    id: "s5terminalattack",
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "Season 5 Terminal Attack",
+      description: "Get leaderboard data from the fifth season of THE FINALS - Terminal Attack.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchS5TerminalAttackData, kv, `backup_${this.id}_${platform}`);
+    },
+    zodSchema: season5TerminalAttackSchema,
+    zodSchemaOpenApi: season5TerminalAttackUserSchema,
+  },
+  {
+    id: "s5powershift",
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "Season 5 PowerShift",
+      description: "Get leaderboard data from the fifth season of THE FINALS - PowerShift.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchS5PowerShiftData, kv, `backup_${this.id}_${platform}`);
+    },
+    zodSchema: season5PowerShiftSchema,
+    zodSchemaOpenApi: season5PowerShiftUserSchema,
+  },
+  {
+    id: "s5quickcash",
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "Season 5 Quick Cash",
+      description: "Get leaderboard data from the fifth season of THE FINALS - Quick Cash.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchS5QuickCashData, kv, `backup_${this.id}_${platform}`);
+    },
+    zodSchema: season5QuickQashSchema,
+    zodSchemaOpenApi: season5QuickQashUserSchema,
+  },
+  {
+    id: "s5bankit",
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "Season 5 Bank It",
+      description: "Get leaderboard data from the fifth season of THE FINALS - Bank It.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(fetchS5BankitData, kv, `backup_${this.id}_${platform}`);
+    },
+    zodSchema: season5BankItSchema,
+    zodSchemaOpenApi: season5BankItUserSchema,
   },
 
   // Special leaderboards. Any non-main leaderboards such as events
