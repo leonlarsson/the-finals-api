@@ -2,6 +2,7 @@ import { z } from "zod";
 import nameFallback from "../../utils/nameFallback";
 import {
   cashoutsPropertySchema,
+  clubTagPropertySchema,
   namePropertySchema,
   psnNamePropertySchema,
   rankPropertySchema,
@@ -18,6 +19,7 @@ export const season5WorldTourSchema = z
     6: z.union([z.string(), z.number()]),
     7: z.union([z.string(), z.number()]),
     8: z.union([z.string(), z.number()]),
+    12: z.union([z.string(), z.number()]),
   })
   .transform((data) => ({
     rank: data[1],
@@ -25,6 +27,7 @@ export const season5WorldTourSchema = z
     steamName: nameFallback(data[6]),
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
+    clubTag: nameFallback(data[12]),
     cashouts: data[5],
   }))
   .array();
@@ -37,6 +40,7 @@ export const season5WorldTourUserSchema = z
     steamName: steamNamePropertySchema,
     psnName: psnNamePropertySchema,
     xboxName: xboxNamePropertySchema,
+    clubTag: clubTagPropertySchema,
     cashouts: cashoutsPropertySchema,
   })
   .openapi("Season5WorldTourUser", {

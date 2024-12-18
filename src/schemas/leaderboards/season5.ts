@@ -3,6 +3,7 @@ import leagueNumberToName from "../../utils/leagueNumberToName";
 import nameFallback from "../../utils/nameFallback";
 import {
   changePropertySchema,
+  clubTagPropertySchema,
   leagueNumberPropertySchema,
   leaguePropertySchema,
   namePropertySchema,
@@ -24,6 +25,7 @@ export const season5Schema = z
     6: z.union([z.string(), z.number()]),
     7: z.union([z.string(), z.number()]),
     8: z.union([z.string(), z.number()]),
+    12: z.union([z.string(), z.number()]),
   })
   .transform((data) => ({
     rank: data[1],
@@ -32,6 +34,7 @@ export const season5Schema = z
     steamName: nameFallback(data[6]),
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
+    clubTag: nameFallback(data[12]),
     leagueNumber: data[4],
     league: leagueNumberToName(data[4]),
     rankScore: data[5],
@@ -47,6 +50,7 @@ export const season5UserSchema = z
     steamName: steamNamePropertySchema,
     psnName: psnNamePropertySchema,
     xboxName: xboxNamePropertySchema,
+    clubTag: clubTagPropertySchema,
     leagueNumber: leagueNumberPropertySchema,
     league: leaguePropertySchema,
     rankScore: rankScorePropertySchema,

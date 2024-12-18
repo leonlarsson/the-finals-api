@@ -27,3 +27,6 @@ export const fansPropertySchema = z.number().openapi({ description: "The user's 
 export const tournamentWinsPropertySchema = z
   .number()
   .openapi({ description: "The user's number of tournament wins." });
+export const clubTagPropertySchema = z
+  .string()
+  .openapi({ description: "The user's club tag.", examples: ["TFL", "API"] });
