@@ -4,13 +4,6 @@ export default async () => {
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
 
   if (!res.ok) {
-    // TODO: Remove me at some point
-    console.error({
-      resStatus: res.status,
-      resStatusText: res.statusText,
-      resUrl: res.url,
-      resText: text,
-    });
     throw new Error(`Failed to fetch data. URL ${res.url} returned status ${res.status}`);
   }
 
