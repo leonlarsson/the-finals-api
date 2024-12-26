@@ -13,11 +13,13 @@ const returnSchema = z
   .object({
     clubTag: z.string().openapi({ description: "The club tag.", example: "API" }),
     members: z
-      .string()
+      .object({
+        name: z.string().openapi({ description: "The member's name.", example: "Mozzy#9999" }),
+      })
       .array()
       .openapi({
         description: "The members in the club. Only users in the top 10K of any relevant leaderboard will show here.",
-        example: ["Mozzy#9999", "TheFinalsApi#1337"],
+        example: [{ name: "Mozzy#9999" }, { name: "TheFinalsApi#1337" }],
       }),
     leaderboards: z
       .object({
@@ -94,59 +96,61 @@ export const registerClubRoutes = (app: App) => {
         const leaderboardId = route.id;
 
         // Aggregate total values and names for each club
-        const totalValues: Record<string, { totalValue: number; members: Set<string> }> = parseResult.data.reduce(
-          (
-            acc: Record<string, { totalValue: number; members: Set<string> }>,
-            entry: {
-              name: string;
-              clubTag: string;
-              rankScore?: number;
-              fans?: number;
-              cashouts?: number;
-              points?: number;
-            },
-          ) => {
-            // Skip users without a clubTag
-            if (!entry.clubTag) return acc;
+        const totalValues: Record<string, { totalValue: number; members: { name: string }[] }> =
+          parseResult.data.reduce(
+            (
+              acc: Record<string, { totalValue: number; members: { name: string }[] }>,
+              entry: {
+                name: string;
+                clubTag: string;
+                rankScore?: number;
+                fans?: number;
+                cashouts?: number;
+                points?: number;
+              },
+            ) => {
+              // Skip users without a clubTag
+              if (!entry.clubTag) return acc;
 
-            // Filter with clubTag query if provided
-            if (
-              (exactClubTag === "true" && entry.clubTag.toLowerCase() !== clubTagFilter?.toLowerCase()) ||
-              (clubTagFilter && !entry.clubTag.toLowerCase().includes(clubTagFilter.toLowerCase()))
-            ) {
+              // Filter with clubTag query if provided
+              if (
+                (exactClubTag === "true" && entry.clubTag.toLowerCase() !== clubTagFilter?.toLowerCase()) ||
+                (clubTagFilter && !entry.clubTag.toLowerCase().includes(clubTagFilter.toLowerCase()))
+              ) {
+                return acc;
+              }
+
+              const value = entry.rankScore ?? entry.fans ?? entry.cashouts ?? entry.points ?? 0;
+              const clubData = acc[entry.clubTag] || { totalValue: 0, members: [] };
+
+              clubData.totalValue += value;
+
+              // Add member only if name doesn't already exist in members
+              if (entry.name && !clubData.members.some((member) => member.name === entry.name)) {
+                clubData.members.push({ name: entry.name });
+              }
+
+              acc[entry.clubTag] = clubData;
+
               return acc;
-            }
-
-            const value = entry.rankScore ?? entry.fans ?? entry.cashouts ?? entry.points ?? 0;
-            const clubData = acc[entry.clubTag] || { totalValue: 0, members: new Set<string>() };
-
-            clubData.totalValue += value;
-
-            if (entry.name) {
-              clubData.members.add(entry.name);
-            }
-
-            acc[entry.clubTag] = clubData;
-
-            return acc;
-          },
-          {},
-        );
+            },
+            {},
+          );
 
         // Create leaderboard values array
         const leaderboardValues = Object.entries(totalValues)
           .filter((x) => x[0])
           .map(([clubTag, { totalValue, members }]) => ({
             clubTag,
-            value: totalValue,
-            members: Array.from(members),
+            totalValue,
+            members,
           }))
-          .sort((a, b) => b.value - a.value)
+          .sort((a, b) => b.totalValue - a.totalValue)
           .map((entry, index) => ({
             clubTag: entry.clubTag,
             leaderboardId,
             rank: index + 1,
-            totalValue: entry.value,
+            totalValue: entry.totalValue,
             members: entry.members,
           }));
 
@@ -161,7 +165,7 @@ export const registerClubRoutes = (app: App) => {
           string,
           {
             clubTag: string;
-            members: Set<string>;
+            members: { name: string }[];
             leaderboards: { leaderboard: string; rank: number; totalValue: number }[];
           }
         >,
@@ -171,10 +175,11 @@ export const registerClubRoutes = (app: App) => {
         if (!clubTag) return acc;
 
         if (!acc[clubTag]) {
-          acc[clubTag] = { clubTag, members: new Set<string>(), leaderboards: [] };
+          acc[clubTag] = { clubTag, members: [], leaderboards: [] };
         }
 
-        acc[clubTag].members = new Set([...acc[clubTag].members, ...members]);
+        acc[clubTag].members.push(...members);
+
         acc[clubTag].leaderboards.push({
           leaderboard: leaderboardId,
           rank,
@@ -189,7 +194,7 @@ export const registerClubRoutes = (app: App) => {
     // Get the final response format
     const response = Object.values(aggregatedClubs).map((club) => ({
       clubTag: club.clubTag,
-      members: Array.from(club.members),
+      members: club.members,
       leaderboards: club.leaderboards,
     }));
 
