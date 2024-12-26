@@ -96,10 +96,10 @@ export const registerClubRoutes = (app: App) => {
         const leaderboardId = route.id;
 
         // Aggregate total values and names for each club
-        const totalValues: Record<string, { totalValue: number; members: { name: string }[] }> =
+        const totalValues: Record<string, { totalValue: number; members: Map<string, { name: string }> }> =
           parseResult.data.reduce(
             (
-              acc: Record<string, { totalValue: number; members: { name: string }[] }>,
+              acc: Record<string, { totalValue: number; members: Map<string, { name: string }> }>,
               entry: {
                 name: string;
                 clubTag: string;
@@ -121,13 +121,13 @@ export const registerClubRoutes = (app: App) => {
               }
 
               const value = entry.rankScore ?? entry.fans ?? entry.cashouts ?? entry.points ?? 0;
-              const clubData = acc[entry.clubTag] || { totalValue: 0, members: [] };
+              const clubData = acc[entry.clubTag] || { totalValue: 0, members: new Map<string, { name: string }>() };
 
               clubData.totalValue += value;
 
-              // Add member only if name doesn't already exist in members
-              if (entry.name && !clubData.members.some((member) => member.name === entry.name)) {
-                clubData.members.push({ name: entry.name });
+              // Add member name to the Map for uniqueness
+              if (entry.name) {
+                clubData.members.set(entry.name, { name: entry.name });
               }
 
               acc[entry.clubTag] = clubData;
@@ -143,7 +143,7 @@ export const registerClubRoutes = (app: App) => {
           .map(([clubTag, { totalValue, members }]) => ({
             clubTag,
             totalValue,
-            members,
+            members: Array.from(members.values()), // Convert Map to an array of { name }
           }))
           .sort((a, b) => b.totalValue - a.totalValue)
           .map((entry, index) => ({
@@ -178,7 +178,13 @@ export const registerClubRoutes = (app: App) => {
           acc[clubTag] = { clubTag, members: [], leaderboards: [] };
         }
 
-        acc[clubTag].members.push(...members);
+        // Merge members, ensuring no duplicates using Map
+        members.forEach((newMember) => {
+          const memberExists = acc[clubTag].members.some((existingMember) => existingMember.name === newMember.name);
+          if (!memberExists) {
+            acc[clubTag].members.push(newMember);
+          }
+        });
 
         acc[clubTag].leaderboards.push({
           leaderboard: leaderboardId,
