@@ -27,6 +27,7 @@ export interface BaseAPIRoute {
   id: string;
   legacyIds?: string[];
   availablePlatforms: LeaderboardPlatforms[];
+  hasClubData?: boolean;
   metadata: {
     summary: string;
     description: string;
@@ -53,4 +54,9 @@ export type BaseUser = {
   xboxName: string;
 };
 
-export type Tags = "Leaderboards" | "Leaderboards - Special" | "Community Events" | "the-finals-leaderboard.com";
+export type Tags =
+  | "Leaderboards"
+  | "Leaderboards - Special"
+  | "Community Events"
+  | "Clubs"
+  | "the-finals-leaderboard.com";

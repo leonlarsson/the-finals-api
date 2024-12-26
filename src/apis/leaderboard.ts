@@ -217,6 +217,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "s5",
     availablePlatforms: ["crossplay"],
+    hasClubData: true,
     metadata: {
       summary: "Season 5",
       description: "Get leaderboard data from the fifth season of THE FINALS.",
@@ -232,6 +233,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "s5sponsor",
     availablePlatforms: ["crossplay"],
+    hasClubData: true,
     metadata: {
       summary: "Season 5 Sponsor",
       description: "Get leaderboard data from the fifth season of THE FINALS - Sponsor.",
@@ -247,6 +249,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "s5worldtour",
     availablePlatforms: ["crossplay"],
+    hasClubData: true,
     metadata: {
       summary: "Season 5 World Tour",
       description: "Get leaderboard data from the fifth season of THE FINALS - World Tour.",
@@ -262,6 +265,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "s5terminalattack",
     availablePlatforms: ["crossplay"],
+    hasClubData: true,
     metadata: {
       summary: "Season 5 Terminal Attack",
       description: "Get leaderboard data from the fifth season of THE FINALS - Terminal Attack.",
@@ -277,6 +281,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "s5powershift",
     availablePlatforms: ["crossplay"],
+    hasClubData: true,
     metadata: {
       summary: "Season 5 PowerShift",
       description: "Get leaderboard data from the fifth season of THE FINALS - PowerShift.",
@@ -292,6 +297,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "s5quickcash",
     availablePlatforms: ["crossplay"],
+    hasClubData: true,
     metadata: {
       summary: "Season 5 Quick Cash",
       description: "Get leaderboard data from the fifth season of THE FINALS - Quick Cash.",
@@ -307,6 +313,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   {
     id: "s5bankit",
     availablePlatforms: ["crossplay"],
+    hasClubData: true,
     metadata: {
       summary: "Season 5 Bank It",
       description: "Get leaderboard data from the fifth season of THE FINALS - Bank It.",

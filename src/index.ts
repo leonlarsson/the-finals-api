@@ -4,6 +4,7 @@ import { contextStorage } from "hono/context-storage";
 import { cors } from "hono/cors";
 import { registerAuthComponent } from "./components/auth";
 import { authentication } from "./middleware/authentication";
+import { registerClubRoutes } from "./routes/clubs";
 import { registerCommunityEventRoutes } from "./routes/community-event";
 import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
@@ -25,6 +26,7 @@ registerAuthComponent(app);
 // Register routes
 registerLeaderboardRoutes(app);
 registerCommunityEventRoutes(app);
+registerClubRoutes(app);
 registerTflNoticeRoutes(app);
 
 // The OpenAPI spec will be available at /openapi.json
@@ -41,6 +43,10 @@ app.doc("/openapi.json", {
     {
       name: "Community Events",
       description: "Endpoints for community events.",
+    },
+    {
+      name: "Clubs",
+      description: "Endpoints for clubs.",
     },
     {
       name: "the-finals-leaderboard.com",
