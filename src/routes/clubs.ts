@@ -112,14 +112,6 @@ export const registerClubRoutes = (app: App) => {
               // Skip users without a clubTag
               if (!entry.clubTag) return acc;
 
-              // Filter with clubTag query if provided
-              if (
-                (exactClubTag === "true" && entry.clubTag.toLowerCase() !== clubTagFilter?.toLowerCase()) ||
-                (clubTagFilter && !entry.clubTag.toLowerCase().includes(clubTagFilter.toLowerCase()))
-              ) {
-                return acc;
-              }
-
               const value = entry.rankScore ?? entry.fans ?? entry.cashouts ?? entry.points ?? 0;
               const clubData = acc[entry.clubTag] || { totalValue: 0, members: new Map<string, { name: string }>() };
 
@@ -197,8 +189,20 @@ export const registerClubRoutes = (app: App) => {
       {},
     );
 
+    // Apply the club tag filtering
+    const filteredClubs = Object.values(aggregatedClubs).filter((club) => {
+      // No filter: all clubs
+      if (!clubTagFilter) return true;
+
+      // Filter by exact club tag or partial match
+      if (exactClubTag === "true") {
+        return club.clubTag.toLowerCase() === clubTagFilter.toLowerCase();
+      }
+      return club.clubTag.toLowerCase().includes(clubTagFilter.toLowerCase());
+    });
+
     // Get the final response format
-    const response = Object.values(aggregatedClubs).map((club) => ({
+    const response = Object.values(filteredClubs).map((club) => ({
       clubTag: club.clubTag,
       members: club.members,
       leaderboards: club.leaderboards,
