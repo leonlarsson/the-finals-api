@@ -8,8 +8,8 @@ kv_namespaces = [
 ]
 
 [triggers]
-# Run every hour
-crons = ["0 */1 * * *"]
+# Run every 2 hours
+crons = ["0 */2 * * *"]
 
 [observability]
 enabled = true
