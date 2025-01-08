@@ -110,8 +110,11 @@ export const registerCommunityEventRoutes = (app: App) => {
           200,
         );
       } catch (error) {
-        console.error("Error in getCommunityEvent:", error);
         const isZodError = error instanceof ZodError;
+        console.error(
+          "Error in getCommunityEvent:",
+          isZodError ? `${error.toString().slice(0, 700)}\n... Truncated due to large payload ...` : error,
+        );
 
         return c.json(
           {

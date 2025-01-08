@@ -103,8 +103,11 @@ export const registerLeaderboardRoutes = (app: App) => {
           200,
         );
       } catch (error) {
-        console.error("Error in getLeaderboard:", error);
         const isZodError = error instanceof ZodError;
+        console.error(
+          "Error in getLeaderboard:",
+          isZodError ? `${error.toString().slice(0, 700)}\n... Truncated due to large payload ...` : error,
+        );
 
         return c.json(
           {
