@@ -14,9 +14,9 @@ export const orfSchema = z
     1: z.number(),
     3: z.string(),
     5: z.number(),
-    6: z.union([z.string(), z.number()]),
-    7: z.union([z.string(), z.number()]),
-    8: z.union([z.string(), z.number()]),
+    6: z.union([z.string(), z.number()]).optional(),
+    7: z.union([z.string(), z.number()]).optional(),
+    8: z.union([z.string(), z.number()]).optional(),
   })
   .transform((data) => ({
     rank: data[1],
