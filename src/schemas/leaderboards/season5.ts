@@ -22,10 +22,10 @@ export const season5Schema = z
     3: z.union([z.string(), z.number()]),
     4: z.number(),
     5: z.number(),
-    6: z.union([z.string(), z.number()]),
-    7: z.union([z.string(), z.number()]),
-    8: z.union([z.string(), z.number()]),
-    12: z.union([z.string(), z.number()]),
+    6: z.union([z.string(), z.number()]).optional(),
+    7: z.union([z.string(), z.number()]).optional(),
+    8: z.union([z.string(), z.number()]).optional(),
+    12: z.union([z.string(), z.number()]).optional(),
   })
   .transform((data) => ({
     rank: data[1],
