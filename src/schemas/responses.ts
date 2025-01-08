@@ -21,5 +21,4 @@ export const leaderboard404ResponseSchema = z.object({
 
 export const leaderboard500ResponseSchema = z.object({
   error: z.string(),
-  zodError: z.any().optional(),
 });

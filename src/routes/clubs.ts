@@ -1,5 +1,4 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { ZodError } from "zod";
 import type { App } from "..";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { cache } from "../middleware/cache";
@@ -88,16 +87,13 @@ export const registerClubRoutes = (app: App) => {
     const clubData = await Promise.all(
       leaderboardWithClubs.map(async (route) => {
         const data = await route.fetchData({ kv: c.env.KV, platform: "crossplay" });
-        const parseResult = route.zodSchema.safeParse(data);
-        if (!parseResult.success) {
-          throw new ZodError(parseResult.error.errors);
-        }
 
         const leaderboardId = route.id;
 
         // Aggregate total values and names for each club
         const totalValues: Record<string, { totalValue: number; members: Map<string, { name: string }> }> =
-          parseResult.data.reduce(
+          // biome-ignore lint/suspicious/noExplicitAny: BaseUser[] technically
+          (data as any).reduce(
             (
               acc: Record<string, { totalValue: number; members: Map<string, { name: string }> }>,
               entry: {

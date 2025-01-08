@@ -49,7 +49,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_${this.id}`);
     },
-    zodSchema: closedBeta1Schema,
     zodSchemaOpenApi: closedBeta1UserSchema,
   },
   {
@@ -65,7 +64,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_${this.id}`);
     },
-    zodSchema: closedBeta2Schema,
     zodSchemaOpenApi: closedBeta2UserSchema,
   },
   {
@@ -81,7 +79,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: openBetaSchema,
     zodSchemaOpenApi: openBetaUserSchema,
   },
   {
@@ -97,7 +94,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season1Schema,
     zodSchemaOpenApi: season1UserSchema,
   },
   {
@@ -114,7 +110,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season2Schema,
     zodSchemaOpenApi: season2UserSchema,
   },
   {
@@ -130,7 +125,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season3Schema,
     zodSchemaOpenApi: season3UserSchema,
   },
   {
@@ -146,7 +140,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season3Schema,
     zodSchemaOpenApi: season3UserSchema,
   },
   {
@@ -162,7 +155,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season3WorldTourSchema,
     zodSchemaOpenApi: season3WorldTourUserSchema,
   },
   {
@@ -178,7 +170,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season4Schema,
     zodSchemaOpenApi: season4UserSchema,
   },
   {
@@ -194,7 +185,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season4WorldTourSchema,
     zodSchemaOpenApi: season4WorldTourUserSchema,
   },
   {
@@ -210,7 +200,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: season4SponsorSchema,
     zodSchemaOpenApi: season4SponsorUserSchema,
   },
 
@@ -227,7 +216,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchS5Data, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: season5Schema,
     zodSchemaOpenApi: season5UserSchema,
   },
   {
@@ -243,7 +231,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchS5SponsorData, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: season5SponsorSchema,
     zodSchemaOpenApi: season5SponsorUserSchema,
   },
   {
@@ -259,7 +246,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchS5WorldTourData, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: season5WorldTourSchema,
     zodSchemaOpenApi: season5WorldTourUserSchema,
   },
   {
@@ -275,7 +261,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchS5TerminalAttackData, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: season5TerminalAttackSchema,
     zodSchemaOpenApi: season5TerminalAttackUserSchema,
   },
   {
@@ -291,7 +276,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchS5PowerShiftData, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: season5PowerShiftSchema,
     zodSchemaOpenApi: season5PowerShiftUserSchema,
   },
   {
@@ -307,7 +291,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchS5QuickCashData, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: season5QuickQashSchema,
     zodSchemaOpenApi: season5QuickQashUserSchema,
   },
   {
@@ -323,7 +306,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchS5BankitData, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: season5BankItSchema,
     zodSchemaOpenApi: season5BankItUserSchema,
   },
 
@@ -341,7 +323,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
-    zodSchema: theFinalsSchema,
     zodSchemaOpenApi: theFinalsUserSchema,
   },
   {
@@ -357,7 +338,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(fetchOrfData, kv, `backup_${this.id}_${platform}`);
     },
-    zodSchema: orfSchema,
     zodSchemaOpenApi: orfUserSchema,
   },
 ] satisfies BaseAPIRoute[];

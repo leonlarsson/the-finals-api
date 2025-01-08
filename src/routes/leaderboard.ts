@@ -1,5 +1,4 @@
 import { createRoute, type z } from "@hono/zod-openapi";
-import { ZodError } from "zod";
 import type { App } from "..";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { cache } from "../middleware/cache";
@@ -9,7 +8,7 @@ import type {
   leaderboard404ResponseSchema,
   leaderboard500ResponseSchema,
 } from "../schemas/responses";
-import type { BaseUser, Env, LeaderboardPlatforms } from "../types";
+import type { BaseUser, LeaderboardPlatforms } from "../types";
 import { standarQueryParams, standardLeaderboardResponses, standardPlatformPathParam } from "../utils/openApiStandards";
 
 export const registerLeaderboardRoutes = (app: App) => {
@@ -74,14 +73,8 @@ export const registerLeaderboardRoutes = (app: App) => {
           platform: platform as LeaderboardPlatforms,
         });
 
-        // Validate and parse data with Zod schema
-        const parseResult = apiRoute.zodSchema.safeParse(fetchedData);
-        if (!parseResult.success) {
-          throw new ZodError(parseResult.error.issues);
-        }
-
         // Filter data by name query
-        const filteredData = parseResult.data.filter((user: BaseUser) =>
+        const filteredData = (fetchedData as BaseUser[]).filter((user) =>
           [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>
             platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? ""),
           ),
@@ -103,16 +96,11 @@ export const registerLeaderboardRoutes = (app: App) => {
           200,
         );
       } catch (error) {
-        const isZodError = error instanceof ZodError;
-        console.error(
-          "Error in getLeaderboard:",
-          isZodError ? `${error.toString().slice(0, 700)}\n... Truncated due to large payload ...` : error,
-        );
+        console.error("Error in getLeaderboard:", error);
 
         return c.json(
           {
-            error: `${isZodError ? "A data validation error occurred while fetching the leaderboard. This means unexpected data came in from Embark." : "An error occurred in the getLeaderboard handler."} Leaderboard: ${apiRoute.id}`,
-            zodError: isZodError ? error : undefined,
+            error: `An error occurred in the getLeaderboard handler. Leaderboard: ${apiRoute.id}. Error: ${error}`,
           } satisfies z.infer<typeof leaderboard500ResponseSchema>,
           500,
         );

@@ -37,7 +37,6 @@ export interface BaseAPIRoute {
   };
   includeInBackup?: boolean;
   fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
-  zodSchema: ZodSchema;
   zodSchemaOpenApi: ZodSchema;
 }
 

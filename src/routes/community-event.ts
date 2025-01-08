@@ -1,5 +1,4 @@
 import { createRoute, type z } from "@hono/zod-openapi";
-import { ZodError } from "zod";
 import type { App } from "..";
 import { communityEventApiRoutes } from "../apis/communityEvents";
 import { cache } from "../middleware/cache";
@@ -73,19 +72,13 @@ export const registerCommunityEventRoutes = (app: App) => {
       }
 
       try {
-        const fetchedData = await apiRoute.fetchData({
+        const fetchedData = (await apiRoute.fetchData({
           kv: c.env.KV,
           platform: platform as LeaderboardPlatforms,
-        });
-
-        // Validate and parse data with Zod schema
-        const parseResult = apiRoute.zodSchema.safeParse(fetchedData);
-        if (!parseResult.success) {
-          throw new ZodError(parseResult.error.issues);
-        }
+        })) as { entries: BaseUser[]; progress: { currentProgress: number; goal: number } };
 
         // Filter data by name query
-        const filteredEntries = parseResult.data.entries.filter((user: BaseUser) =>
+        const filteredEntries = fetchedData.entries.filter((user) =>
           [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>
             platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? ""),
           ),
@@ -103,23 +96,18 @@ export const registerCommunityEventRoutes = (app: App) => {
             },
             count: filteredEntries.length,
             data: {
-              progress: parseResult.data.progress,
+              progress: fetchedData.progress,
               entries: returnCountOnly ? [] : filteredEntries,
             },
           } satisfies z.infer<ReturnType<typeof communityEvent200ResponseSchema>>,
           200,
         );
       } catch (error) {
-        const isZodError = error instanceof ZodError;
-        console.error(
-          "Error in getCommunityEvent:",
-          isZodError ? `${error.toString().slice(0, 700)}\n... Truncated due to large payload ...` : error,
-        );
+        console.error("Error in getCommunityEvent:", error);
 
         return c.json(
           {
-            error: `${isZodError ? "A data validation error occurred while fetching the community event. This means unexpected data came in from Embark." : "An error occurred in the getCommunityEvent handler."} Community event: ${apiRoute.id}`,
-            zodError: isZodError ? error : undefined,
+            error: `An error occurred in the getCommunityEvent handler. Community event: ${apiRoute.id}. Error: ${error}`,
           } satisfies z.infer<typeof leaderboard500ResponseSchema>,
           500,
         );

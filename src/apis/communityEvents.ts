@@ -1,5 +1,5 @@
-import { ce44ResponseSchema, ce44Schema } from "../schemas/communityEvents/ce44";
-import { ce48ResponseSchema, ce48Schema } from "../schemas/communityEvents/ce48";
+import { ce44ResponseSchema } from "../schemas/communityEvents/ce44";
+import { ce48ResponseSchema } from "../schemas/communityEvents/ce48";
 import type { BaseAPIRoute } from "../types";
 import { getJsonFromKV } from "../utils/kv";
 
@@ -19,7 +19,6 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_event_${this.id}`);
     },
-    zodSchema: ce44Schema,
     zodSchemaOpenApi: ce44ResponseSchema,
   },
   {
@@ -35,7 +34,6 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_event_${this.id}`);
     },
-    zodSchema: ce48Schema,
     zodSchemaOpenApi: ce48ResponseSchema,
   },
 ] satisfies BaseAPIRoute[];

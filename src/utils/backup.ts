@@ -7,21 +7,16 @@ export default async (kv: KVNamespace) => {
     // Fetch data
     const data = await route.fetchData({ kv, platform });
 
-    // Validate data
-    const { success } = route.zodSchema.safeParse(data);
+    // At this point, the data has been fetched, validated, and transformed
+    const eventBit = route.metadata.tags.includes("Community Events") ? "event_" : "";
 
-    // If data is valid, backup to KV
-    if (success) {
-      const eventBit = route.metadata.tags.includes("Community Events") ? "event_" : "";
+    // Append _platform if route has platforms
+    const key =
+      route.availablePlatforms.length === 0
+        ? `backup_${eventBit}${route.id}`
+        : `backup_${eventBit}${route.id}_${platform}`;
 
-      // Append _platform if route has platforms
-      const key =
-        route.availablePlatforms.length === 0
-          ? `backup_${eventBit}${route.id}`
-          : `backup_${eventBit}${route.id}_${platform}`;
-
-      await kv.put(key, JSON.stringify(data));
-    }
+    await kv.put(key, JSON.stringify(data));
   };
 
   // For each route

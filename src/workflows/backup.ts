@@ -23,15 +23,6 @@ export class BackupWorkflow extends WorkflowEntrypoint<Env["Bindings"], Params> 
 
         const fetchAndValidateData = async (leaderboard: BaseAPIRoute, platform: LeaderboardPlatforms) => {
           const data = await leaderboard.fetchData({ kv: this.env.KV, platform });
-          const { success, error } = leaderboard.zodSchema.safeParse(data);
-
-          if (!success) {
-            throw new Error(
-              `Backup: Data validation failed for leaderboard ${leaderboard.id} for platform ${platform}. ZodError:\n${error.toString()}`,
-              { cause: error.cause },
-            );
-          }
-
           dataToBackup.push({ leaderboardId: leaderboard.id, platform, data });
         };
 
