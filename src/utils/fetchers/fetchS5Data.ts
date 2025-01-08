@@ -12,5 +12,13 @@ export default async () => {
   }
 
   const jsonData = JSON.parse(stringData);
+
+  // if (zodSchema) {
+  //   const { success } = zodSchema.safeParse(jsonData.props.pageProps.entries);
+  //   if (!success) {
+  //     throw new Error(`Failed to validate fetched data from URL ${res.url} with provided Zod schema.`);
+  //   }
+  // }
+
   return jsonData.props.pageProps.entries;
 };
