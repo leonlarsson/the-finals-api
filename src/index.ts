@@ -92,8 +92,10 @@ app.get(
   }),
 );
 
-// Redirect any other route to the API Reference
-app.notFound((c) => c.redirect("/", 302));
+// 404 anything else
+app.notFound((c) =>
+  c.json({ error: "Route not found. Check https://api.the-finals-leaderboard.com for all available routes." }, 404),
+);
 
 export default {
   fetch: app.fetch,
