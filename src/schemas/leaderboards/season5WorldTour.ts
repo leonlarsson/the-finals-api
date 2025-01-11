@@ -14,7 +14,8 @@ export const season5WorldTourSchema = z
   .object({
     1: z.number(),
     // For some reason, the name can come back as a 0 (number) instead of a string. Example: {"1":4059,"2":57070,"3":0,"4":11,"5":25114,"6":"ඞ ⁧ AK","7":0,"8":0}
-    3: z.union([z.string(), z.number()]),
+    // 25-01-11: Once instance of 3 coming back as undefined. Only in this leaderboard so far.
+    3: z.union([z.string(), z.number()]).optional(),
     5: z.number(),
     6: z.union([z.string(), z.number()]).optional(),
     7: z.union([z.string(), z.number()]).optional(),
