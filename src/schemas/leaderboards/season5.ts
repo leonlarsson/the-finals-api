@@ -17,7 +17,8 @@ import {
 export const season5Schema = z
   .object({
     1: z.number(),
-    2: z.number(),
+    // 25-01-21: The 24h change (2) can now comeback as an empty string. Treat it as a 0 in the transform.
+    2: z.union([z.number(), z.string()]),
     // For some reason, the name can come back as a 0 (number) instead of a string. Example: {"1":4059,"2":57070,"3":0,"4":11,"5":25114,"6":"ඞ ⁧ AK","7":0,"8":0}
     3: z.union([z.string(), z.number()]),
     4: z.number(),
@@ -29,7 +30,7 @@ export const season5Schema = z
   })
   .transform((data) => ({
     rank: data[1],
-    change: data[2],
+    change: typeof data[2] !== "number" ? 0 : data[2],
     name: nameFallback(data[3], "Unknown#0000"),
     steamName: nameFallback(data[6]),
     psnName: nameFallback(data[7]),
