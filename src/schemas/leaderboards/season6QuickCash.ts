@@ -1,11 +1,11 @@
 import { z } from "zod";
 import nameFallback from "../../utils/nameFallback";
 import {
-  cashoutsPropertySchema,
   clubTagPropertySchema,
   namePropertySchema,
   psnNamePropertySchema,
   rankPropertySchema,
+  scorePropertySchema,
   steamNamePropertySchema,
   xboxNamePropertySchema,
 } from "../userProperties";
@@ -41,7 +41,7 @@ export const season6QuickQashUserSchema = z
     psnName: psnNamePropertySchema,
     xboxName: xboxNamePropertySchema,
     clubTag: clubTagPropertySchema,
-    points: cashoutsPropertySchema,
+    points: scorePropertySchema,
   })
   .openapi("Season6QuickQashUser", {
     title: "Season 6 Quick Qash User",
