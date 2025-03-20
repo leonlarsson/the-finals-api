@@ -14,10 +14,10 @@ export const leaderboardPlatformParamSchema = (apiRoute: BaseAPIRoute) =>
       example: apiRoute.availablePlatforms[0],
     });
 
-// TODO: Make boolean. There is currently a bug if I use a boolean.
 export const leaderboardCountQuerySchema = z
   .enum(["true", "false"])
-  .optional()
+  .default("false")
+  .transform((v) => v === "true")
   .openapi({
     param: {
       name: "count",

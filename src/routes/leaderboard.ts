@@ -38,8 +38,7 @@ export const registerLeaderboardRoutes = (app: App) => {
       // TODO: Figure out a type-safe way to handle this
       // @ts-ignore I am unable to use c.req.valid("param") because route.request.params can (and should be) be undefined if the api route does not require a platform
       const { platform } = c.req.param();
-      const { count, name } = c.req.valid("query");
-      const returnCountOnly = ["true", "1"].includes(count ?? "");
+      const { count: returnCountOnly, name } = c.req.valid("query");
       const nameFilter = name;
 
       const routeRequiresPlatform = apiRoute.availablePlatforms.length > 0;
