@@ -83,8 +83,8 @@ app.get(
     spec: {
       url: "/openapi.json",
     },
-    // Downgraded to avoid: https://github.com/scalar/scalar/issues/4167 and https://github.com/scalar/scalar/issues/4210
-    cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.25.60",
+    // (No longer) Downgraded to avoid: https://github.com/scalar/scalar/issues/4167 and https://github.com/scalar/scalar/issues/4210
+    cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.28.7",
     pageTitle: "THE FINALS API",
     favicon: "https://the-finals-leaderboard.com/favicon.png",
     theme: "default",
