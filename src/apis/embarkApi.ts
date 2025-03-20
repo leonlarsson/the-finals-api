@@ -7,6 +7,13 @@ import { season5QuickQashSchema } from "../schemas/leaderboards/season5QuickCash
 import { season5SponsorSchema } from "../schemas/leaderboards/season5Sponsor";
 import { season5TerminalAttackSchema } from "../schemas/leaderboards/season5TerminalAttack";
 import { season5WorldTourSchema } from "../schemas/leaderboards/season5WorldTour";
+import { season6Schema } from "../schemas/leaderboards/season6";
+import { season6PowerShiftSchema } from "../schemas/leaderboards/season6PowerShift";
+import { season6QuickQashSchema } from "../schemas/leaderboards/season6QuickCash";
+import { season6SponsorSchema } from "../schemas/leaderboards/season6Sponsor";
+import { season6TeamDeathmatchSchema } from "../schemas/leaderboards/season6TeamDeathmatch";
+import { season6TerminalAttackSchema } from "../schemas/leaderboards/season6TerminalAttack";
+import { season6WorldTourSchema } from "../schemas/leaderboards/season6WorldTour";
 
 export type EmbarkApi = {
   url: string;
@@ -15,34 +22,35 @@ export type EmbarkApi = {
 
 /** `embarkApi` lists the URL and Zod schema used to validate and transform the response for a leaderboard. */
 export const embarkApi = {
-  season5: {
-    url: "https://id.embark.games/the-finals/leaderboards/s5",
-    zodSchema: season5Schema,
+  season6: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6",
+    zodSchema: season6Schema,
   },
-  season5Sponsor: {
-    url: "https://id.embark.games/the-finals/leaderboards/s5s",
-    zodSchema: season5SponsorSchema,
+  season6Sponsor: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6s",
+    zodSchema: season6SponsorSchema,
   },
-  season5WorldTour: {
-    url: "https://id.embark.games/the-finals/leaderboards/s5wt",
-    zodSchema: season5WorldTourSchema,
+  season6WorldTour: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6wt",
+    zodSchema: season6WorldTourSchema,
   },
-  season5TerminalAttack: {
-    url: "https://id.embark.games/the-finals/leaderboards/s5ta",
-    zodSchema: season5TerminalAttackSchema,
+  season6TerminalAttack: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6ta",
+    zodSchema: season6TerminalAttackSchema,
   },
-  season5PowerShift: {
-    url: "https://id.embark.games/the-finals/leaderboards/s5ps",
-    zodSchema: season5PowerShiftSchema,
+  season6PowerShift: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6ps",
+    zodSchema: season6PowerShiftSchema,
   },
-  season5QuickCash: {
-    url: "https://id.embark.games/the-finals/leaderboards/s5qc",
-    zodSchema: season5QuickQashSchema,
+  season6QuickCash: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6qc",
+    zodSchema: season6QuickQashSchema,
   },
-  season5BankIt: {
-    url: "https://id.embark.games/the-finals/leaderboards/s5bi",
-    zodSchema: season5BankItSchema,
+  season6TeamDeathmatch: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6tdm",
+    zodSchema: season6TeamDeathmatchSchema,
   },
+
   orf: {
     url: "https://id.embark.games/the-finals/leaderboards/orf",
     zodSchema: orfSchema,

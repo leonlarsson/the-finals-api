@@ -1,41 +1,39 @@
-import { closedBeta1Schema, closedBeta1UserSchema } from "../schemas/leaderboards/closedBeta1";
-import { closedBeta2Schema, closedBeta2UserSchema } from "../schemas/leaderboards/closedBeta2";
-import { openBetaSchema, openBetaUserSchema } from "../schemas/leaderboards/openBeta";
-import { orfSchema, orfUserSchema } from "../schemas/leaderboards/orf";
-import { season1Schema, season1UserSchema } from "../schemas/leaderboards/season1";
-import { season2Schema, season2UserSchema } from "../schemas/leaderboards/season2";
-import { season3Schema, season3UserSchema } from "../schemas/leaderboards/season3";
-import { season3WorldTourSchema, season3WorldTourUserSchema } from "../schemas/leaderboards/season3WorldTour";
-import { season4Schema, season4UserSchema } from "../schemas/leaderboards/season4";
-import { season4SponsorSchema, season4SponsorUserSchema } from "../schemas/leaderboards/season4Sponsor";
-import { season4WorldTourSchema, season4WorldTourUserSchema } from "../schemas/leaderboards/season4WorldTour";
-import { season5Schema, season5UserSchema } from "../schemas/leaderboards/season5";
-import { season5BankItSchema, season5BankItUserSchema } from "../schemas/leaderboards/season5BankIt";
-import { season5PowerShiftSchema, season5PowerShiftUserSchema } from "../schemas/leaderboards/season5PowerShift";
-import { season5QuickQashSchema, season5QuickQashUserSchema } from "../schemas/leaderboards/season5QuickCash";
-import { season5SponsorSchema, season5SponsorUserSchema } from "../schemas/leaderboards/season5Sponsor";
-import {
-  season5TerminalAttackSchema,
-  season5TerminalAttackUserSchema,
-} from "../schemas/leaderboards/season5TerminalAttack";
-import { season5WorldTourSchema, season5WorldTourUserSchema } from "../schemas/leaderboards/season5WorldTour";
-import { theFinalsSchema, theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
+import { closedBeta1UserSchema } from "../schemas/leaderboards/closedBeta1";
+import { closedBeta2UserSchema } from "../schemas/leaderboards/closedBeta2";
+import { openBetaUserSchema } from "../schemas/leaderboards/openBeta";
+import { orfUserSchema } from "../schemas/leaderboards/orf";
+import { season1UserSchema } from "../schemas/leaderboards/season1";
+import { season2UserSchema } from "../schemas/leaderboards/season2";
+import { season3UserSchema } from "../schemas/leaderboards/season3";
+import { season3WorldTourUserSchema } from "../schemas/leaderboards/season3WorldTour";
+import { season4UserSchema } from "../schemas/leaderboards/season4";
+import { season4SponsorUserSchema } from "../schemas/leaderboards/season4Sponsor";
+import { season4WorldTourUserSchema } from "../schemas/leaderboards/season4WorldTour";
+import { season5UserSchema } from "../schemas/leaderboards/season5";
+import { season5BankItUserSchema } from "../schemas/leaderboards/season5BankIt";
+import { season5PowerShiftUserSchema } from "../schemas/leaderboards/season5PowerShift";
+import { season5QuickQashUserSchema } from "../schemas/leaderboards/season5QuickCash";
+import { season5SponsorUserSchema } from "../schemas/leaderboards/season5Sponsor";
+import { season5TerminalAttackUserSchema } from "../schemas/leaderboards/season5TerminalAttack";
+import { season5WorldTourUserSchema } from "../schemas/leaderboards/season5WorldTour";
+import { season6UserSchema } from "../schemas/leaderboards/season6";
+import { season6PowerShiftUserSchema } from "../schemas/leaderboards/season6PowerShift";
+import { season6QuickQashUserSchema } from "../schemas/leaderboards/season6QuickCash";
+import { season6SponsorUserSchema } from "../schemas/leaderboards/season6Sponsor";
+import { season6TeamDeathmatchUserSchema } from "../schemas/leaderboards/season6TeamDeathmatch";
+import { season6TerminalAttackUserSchema } from "../schemas/leaderboards/season6TerminalAttack";
+import { season6WorldTourUserSchema } from "../schemas/leaderboards/season6WorldTour";
+import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
-import fetchOrfData from "../utils/fetchers/fetchOrfData";
-import fetchS5BankitData from "../utils/fetchers/fetchS5BankitData";
-import fetchS5Data from "../utils/fetchers/fetchS5Data";
-import fetchS5PowerShiftData from "../utils/fetchers/fetchS5PowerShiftData";
-import fetchS5QuickCashData from "../utils/fetchers/fetchS5QuickCashData";
-import fetchS5SponsorData from "../utils/fetchers/fetchS5SponsorData";
-import fetchS5TerminalAttackData from "../utils/fetchers/fetchS5TerminalAttackData";
-import fetchS5WorldTourData from "../utils/fetchers/fetchS5WorldTourData";
 import { getJsonFromKV } from "../utils/kv";
+import { embarkApi, fetchStandardEmbarkLeaderboardData } from "./embarkApi";
 
 // 20_160 minutes is 14 days
 const oldLeaderboardCacheMinutes = 20_160;
 
 export const leaderboardApiRoutes: BaseAPIRoute[] = [
+  // CLOSED BETA 1
   {
     id: "cb1",
     legacyIds: ["closedbeta1"],
@@ -51,6 +49,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: closedBeta1UserSchema,
   },
+
+  // CLOSED BETA 2
   {
     id: "cb2",
     legacyIds: ["closedbeta2"],
@@ -66,6 +66,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: closedBeta2UserSchema,
   },
+
+  // OPEN BETA
   {
     id: "ob",
     legacyIds: ["openbeta"],
@@ -81,6 +83,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: openBetaUserSchema,
   },
+
+  // SEASON 1
   {
     id: "s1",
     legacyIds: ["season1"],
@@ -96,6 +100,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: season1UserSchema,
   },
+
+  // SEASON 2
   {
     id: "s2",
     // "live" was a horrible idea, but it's here now. It will remain on S2
@@ -112,6 +118,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: season2UserSchema,
   },
+
+  // SEASON 3
   {
     id: "s3",
     legacyIds: ["season3"],
@@ -157,6 +165,8 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: season3WorldTourUserSchema,
   },
+
+  // SEASON 4
   {
     id: "s4",
     legacyIds: ["season4"],
@@ -203,6 +213,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     zodSchemaOpenApi: season4SponsorUserSchema,
   },
 
+  // SEASON 5
   {
     id: "s5",
     availablePlatforms: ["crossplay"],
@@ -211,10 +222,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5",
       description: "Get leaderboard data from the fifth season of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5Data, kv, `backup_${this.id}_${platform}`);
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5UserSchema,
   },
@@ -226,10 +237,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Sponsor",
       description: "Get leaderboard data from the fifth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5SponsorData, kv, `backup_${this.id}_${platform}`);
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5SponsorUserSchema,
   },
@@ -241,10 +252,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 World Tour",
       description: "Get leaderboard data from the fifth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5WorldTourData, kv, `backup_${this.id}_${platform}`);
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5WorldTourUserSchema,
   },
@@ -256,10 +267,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Terminal Attack",
       description: "Get leaderboard data from the fifth season of THE FINALS - Terminal Attack.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5TerminalAttackData, kv, `backup_${this.id}_${platform}`);
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5TerminalAttackUserSchema,
   },
@@ -271,10 +282,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 PowerShift",
       description: "Get leaderboard data from the fifth season of THE FINALS - PowerShift.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5PowerShiftData, kv, `backup_${this.id}_${platform}`);
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5PowerShiftUserSchema,
   },
@@ -286,10 +297,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Quick Cash",
       description: "Get leaderboard data from the fifth season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5QuickCashData, kv, `backup_${this.id}_${platform}`);
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5QuickQashUserSchema,
   },
@@ -301,12 +312,147 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Bank It",
       description: "Get leaderboard data from the fifth season of THE FINALS - Bank It.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+    },
+    zodSchemaOpenApi: season5BankItUserSchema,
+  },
+
+  // SEASON 6
+  {
+    id: "s6",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6",
+      description: "Get leaderboard data from the sixth season of THE FINALS.",
+      tags: ["Leaderboards"],
     },
     includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchS5BankitData, kv, `backup_${this.id}_${platform}`);
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
     },
-    zodSchemaOpenApi: season5BankItUserSchema,
+    zodSchemaOpenApi: season6UserSchema,
+  },
+  {
+    id: "s6sponsor",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6 Sponsor",
+      description: "Get leaderboard data from the sixth season of THE FINALS - Sponsor.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6Sponsor),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season6SponsorUserSchema,
+  },
+  {
+    id: "s6worldtour",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6 World Tour",
+      description: "Get leaderboard data from the sixth season of THE FINALS - World Tour.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6WorldTour),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season6WorldTourUserSchema,
+  },
+  {
+    id: "s6terminalattack",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6 Terminal Attack",
+      description: "Get leaderboard data from the sixth season of THE FINALS - Terminal Attack.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6TerminalAttack),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season6TerminalAttackUserSchema,
+  },
+  {
+    id: "s6powershift",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6 PowerShift",
+      description: "Get leaderboard data from the sixth season of THE FINALS - PowerShift.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6PowerShift),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season6PowerShiftUserSchema,
+  },
+  {
+    id: "s6quickcash",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6 Quick Cash",
+      description: "Get leaderboard data from the sixth season of THE FINALS - Quick Cash.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6QuickCash),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season6QuickQashUserSchema,
+  },
+  {
+    id: "s6teamdeathmatch",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6 Team Deathmatch",
+      description: "Get leaderboard data from the sixth season of THE FINALS - Team Deathmatch.",
+      tags: ["Leaderboards"],
+    },
+    includeInBackup: true,
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6TeamDeathmatch),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season6TeamDeathmatchUserSchema,
   },
 
   // Special leaderboards. Any non-main leaderboards such as events
@@ -336,7 +482,11 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     includeInBackup: true,
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(fetchOrfData, kv, `backup_${this.id}_${platform}`);
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.orf),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
     },
     zodSchemaOpenApi: orfUserSchema,
   },
