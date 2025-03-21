@@ -3,7 +3,7 @@ import type { App } from "..";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { cache } from "../middleware/cache";
 import { withSearchParams } from "../middleware/withSearchParams";
-import type { Tags } from "../types";
+import type { ClubBaseUser, Tags } from "../types";
 
 const path = "/v1/clubs";
 const tags = ["Clubs"] satisfies Tags[];
@@ -82,127 +82,113 @@ export const registerClubRoutes = (app: App) => {
   app.openapi(getRoute, async (c) => {
     const { clubTagFilter, exactClubTag } = c.req.valid("query");
 
+    const normalizedClubTagFilter = clubTagFilter?.toLowerCase();
+    const useExactClubTag = exactClubTag === "true";
+
     const leaderboardWithClubs = leaderboardApiRoutes.filter((route) => route.hasClubData);
 
-    const clubData = await Promise.all(
-      leaderboardWithClubs.map(async (route) => {
-        const data = await route.fetchData({ kv: c.env.KV, platform: "crossplay" });
+    // Create a single map for club aggregation
+    const clubsMap = new Map<
+      string,
+      {
+        clubTag: string;
+        members: Map<string, { name: string }>;
+        leaderboards: { leaderboard: string; rank: number; totalValue: number }[];
+      }
+    >();
 
+    await Promise.all(
+      leaderboardWithClubs.map(async (route) => {
+        const leaderboardData = (await route.fetchData({ kv: c.env.KV, platform: "crossplay" })) as ClubBaseUser[];
         const leaderboardId = route.id;
 
-        // Aggregate total values and names for each club
-        const totalValues: Record<string, { totalValue: number; members: Map<string, { name: string }> }> =
-          // biome-ignore lint/suspicious/noExplicitAny: BaseUser[] technically
-          (data as any).reduce(
-            (
-              acc: Record<string, { totalValue: number; members: Map<string, { name: string }> }>,
-              entry: {
-                name: string;
-                clubTag: string;
-                rankScore?: number;
-                fans?: number;
-                cashouts?: number;
-                points?: number;
-              },
-            ) => {
-              // Skip users without a clubTag
-              if (!entry.clubTag) return acc;
+        // Calculate scores in a single pass
+        const clubScores = new Map<string, number>();
 
-              const value = entry.rankScore ?? entry.fans ?? entry.cashouts ?? entry.points ?? 0;
-              const clubData = acc[entry.clubTag] || { totalValue: 0, members: new Map<string, { name: string }>() };
+        // Create a temporary map to track all clubs and their members
+        const tempClubMembers = new Map<string, Set<string>>();
 
-              clubData.totalValue += value;
+        for (const leaderboardUser of leaderboardData) {
+          if (!leaderboardUser.clubTag) continue;
 
-              // Add member name to the Map for uniqueness
-              if (entry.name) {
-                clubData.members.set(entry.name, { name: entry.name });
-              }
+          // Calculate total value for ranking
+          const value =
+            leaderboardUser.rankScore ??
+            leaderboardUser.fans ??
+            leaderboardUser.cashouts ??
+            leaderboardUser.points ??
+            0;
+          clubScores.set(leaderboardUser.clubTag, (clubScores.get(leaderboardUser.clubTag) || 0) + value);
 
-              acc[entry.clubTag] = clubData;
+          // Collect members
+          if (leaderboardUser.name) {
+            let memberSet = tempClubMembers.get(leaderboardUser.clubTag);
+            if (!memberSet) {
+              memberSet = new Set();
+              tempClubMembers.set(leaderboardUser.clubTag, memberSet);
+            }
+            memberSet.add(leaderboardUser.name);
+          }
+        }
 
-              return acc;
-            },
-            {},
-          );
+        // Calculate ranks
+        const clubRanks = new Map<string, { rank: number; totalValue: number }>();
 
-        // Create leaderboard values array
-        const leaderboardValues = Object.entries(totalValues)
-          .filter((x) => x[0])
-          .map(([clubTag, { totalValue, members }]) => ({
-            clubTag,
-            totalValue,
-            members: Array.from(members.values()), // Convert Map to an array of { name }
-          }))
-          .sort((a, b) => b.totalValue - a.totalValue)
-          .map((entry, index) => ({
-            clubTag: entry.clubTag,
-            leaderboardId,
-            rank: index + 1,
-            totalValue: entry.totalValue,
-            members: entry.members,
-          }));
+        [...clubScores.entries()]
+          .sort((a, b) => b[1] - a[1])
+          .forEach(([clubTag, totalValue], index) => {
+            clubRanks.set(clubTag, { rank: index + 1, totalValue });
+          });
 
-        return leaderboardValues;
+        // Process filtered clubs
+        for (const [clubTag, rankData] of clubRanks.entries()) {
+          // Apply filtering
+          if (normalizedClubTagFilter) {
+            const normalizedClubTag = clubTag.toLowerCase();
+            if (useExactClubTag) {
+              if (normalizedClubTag !== normalizedClubTagFilter) continue;
+            } else {
+              if (!normalizedClubTag.includes(normalizedClubTagFilter)) continue;
+            }
+          }
+
+          // Add or update club in the global map
+          let clubData = clubsMap.get(clubTag);
+          if (!clubData) {
+            clubData = {
+              clubTag,
+              members: new Map(),
+              leaderboards: [],
+            };
+            clubsMap.set(clubTag, clubData);
+          }
+
+          // Add leaderboard data
+          clubData.leaderboards.push({
+            leaderboard: leaderboardId,
+            rank: rankData.rank,
+            totalValue: rankData.totalValue,
+          });
+
+          // Add members
+          const memberSet = tempClubMembers.get(clubTag);
+          if (memberSet) {
+            for (const name of memberSet) {
+              clubData.members.set(name, { name });
+            }
+          }
+        }
       }),
     );
 
-    // Aggregate data by club
-    const aggregatedClubs = clubData.flat().reduce(
-      (
-        acc: Record<
-          string,
-          {
-            clubTag: string;
-            members: { name: string }[];
-            leaderboards: { leaderboard: string; rank: number; totalValue: number }[];
-          }
-        >,
-        entry,
-      ) => {
-        const { clubTag, leaderboardId, rank, totalValue, members } = entry;
-        if (!clubTag) return acc;
-
-        if (!acc[clubTag]) {
-          acc[clubTag] = { clubTag, members: [], leaderboards: [] };
-        }
-
-        // Merge members, ensuring no duplicates using Map
-        members.forEach((newMember) => {
-          const memberExists = acc[clubTag].members.some((existingMember) => existingMember.name === newMember.name);
-          if (!memberExists) {
-            acc[clubTag].members.push(newMember);
-          }
-        });
-
-        acc[clubTag].leaderboards.push({
-          leaderboard: leaderboardId,
-          rank,
-          totalValue,
-        });
-
-        return acc;
-      },
-      {},
-    );
-
-    // Apply the club tag filtering
-    const filteredClubs = Object.values(aggregatedClubs).filter((club) => {
-      // No filter: all clubs
-      if (!clubTagFilter) return true;
-
-      // Filter by exact club tag or partial match
-      if (exactClubTag === "true") {
-        return club.clubTag.toLowerCase() === clubTagFilter.toLowerCase();
-      }
-      return club.clubTag.toLowerCase().includes(clubTagFilter.toLowerCase());
-    });
-
-    // Get the final response format
-    const response = Object.values(filteredClubs).map((club) => ({
-      clubTag: club.clubTag,
-      members: club.members,
-      leaderboards: club.leaderboards,
-    }));
+    // Create final response
+    const response = [...clubsMap.values()]
+      .map((club) => ({
+        clubTag: club.clubTag,
+        members: Array.from(club.members.values()),
+        leaderboards: club.leaderboards.sort((a, b) => a.rank - b.rank),
+      }))
+      .sort((a, b) => a.clubTag.localeCompare(b.clubTag));
 
     return c.json(response, 200);
   });

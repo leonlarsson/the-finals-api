@@ -53,6 +53,19 @@ export type BaseUser = {
   xboxName: string;
 };
 
+/** Base properties that exists in all club users. */
+export type ClubBaseUser = {
+  name: string;
+  steamName: string;
+  psnName: string;
+  xboxName: string;
+  clubTag: string;
+  rankScore?: number;
+  fans?: number;
+  cashouts?: number;
+  points?: number;
+};
+
 export type Tags =
   | "Leaderboards"
   | "Leaderboards - Special"
