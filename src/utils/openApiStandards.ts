@@ -1,6 +1,8 @@
 import { z } from "zod";
 import {
+  leaderboardClubTagQuerySchema,
   leaderboardCountQuerySchema,
+  leaderboardExactClubTagQuerySchema,
   leaderboardNameQuerySchema,
   leaderboardPlatformParamSchema,
 } from "../schemas/requests";
@@ -12,10 +14,12 @@ import {
 } from "../schemas/responses";
 import type { BaseAPIRoute } from "../types";
 
-export const standarQueryParams = () =>
+export const standardQueryParams = () =>
   z.object({
     count: leaderboardCountQuerySchema,
     name: leaderboardNameQuerySchema,
+    clubTag: leaderboardClubTagQuerySchema,
+    exactClubTag: leaderboardExactClubTagQuerySchema,
   });
 
 export const standardPlatformPathParam = (apiRoute: BaseAPIRoute) =>

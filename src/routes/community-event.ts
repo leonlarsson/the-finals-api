@@ -10,9 +10,9 @@ import type {
 } from "../schemas/responses";
 import type { BaseUser, LeaderboardPlatforms } from "../types";
 import {
-  standarQueryParams,
   standardCommunityEventResponses,
   standardPlatformPathParam,
+  standardQueryParams,
 } from "../utils/openApiStandards";
 
 export const registerCommunityEventRoutes = (app: App) => {
@@ -24,12 +24,12 @@ export const registerCommunityEventRoutes = (app: App) => {
         ? `/v1/community-event/${apiRoute.id}/{platform}`
         : `/v1/community-event/${apiRoute.id}`,
       middleware: [
-        withSearchParams(["name", "count"]),
+        withSearchParams(["name", "count", "clubTag", "exactClubTag"]),
         cache(`v1-community-event-${apiRoute.id}`, apiRoute.metadata.cacheMinutes ?? 10),
       ],
       request: {
         params: standardPlatformPathParam(apiRoute),
-        query: standarQueryParams(),
+        query: standardQueryParams(),
       },
       tags: apiRoute.metadata.tags,
       summary: apiRoute.metadata.summary,
@@ -42,8 +42,9 @@ export const registerCommunityEventRoutes = (app: App) => {
       // TODO: Figure out a type-safe way to handle this
       // @ts-ignore I am unable to use c.req.valid("param") because route.request.params can (and should be) be undefined if the api route does not require a platform
       const { platform } = c.req.param();
-      const { count: returnCountOnly, name } = c.req.valid("query");
+      const { count: returnCountOnly, name, clubTag, exactClubTag: useExactClubTag } = c.req.valid("query");
       const nameFilter = name;
+      const normalizedClubTag = clubTag?.toLowerCase();
 
       const routeRequiresPlatform = apiRoute.availablePlatforms.length > 0;
       const validPlatformProvided = apiRoute.availablePlatforms.includes(platform as LeaderboardPlatforms);
@@ -76,12 +77,25 @@ export const registerCommunityEventRoutes = (app: App) => {
           platform: platform as LeaderboardPlatforms,
         })) as { entries: BaseUser[]; progress: { currentProgress: number; goal: number } };
 
-        // Filter data by name query
-        const filteredEntries = fetchedData.entries.filter((user) =>
-          [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>
+        const nameFilterFn = (user: BaseUser) => {
+          return [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>
             platformName.toLowerCase().includes(nameFilter?.toLowerCase() ?? ""),
-          ),
-        );
+          );
+        };
+
+        const clubTagFilterFn = (user: BaseUser & { clubTag?: string }) => {
+          const userClubTag = user.clubTag?.toLowerCase() ?? ""; // Normalize club tag
+          const isMatchingClubTag = userClubTag.includes(normalizedClubTag ?? "");
+
+          return useExactClubTag ? userClubTag === normalizedClubTag : isMatchingClubTag;
+        };
+
+        // Filter data
+        const filteredEntries = fetchedData.entries
+          // If a name filter is provided, filter by name
+          .filter(nameFilter ? nameFilterFn : () => true)
+          // If the API route has club data and a club tag is provided, filter by club tag
+          .filter(apiRoute.hasClubData && normalizedClubTag ? clubTagFilterFn : () => true);
 
         // Return data
         return c.json(
@@ -91,6 +105,8 @@ export const registerCommunityEventRoutes = (app: App) => {
               leaderboardPlatform: platform,
               dataSource: c.get("leaderboardDataSource"),
               nameFilter,
+              clubTagFilter: apiRoute.hasClubData ? normalizedClubTag : undefined,
+              exactClubTag: apiRoute.hasClubData ? useExactClubTag : undefined,
               returnCountOnly,
             },
             count: filteredEntries.length,

@@ -53,14 +53,32 @@ export const registerClubRoutes = (app: App) => {
   const getRoute = createRoute({
     method: "get",
     path,
-    middleware: [withSearchParams(["clubTagFilter", "exactClubTag"]), cache("v1-clubs", 30)],
+    middleware: [withSearchParams(["clubTag", "exactClubTag"]), cache("v1-clubs", 30)],
     request: {
       query: z.object({
-        clubTagFilter: z.string().optional().openapi({ description: "The club tag to filter by.", example: "OG" }),
+        clubTag: z
+          .string()
+          .optional()
+          .openapi({
+            param: {
+              name: "clubTag",
+              in: "query",
+            },
+            description: "The club tag to filter by.",
+            example: "OG",
+          }),
         exactClubTag: z
           .enum(["true", "false"])
-          .optional()
-          .openapi({ description: "Whether to filter by exact club tag.", example: "true" }),
+          .default("false")
+          .transform((v) => v === "true")
+          .openapi({
+            param: {
+              name: "exactClubTag",
+              in: "query",
+            },
+            description: "Whether to filter by exact club tag.",
+            example: "true",
+          }),
       }),
     },
     tags,
@@ -80,10 +98,9 @@ export const registerClubRoutes = (app: App) => {
   });
 
   app.openapi(getRoute, async (c) => {
-    const { clubTagFilter, exactClubTag } = c.req.valid("query");
+    const { clubTag, exactClubTag: useExactClubTag } = c.req.valid("query");
 
-    const normalizedClubTagFilter = clubTagFilter?.toLowerCase();
-    const useExactClubTag = exactClubTag === "true";
+    const normalizedClubTagFilter = clubTag?.toLowerCase();
 
     const leaderboardWithClubs = leaderboardApiRoutes.filter((route) => route.hasClubData);
 

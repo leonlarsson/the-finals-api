@@ -13,6 +13,11 @@ export const responseMetaSchema = z
       example: "fetch",
     }),
     nameFilter: z.string().optional().openapi({ description: "The chosen name filter.", example: "ttv" }),
+    clubTagFilter: z.string().optional().openapi({ description: "The chosen club tag filter.", example: "OG" }),
+    exactClubTag: z.boolean().optional().openapi({
+      description: "Whether the club tag filter is set to exact match.",
+      example: false,
+    }),
     returnCountOnly: z
       .boolean()
       .openapi({ description: "Whether the response only contains the count of the leaderboard.", example: false }),

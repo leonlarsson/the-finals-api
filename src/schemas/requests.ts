@@ -38,3 +38,28 @@ export const leaderboardNameQuerySchema = z
     example: "TTV",
     description: "Filter the leaderboard entries by name.",
   });
+
+export const leaderboardClubTagQuerySchema = z
+  .string()
+  .optional()
+  .openapi({
+    param: {
+      name: "clubTag",
+      in: "query",
+    },
+    description: "The club tag to filter by. Will only work in leaderboards that support club tags.",
+    example: "OG",
+  });
+
+export const leaderboardExactClubTagQuerySchema = z
+  .enum(["true", "false"])
+  .default("false")
+  .transform((v) => v === "true")
+  .openapi({
+    param: {
+      name: "exactClubTag",
+      in: "query",
+    },
+    description: "Whether to filter by exact club tag. Will only work in leaderboards that support club tags.",
+    example: "true",
+  });
