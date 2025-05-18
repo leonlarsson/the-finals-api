@@ -10,6 +10,7 @@ import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
 import type { HonoEnv } from "./types";
 import { backupToKV } from "./utils/backupToKV";
+import { backupToR2 } from "./utils/backupToR2";
 
 const app = new OpenAPIHono<HonoEnv>();
 export type App = typeof app;
@@ -100,18 +101,23 @@ app.notFound((c) =>
 export default {
   fetch: app.fetch,
   scheduled: (event: ScheduledEvent, env: CloudflareBindings, ctx: ExecutionContext) => {
+    // KV backup every 2 hours
     if (event.cron === "0 */2 * * *") {
       ctx.waitUntil(backupToKV(env.KV));
     }
 
+    // R2 backup every 12 hours - used for AutoRAG
     if (event.cron === "30 */12 * * *") {
+      ctx.waitUntil(backupToR2(env.KV, env.R2));
     }
   },
 };
 
-// Just a test
-app.get("/backup-via-workflow", authentication, async (c) => {
+app.post("/backup-to-kv-via-workflow", authentication, async (c) => {
   await c.env.BACKUP_WORKFLOW.create();
 });
+
+app.post("/backup-to-kv", authentication, (c) => backupToKV(c.env.KV));
+app.post("/backup-to-r2", authentication, (c) => backupToR2(c.env.KV, c.env.R2));
 
 export { BackupWorkflow } from "./workflows/backup";

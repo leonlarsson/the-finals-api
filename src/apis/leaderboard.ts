@@ -44,6 +44,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_${this.id}`);
     },
@@ -60,6 +63,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the second closed beta of THE FINALS.",
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    backups: {
+      r2: true,
     },
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_${this.id}`);
@@ -78,6 +84,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -94,6 +103,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the first season of THE FINALS.",
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    backups: {
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
@@ -113,6 +125,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -130,6 +145,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -145,6 +163,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -159,6 +180,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the third season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    backups: {
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
@@ -177,6 +201,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -192,6 +219,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -206,6 +236,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fourth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    backups: {
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
@@ -224,6 +257,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -238,6 +274,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fifth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    backups: {
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
@@ -254,6 +293,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -268,6 +310,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fifth season of THE FINALS - Terminal Attack.",
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    backups: {
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
@@ -284,6 +329,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -299,6 +347,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -313,6 +364,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fifth season of THE FINALS - Bank It.",
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
+    },
+    backups: {
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
@@ -332,6 +386,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
@@ -353,6 +408,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
@@ -374,6 +430,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
@@ -395,6 +452,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
@@ -416,6 +474,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
@@ -437,6 +496,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
@@ -458,6 +518,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
@@ -480,6 +541,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards - Special"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
+    backups: {
+      kv: true,
+      r2: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -496,6 +561,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     backups: {
       kv: true,
+      r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(

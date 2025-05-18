@@ -13,6 +13,14 @@
     }
   ],
 
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "the-finals-api",
+      "preview_bucket_name": "the-finals-api"
+    }
+  ],
+
   "triggers": {
     "crons": [
       // Every 2 hours at minute 0
