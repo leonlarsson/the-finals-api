@@ -9,7 +9,7 @@ import { registerCommunityEventRoutes } from "./routes/community-event";
 import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
 import type { Env } from "./types";
-import backup from "./utils/backup";
+import { backupToKV } from "./utils/backupToKV";
 
 const app = new OpenAPIHono<Env>();
 export type App = typeof app;
@@ -99,8 +99,13 @@ app.notFound((c) =>
 
 export default {
   fetch: app.fetch,
-  scheduled: (_event: ScheduledEvent, env: Env["Bindings"], ctx: ExecutionContext) => {
-    ctx.waitUntil(backup(env.KV));
+  scheduled: (event: ScheduledEvent, env: Env["Bindings"], ctx: ExecutionContext) => {
+    if (event.cron === "0 */2 * * *") {
+      ctx.waitUntil(backupToKV(env.KV));
+    }
+
+    if (event.cron === "30 */12 * * *") {
+    }
   },
 };
 

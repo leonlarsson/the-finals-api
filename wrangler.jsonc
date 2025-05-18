@@ -14,7 +14,12 @@
   ],
 
   "triggers": {
-    "crons": ["0 */2 * * *"]
+    "crons": [
+      // Every 2 hours at minute 0
+      "0 */2 * * *",
+      // Every 12 hours at minute 30
+      "30 */12 * * *"
+    ]
   },
 
   "observability": {

@@ -26,9 +26,7 @@ export class BackupWorkflow extends WorkflowEntrypoint<Env["Bindings"], Params> 
           dataToBackup.push({ leaderboardId: leaderboard.id, platform, data });
         };
 
-        const leaderboardsToBackup = [...leaderboardApiRoutes, ...communityEventApiRoutes].filter(
-          (r) => r.includeInBackup,
-        );
+        const leaderboardsToBackup = [...leaderboardApiRoutes, ...communityEventApiRoutes].filter((r) => r.backups?.kv);
         for (const leaderboard of leaderboardsToBackup) {
           const platforms = leaderboard.availablePlatforms;
 

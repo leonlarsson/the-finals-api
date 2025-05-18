@@ -330,7 +330,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.season6),
@@ -349,7 +351,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.season6Sponsor),
@@ -368,7 +372,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.season6WorldTour),
@@ -387,7 +393,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS - Terminal Attack.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.season6TerminalAttack),
@@ -406,7 +414,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS - PowerShift.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.season6PowerShift),
@@ -425,7 +435,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.season6QuickCash),
@@ -444,7 +456,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS - Team Deathmatch.",
       tags: ["Leaderboards"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.season6TeamDeathmatch),
@@ -480,7 +494,9 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the ÖRF leaderboard.",
       tags: ["Leaderboards - Special"],
     },
-    includeInBackup: true,
+    backups: {
+      kv: true,
+    },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
         () => fetchStandardEmbarkLeaderboardData(embarkApi.orf),

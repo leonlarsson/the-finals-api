@@ -2,7 +2,7 @@ import { communityEventApiRoutes } from "../apis/communityEvents";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 
-export default async (kv: KVNamespace) => {
+export const backupToKV = async (kv: KVNamespace) => {
   const backupData = async (route: BaseAPIRoute, platform: LeaderboardPlatforms) => {
     // Fetch data
     const data = await route.fetchData({ kv, platform });
@@ -20,7 +20,7 @@ export default async (kv: KVNamespace) => {
   };
 
   // For each route
-  for (const route of [...leaderboardApiRoutes, ...communityEventApiRoutes].filter((r) => r.includeInBackup)) {
+  for (const route of [...leaderboardApiRoutes, ...communityEventApiRoutes].filter((r) => r.backups?.kv)) {
     const platforms = route.availablePlatforms;
 
     // If route has no platforms, platform param doesn't really matter

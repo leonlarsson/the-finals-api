@@ -35,7 +35,11 @@ export interface BaseAPIRoute {
     /** The amount of minutes to cache the route using the cache middleware. Defaults to whatever value is set on the route level. */
     cacheMinutes?: number;
   };
-  includeInBackup?: boolean;
+  /** Where to store backups. */
+  backups?: {
+    kv?: boolean;
+    r2?: boolean;
+  };
   fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
   zodSchemaOpenApi: ZodSchema;
 }
