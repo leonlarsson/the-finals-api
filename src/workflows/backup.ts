@@ -1,13 +1,13 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
 import { communityEventApiRoutes } from "../apis/communityEvents";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
-import type { BaseAPIRoute, Env, LeaderboardPlatforms } from "../types";
+import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 
 type Params = {
   something: string;
 };
 
-export class BackupWorkflow extends WorkflowEntrypoint<Env["Bindings"], Params> {
+export class BackupWorkflow extends WorkflowEntrypoint<CloudflareBindings, Params> {
   async run(event: WorkflowEvent<Params>, step: WorkflowStep) {
     await step.do(
       "Fetch and validate leaderboards",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
   "files": {
-    "ignore": [".vscode", ".wrangler"]
+    "ignore": [".vscode", ".wrangler", "worker-configuration.d.ts"]
   },
   "organizeImports": {
     "enabled": true

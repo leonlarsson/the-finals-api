@@ -8,10 +8,10 @@ import { registerClubRoutes } from "./routes/clubs";
 import { registerCommunityEventRoutes } from "./routes/community-event";
 import { registerLeaderboardRoutes } from "./routes/leaderboard";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
-import type { Env } from "./types";
+import type { HonoEnv } from "./types";
 import { backupToKV } from "./utils/backupToKV";
 
-const app = new OpenAPIHono<Env>();
+const app = new OpenAPIHono<HonoEnv>();
 export type App = typeof app;
 
 // Enable CORS for all routes
@@ -99,7 +99,7 @@ app.notFound((c) =>
 
 export default {
   fetch: app.fetch,
-  scheduled: (event: ScheduledEvent, env: Env["Bindings"], ctx: ExecutionContext) => {
+  scheduled: (event: ScheduledEvent, env: CloudflareBindings, ctx: ExecutionContext) => {
     if (event.cron === "0 */2 * * *") {
       ctx.waitUntil(backupToKV(env.KV));
     }

@@ -4,7 +4,7 @@
     "dev": "wrangler dev",
     "dev:remote": "wrangler dev --remote",
     "deploy": "wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "types": "wrangler types --env-interface CloudflareBindings",
     "biome": "npx @biomejs/biome check --write ."
   },
   "dependencies": {
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.2",
-    "@cloudflare/workers-types": "^4.20240605.0",
-    "wrangler": "^4.8.0"
+    "@types/node": "^22.15.18",
+    "wrangler": "^4.15.2"
   }
 }

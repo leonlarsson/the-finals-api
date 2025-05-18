@@ -1,5 +1,5 @@
 import type { Context, Next } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
-import type { Env } from "../types";
+import type { HonoEnv } from "../types";
 
-export const authentication = (c: Context<Env>, next: Next) => bearerAuth({ token: c.env.AUTH_TOKEN })(c, next);
+export const authentication = (c: Context<HonoEnv>, next: Next) => bearerAuth({ token: c.env.AUTH_TOKEN })(c, next);

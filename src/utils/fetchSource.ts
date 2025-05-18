@@ -1,9 +1,9 @@
 import { getContext } from "hono/context-storage";
-import type { Env } from "../types";
+import type { HonoEnv } from "../types";
 
 const context = () => {
   try {
-    return getContext<Env>();
+    return getContext<HonoEnv>();
   } catch (error) {
     return null;
   }

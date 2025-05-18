@@ -1,13 +1,11 @@
 import type { ZodSchema } from "zod";
 
-interface CloudflareBindings {
-  KV: KVNamespace;
-  BACKUP_WORKFLOW: Workflow;
+interface CloudflareEnv extends CloudflareBindings {
   AUTH_TOKEN: string;
 }
 
-export type Env = {
-  Bindings: CloudflareBindings;
+export type HonoEnv = {
+  Bindings: CloudflareEnv;
   Variables: {
     leaderboardDataSource: "fetch" | "kv" | "backup";
   };
