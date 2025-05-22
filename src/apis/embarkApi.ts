@@ -1,13 +1,7 @@
 import type { ZodSchema } from "zod";
 import { orfSchema } from "../schemas/leaderboards/orf";
-import { season5Schema } from "../schemas/leaderboards/season5";
-import { season5BankItSchema } from "../schemas/leaderboards/season5BankIt";
-import { season5PowerShiftSchema } from "../schemas/leaderboards/season5PowerShift";
-import { season5QuickQashSchema } from "../schemas/leaderboards/season5QuickCash";
-import { season5SponsorSchema } from "../schemas/leaderboards/season5Sponsor";
-import { season5TerminalAttackSchema } from "../schemas/leaderboards/season5TerminalAttack";
-import { season5WorldTourSchema } from "../schemas/leaderboards/season5WorldTour";
 import { season6Schema } from "../schemas/leaderboards/season6";
+import { season6HeavyHittersSchema } from "../schemas/leaderboards/season6HeavyHitters";
 import { season6PowerShiftSchema } from "../schemas/leaderboards/season6PowerShift";
 import { season6QuickQashSchema } from "../schemas/leaderboards/season6QuickCash";
 import { season6SponsorSchema } from "../schemas/leaderboards/season6Sponsor";
@@ -49,6 +43,10 @@ export const embarkApi = {
   season6TeamDeathmatch: {
     url: "https://id.embark.games/the-finals/leaderboards/s6tdm",
     zodSchema: season6TeamDeathmatchSchema,
+  },
+  season6HeavyHitters: {
+    url: "https://id.embark.games/the-finals/leaderboards/s6hh",
+    zodSchema: season6HeavyHittersSchema,
   },
 
   orf: {

@@ -17,6 +17,7 @@ import { season5SponsorUserSchema } from "../schemas/leaderboards/season5Sponsor
 import { season5TerminalAttackUserSchema } from "../schemas/leaderboards/season5TerminalAttack";
 import { season5WorldTourUserSchema } from "../schemas/leaderboards/season5WorldTour";
 import { season6UserSchema } from "../schemas/leaderboards/season6";
+import { season6HeavyHittersUserSchema } from "../schemas/leaderboards/season6HeavyHitters";
 import { season6PowerShiftUserSchema } from "../schemas/leaderboards/season6PowerShift";
 import { season6QuickQashUserSchema } from "../schemas/leaderboards/season6QuickCash";
 import { season6SponsorUserSchema } from "../schemas/leaderboards/season6Sponsor";
@@ -528,6 +529,28 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       );
     },
     zodSchemaOpenApi: season6TeamDeathmatchUserSchema,
+  },
+  {
+    id: "s6heavyhitters",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 6 Heavy Hitters",
+      description: "Get leaderboard data from the sixth season of THE FINALS - Heavy Hitters.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6HeavyHitters),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season6HeavyHittersUserSchema,
   },
 
   // Special leaderboards. Any non-main leaderboards such as events
