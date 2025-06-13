@@ -689,7 +689,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
-      kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
