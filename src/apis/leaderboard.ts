@@ -391,6 +391,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6",
       description: "Get leaderboard data from the sixth season of THE FINALS.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       kv: true,
@@ -409,6 +410,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Sponsor",
       description: "Get leaderboard data from the sixth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       r2: true,
@@ -426,6 +428,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 World Tour",
       description: "Get leaderboard data from the sixth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       r2: true,
@@ -443,6 +446,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Terminal Attack",
       description: "Get leaderboard data from the sixth season of THE FINALS - Terminal Attack.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       r2: true,
@@ -460,6 +464,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 PowerShift",
       description: "Get leaderboard data from the sixth season of THE FINALS - PowerShift.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       r2: true,
@@ -477,6 +482,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Quick Cash",
       description: "Get leaderboard data from the sixth season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       r2: true,
@@ -494,6 +500,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Team Deathmatch",
       description: "Get leaderboard data from the sixth season of THE FINALS - Team Deathmatch.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       r2: true,
@@ -511,6 +518,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Heavy Hitters",
       description: "Get leaderboard data from the sixth season of THE FINALS - Heavy Hitters.",
       tags: ["Leaderboards"],
+      cacheMinutes: oldLeaderboardCacheMinutes,
     },
     backups: {
       r2: true,
