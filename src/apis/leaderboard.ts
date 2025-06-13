@@ -24,6 +24,13 @@ import { season6SponsorUserSchema } from "../schemas/leaderboards/season6Sponsor
 import { season6TeamDeathmatchUserSchema } from "../schemas/leaderboards/season6TeamDeathmatch";
 import { season6TerminalAttackUserSchema } from "../schemas/leaderboards/season6TerminalAttack";
 import { season6WorldTourUserSchema } from "../schemas/leaderboards/season6WorldTour";
+import { season7UserSchema } from "../schemas/leaderboards/season7";
+import { season7PowerShiftUserSchema } from "../schemas/leaderboards/season7PowerShift";
+import { season7QuickQashUserSchema } from "../schemas/leaderboards/season7QuickCash";
+import { season7SponsorUserSchema } from "../schemas/leaderboards/season7Sponsor";
+import { season7TeamDeathmatchUserSchema } from "../schemas/leaderboards/season7TeamDeathmatch";
+import { season7TerminalAttackUserSchema } from "../schemas/leaderboards/season7TerminalAttack";
+import { season7WorldTourUserSchema } from "../schemas/leaderboards/season7WorldTour";
 import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
@@ -49,7 +56,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv }) {
-      return await getJsonFromKV(kv, `data_${this.id}`);
+      return getJsonFromKV(kv, `data_${this.id}`);
     },
     zodSchemaOpenApi: closedBeta1UserSchema,
   },
@@ -69,7 +76,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv }) {
-      return await getJsonFromKV(kv, `data_${this.id}`);
+      return getJsonFromKV(kv, `data_${this.id}`);
     },
     zodSchemaOpenApi: closedBeta2UserSchema,
   },
@@ -89,7 +96,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: openBetaUserSchema,
   },
@@ -109,7 +116,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season1UserSchema,
   },
@@ -130,7 +137,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season2UserSchema,
   },
@@ -150,7 +157,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season3UserSchema,
   },
@@ -168,7 +175,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season3UserSchema,
   },
@@ -186,7 +193,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season3WorldTourUserSchema,
   },
@@ -206,7 +213,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season4UserSchema,
   },
@@ -224,7 +231,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season4WorldTourUserSchema,
   },
@@ -242,7 +249,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season4SponsorUserSchema,
   },
@@ -262,7 +269,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5UserSchema,
   },
@@ -280,7 +287,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5SponsorUserSchema,
   },
@@ -298,7 +305,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5WorldTourUserSchema,
   },
@@ -316,7 +323,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5TerminalAttackUserSchema,
   },
@@ -334,7 +341,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5PowerShiftUserSchema,
   },
@@ -352,7 +359,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5QuickQashUserSchema,
   },
@@ -370,7 +377,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5BankItUserSchema,
   },
@@ -390,11 +397,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6UserSchema,
   },
@@ -408,15 +411,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     backups: {
-      kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6Sponsor),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6SponsorUserSchema,
   },
@@ -430,15 +428,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     backups: {
-      kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6WorldTour),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6WorldTourUserSchema,
   },
@@ -452,15 +445,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     backups: {
-      kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6TerminalAttack),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6TerminalAttackUserSchema,
   },
@@ -474,15 +462,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     backups: {
-      kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6PowerShift),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6PowerShiftUserSchema,
   },
@@ -496,15 +479,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     backups: {
-      kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6QuickCash),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6QuickQashUserSchema,
   },
@@ -518,15 +496,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     backups: {
-      kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6TeamDeathmatch),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6TeamDeathmatchUserSchema,
   },
@@ -540,17 +513,168 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
     },
     backups: {
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
+    },
+    zodSchemaOpenApi: season6HeavyHittersUserSchema,
+  },
+
+  // SEASON 7
+  {
+    id: "s7",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7",
+      description: "Get leaderboard data from the seventh season of THE FINALS.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
       kv: true,
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
       return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season6HeavyHitters),
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7),
         kv,
         `backup_${this.id}_${platform}`,
       );
     },
-    zodSchemaOpenApi: season6HeavyHittersUserSchema,
+    zodSchemaOpenApi: season7UserSchema,
+  },
+  {
+    id: "s7sponsor",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Sponsor",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Sponsor.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7Sponsor),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season7SponsorUserSchema,
+  },
+  {
+    id: "s7worldtour",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 World Tour",
+      description: "Get leaderboard data from the seventh season of THE FINALS - World Tour.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7WorldTour),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season7WorldTourUserSchema,
+  },
+  {
+    id: "s7terminalattack",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Terminal Attack",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Terminal Attack.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7TerminalAttack),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season7TerminalAttackUserSchema,
+  },
+  {
+    id: "s7powershift",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 PowerShift",
+      description: "Get leaderboard data from the seventh season of THE FINALS - PowerShift.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7PowerShift),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season7PowerShiftUserSchema,
+  },
+  {
+    id: "s7quickcash",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Quick Cash",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Quick Cash.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7QuickCash),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season7QuickQashUserSchema,
+  },
+  {
+    id: "s7teamdeathmatch",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Team Deathmatch",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Team Deathmatch.",
+      tags: ["Leaderboards"],
+    },
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7TeamDeathmatch),
+        kv,
+        `backup_${this.id}_${platform}`,
+      );
+    },
+    zodSchemaOpenApi: season7TeamDeathmatchUserSchema,
   },
 
   // Special leaderboards. Any non-main leaderboards such as events
@@ -569,7 +693,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       r2: true,
     },
     fetchData: async function ({ kv, platform }) {
-      return await getJsonFromKV(kv, `data_${this.id}_${platform}`);
+      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: theFinalsUserSchema,
   },
