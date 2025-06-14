@@ -52,9 +52,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv }) {
       return getJsonFromKV(kv, `data_${this.id}`);
     },
@@ -72,9 +70,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv }) {
       return getJsonFromKV(kv, `data_${this.id}`);
     },
@@ -92,9 +88,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -112,9 +106,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -133,9 +125,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -153,9 +143,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -171,9 +159,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -189,9 +175,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -209,9 +193,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -227,9 +209,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -245,9 +225,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -265,9 +243,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -283,9 +259,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -301,9 +275,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -319,9 +291,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -337,9 +307,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -355,9 +323,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -373,9 +339,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -393,9 +357,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -411,9 +373,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -429,9 +389,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -447,9 +405,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -465,9 +421,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -483,9 +437,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -501,9 +453,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -519,9 +469,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
@@ -695,9 +643,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       tags: ["Leaderboards - Special"],
       cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    backups: {},
     fetchData: async function ({ kv, platform }) {
       return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
