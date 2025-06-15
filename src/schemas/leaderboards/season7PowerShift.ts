@@ -43,7 +43,7 @@ export const season7PowerShiftUserSchema = z
     clubTag: clubTagPropertySchema,
     points: scorePropertySchema,
   })
-  .openapi("season7PowerShiftUser", {
+  .openapi("Season7PowerShiftUser", {
     title: "Season 7 PowerShift User",
     description: "A user in the Season 7 PowerShift leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season7PowerShiftSchema>[number]>;

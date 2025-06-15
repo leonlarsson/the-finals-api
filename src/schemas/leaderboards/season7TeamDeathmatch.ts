@@ -43,7 +43,7 @@ export const season7TeamDeathmatchUserSchema = z
     clubTag: clubTagPropertySchema,
     points: scorePropertySchema,
   })
-  .openapi("season7TeamDeathmatchUser", {
+  .openapi("Season7TeamDeathmatchUser", {
     title: "Season 7 Team Deathmatch User",
     description: "A user in the Season 7 Team Deathmatch leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season7TeamDeathmatchSchema>[number]>;

@@ -47,7 +47,7 @@ export const season7SponsorUserSchema = z
     sponsor: sponsorPropertySchema,
     fans: fansPropertySchema,
   })
-  .openapi("season7SponsorUser", {
+  .openapi("Season7SponsorUser", {
     title: "Season 7 Sponsor User",
     description: "A user in the Season 7 Sponsor leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season7SponsorSchema>[number]>;

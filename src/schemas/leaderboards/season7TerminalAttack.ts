@@ -43,7 +43,7 @@ export const season7TerminalAttackUserSchema = z
     clubTag: clubTagPropertySchema,
     points: scorePropertySchema,
   })
-  .openapi("season7TerminalAttackUser", {
+  .openapi("Season7TerminalAttackUser", {
     title: "Season 7 Terminal Attack User",
     description: "A user in the Season 7 Terminal Attack leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season7TerminalAttackSchema>[number]>;

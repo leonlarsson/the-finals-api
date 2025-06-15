@@ -56,7 +56,7 @@ export const season7UserSchema = z
     league: leaguePropertySchema,
     rankScore: rankScorePropertySchema,
   })
-  .openapi("season7User", {
+  .openapi("Season7User", {
     title: "Season 7 User",
     description: "A user in the Season 7 leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season7Schema>[number]>;

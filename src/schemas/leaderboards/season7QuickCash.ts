@@ -43,7 +43,7 @@ export const season7QuickQashUserSchema = z
     clubTag: clubTagPropertySchema,
     points: scorePropertySchema,
   })
-  .openapi("season7QuickQashUser", {
+  .openapi("Season7QuickQashUser", {
     title: "Season 7 Quick Qash User",
     description: "A user in the Season 7 Quick Qash leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season7QuickQashSchema>[number]>;

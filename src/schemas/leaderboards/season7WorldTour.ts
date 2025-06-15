@@ -44,7 +44,7 @@ export const season7WorldTourUserSchema = z
     clubTag: clubTagPropertySchema,
     cashouts: cashoutsPropertySchema,
   })
-  .openapi("season7WorldTourUser", {
+  .openapi("Season7WorldTourUser", {
     title: "Season 7 World Tour User",
     description: "A user in the Season 7 World Tour leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season7WorldTourSchema>[number]>;
