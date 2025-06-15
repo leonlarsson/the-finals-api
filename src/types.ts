@@ -23,7 +23,6 @@ type LeaderboardAPIRouteFetchDataSettings = {
 
 export interface BaseAPIRoute {
   id: string;
-  legacyIds?: string[];
   availablePlatforms: LeaderboardPlatforms[];
   hasClubData?: boolean;
   metadata: {

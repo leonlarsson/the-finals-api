@@ -125,20 +125,5 @@ export const registerLeaderboardRoutes = (app: App) => {
         );
       }
     });
-
-    // Redirect all legacy version aliases
-    leaderboardApiRoutes.forEach((apiRoute) => {
-      apiRoute.legacyIds?.forEach((versionAlias) => {
-        app.get(`/v1/leaderboard/${versionAlias}/:platform?`, (c) => {
-          const platform = c.req.param("platform");
-          const query = c.req.query();
-          const queryString = new URLSearchParams(query).toString();
-          const redirectUrl = platform
-            ? `/v1/leaderboard/${apiRoute.id}/${platform}`
-            : `/v1/leaderboard/${apiRoute.id}`;
-          return c.redirect(queryString ? `${redirectUrl}?${queryString}` : redirectUrl);
-        });
-      });
-    });
   }
 };

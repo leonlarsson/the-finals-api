@@ -44,14 +44,14 @@ const oldLeaderboardCacheMinutes = 20_160;
 const liveLeaderboardCacheMinutes = 10;
 
 type PartialLeaderboardWithRequired<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+type CreateLeaderboardData = PartialLeaderboardWithRequired<
+  BaseAPIRoute,
+  // Required properties
+  "id" | "availablePlatforms" | "metadata" | "zodSchemaOpenApi"
+>;
 
-/** createOldLeaderboard creates a leaderboard API route with the old cache settings and fetchData function that retrieves data from KV. No backups */
-const createOldLeaderboard = (
-  data: PartialLeaderboardWithRequired<
-    BaseAPIRoute,
-    "id" | "legacyIds" | "availablePlatforms" | "metadata" | "zodSchemaOpenApi"
-  >,
-): BaseAPIRoute => {
+/** createOldLeaderboard creates a leaderboard API route with the old cache settings and fetchData function that retrieves data from KV. No backups. */
+const createOldLeaderboard = (data: CreateLeaderboardData): BaseAPIRoute => {
   return {
     cacheMinutes: oldLeaderboardCacheMinutes,
     backups: {},
@@ -62,11 +62,8 @@ const createOldLeaderboard = (
   };
 };
 
-/** createLiveLeaderboard creates a leaderboard API route with the live cache settings and fetchData function that retrieves data from the Embark API. All backups enabled */
-const createLiveLeaderboard = (
-  data: PartialLeaderboardWithRequired<BaseAPIRoute, "id" | "availablePlatforms" | "metadata" | "zodSchemaOpenApi">,
-  embarkApi: EmbarkApi,
-): BaseAPIRoute => {
+/** createLiveLeaderboard creates a leaderboard API route with the live cache settings and fetchData function that retrieves data from the provided `embarkApi` with a fall back to KV. All backups enabled. */
+const createLiveLeaderboard = (data: CreateLeaderboardData, embarkApi: EmbarkApi): BaseAPIRoute => {
   return {
     cacheMinutes: liveLeaderboardCacheMinutes,
     backups: {
@@ -88,7 +85,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   // CLOSED BETA 1
   createOldLeaderboard({
     id: "cb1",
-    legacyIds: ["closedbeta1"],
     availablePlatforms: [],
     metadata: {
       summary: "Closed Beta 1",
@@ -101,7 +97,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   // CLOSED BETA 2
   createOldLeaderboard({
     id: "cb2",
-    legacyIds: ["closedbeta2"],
     availablePlatforms: [],
     metadata: {
       summary: "Closed Beta 2",
@@ -114,7 +109,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   // OPEN BETA
   createOldLeaderboard({
     id: "ob",
-    legacyIds: ["openbeta"],
     availablePlatforms: allPlatforms,
     metadata: {
       summary: "Open Beta",
@@ -127,7 +121,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   // SEASON 1
   createOldLeaderboard({
     id: "s1",
-    legacyIds: ["season1"],
     availablePlatforms: allPlatforms,
     metadata: {
       summary: "Season 1",
@@ -141,7 +134,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   createOldLeaderboard({
     id: "s2",
     // "live" was a horrible idea, but it's here now. It will remain on S2
-    legacyIds: ["season2", "live"],
     availablePlatforms: allPlatforms,
     metadata: {
       summary: "Season 2",
@@ -154,7 +146,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   // SEASON 3
   createOldLeaderboard({
     id: "s3",
-    legacyIds: ["season3"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 3",
@@ -165,7 +156,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
   createOldLeaderboard({
     id: "s3original",
-    legacyIds: ["season3original"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 3 - Original",
@@ -176,7 +166,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
   createOldLeaderboard({
     id: "s3worldtour",
-    legacyIds: ["season3worldtour"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 3 World Tour",
@@ -189,7 +178,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   // SEASON 4
   createOldLeaderboard({
     id: "s4",
-    legacyIds: ["season4"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 4",
@@ -200,7 +188,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
   createOldLeaderboard({
     id: "s4worldtour",
-    legacyIds: ["season4worldtour"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 4 World Tour",
@@ -211,7 +198,6 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
   createOldLeaderboard({
     id: "s4sponsor",
-    legacyIds: ["season4sponsor"],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "Season 4 Sponsor",
