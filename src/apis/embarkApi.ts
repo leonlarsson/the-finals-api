@@ -7,6 +7,7 @@ import { season7SponsorSchema } from "../schemas/leaderboards/season7Sponsor";
 import { season7TeamDeathmatchSchema } from "../schemas/leaderboards/season7TeamDeathmatch";
 import { season7TerminalAttackSchema } from "../schemas/leaderboards/season7TerminalAttack";
 import { season7WorldTourSchema } from "../schemas/leaderboards/season7WorldTour";
+import type { BaseUser } from "../types";
 
 export type EmbarkApi = {
   url: string;
@@ -105,5 +106,56 @@ export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi) => {
     throw new Error(`Failed to validate fetched data from URL ${res.url} with provided Zod schema.`);
   }
 
+  return data;
+};
+
+/** Caches the standard leaderboard data from the Embark API in KV storage.
+ * If the data is already cached, it returns the cached data.
+ * If not, it fetches the data from the API, caches it, and returns the fetched data.
+ */
+export const cachedFetchStandardEmbarkLeaderboardData = async (
+  api: EmbarkApi,
+  KV: KVNamespace,
+  ttlSeconds: number,
+  ctx?: Pick<ExecutionContext, "waitUntil">,
+) => {
+  // If the data we're fetching is cached, return it immediately
+  const cacheKey = `cache_${new URL(api.url).pathname}`;
+  const cached = await KV.get<BaseUser[]>(cacheKey, { type: "json" });
+  if (cached !== null) {
+    return cached;
+  }
+
+  // Fetch data from the Embark API
+  const data = await fetchStandardEmbarkLeaderboardData(api);
+
+  // Store the parsed data in KV with the specified TTL
+  ctx?.waitUntil(KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }));
+  return data;
+};
+
+/**
+ * Caches the standard community event data from the Embark API in KV storage.
+ * If the data is already cached, it returns the cached data.
+ * If not, it fetches the data from the API, caches it, and returns the fetched data.
+ */
+export const cachedFetchStandardEmbarkCommunityEventData = async (
+  api: EmbarkApi,
+  KV: KVNamespace,
+  ttlSeconds: number,
+  ctx?: ExecutionContext,
+) => {
+  // If the data we're fetching is cached, return it immediately
+  const cacheKey = `cache_${new URL(api.url).pathname}`;
+  const cached = await KV.get(cacheKey, { type: "json" });
+  if (cached !== null) {
+    return cached;
+  }
+
+  // Fetch data from the Embark API
+  const data = await fetchStandardEmbarkCommunityEventData(api);
+
+  // Store the parsed data in KV with the specified TTL
+  ctx?.waitUntil(KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }));
   return data;
 };

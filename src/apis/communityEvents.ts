@@ -6,6 +6,9 @@ import { getJsonFromKV } from "../utils/kv";
 // 20_160 minutes is 14 days
 const oldLeaderboardCacheMinutes = 20_160;
 
+// Community events do not follow the same updated logic as the standard leaderboards
+// There hasn't been a community event in a while, so this is not a problem for now
+// If more community events are added, I will look into using createOldLeaderboard / createLiveLeaderboard and make sure it works with the 2nd cache layer
 export const communityEventApiRoutes: BaseAPIRoute[] = [
   {
     id: "ce44",

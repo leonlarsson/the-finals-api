@@ -17,6 +17,7 @@ export type HonoEnv = {
 export type LeaderboardPlatforms = "crossplay" | "steam" | "xbox" | "psn";
 
 type LeaderboardAPIRouteFetchDataSettings = {
+  ctx?: Pick<ExecutionContext, "waitUntil">;
   kv: KVNamespace;
   platform: LeaderboardPlatforms;
 };
@@ -30,14 +31,14 @@ export interface BaseAPIRoute {
     description: string;
     tags: Tags[];
   };
-  /** The amount of minutes to cache the route using the cache middleware. Defaults to whatever value is set on the route level. */
-  cacheMinutes?: number;
+  /** The amount of minutes to cache the route using the cache middleware. Is defaulted at declaration level. */
+  cacheMinutes: number;
   /** Where to store backups. */
   backups?: {
     kv?: boolean;
     r2?: boolean;
   };
-  fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<unknown>;
+  fetchData: (fetchSettings: LeaderboardAPIRouteFetchDataSettings) => Promise<BaseUser[] | ClubBaseUser[]>;
   zodSchemaOpenApi: ZodSchema;
 }
 

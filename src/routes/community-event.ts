@@ -75,7 +75,7 @@ export const registerCommunityEventRoutes = (app: App) => {
         const fetchedData = (await apiRoute.fetchData({
           kv: c.env.KV,
           platform: platform as LeaderboardPlatforms,
-        })) as { entries: BaseUser[]; progress: { currentProgress: number; goal: number } };
+        })) as unknown as { entries: BaseUser[]; progress: { currentProgress: number; goal: number } };
 
         const nameFilterFn = (user: BaseUser) => {
           return [user.name, user.steamName, user.xboxName, user.psnName].some((platformName) =>

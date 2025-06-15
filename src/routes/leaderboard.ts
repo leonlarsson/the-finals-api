@@ -25,7 +25,7 @@ export const registerLeaderboardRoutes = (app: App) => {
         : `/v1/leaderboard/${apiRoute.id}`,
       middleware: [
         withSearchParams(["name", "count", "clubTag", "exactClubTag"]),
-        cache(`v1-leaderboard-${apiRoute.id}`, apiRoute.cacheMinutes ?? 10),
+        cache(`v1-leaderboard-${apiRoute.id}`, apiRoute.cacheMinutes),
       ],
       request: {
         params: standardPlatformPathParam(apiRoute),
@@ -73,6 +73,7 @@ export const registerLeaderboardRoutes = (app: App) => {
 
       try {
         const fetchedData = await apiRoute.fetchData({
+          ctx: c.executionCtx,
           kv: c.env.KV,
           platform: platform as LeaderboardPlatforms,
         });
@@ -91,7 +92,7 @@ export const registerLeaderboardRoutes = (app: App) => {
         };
 
         // Filter data
-        const filteredData = (fetchedData as BaseUser[])
+        const filteredData = fetchedData
           // If a name filter is provided, filter by name
           .filter(nameFilter ? nameFilterFn : () => true)
           // If the API route has club data and a club tag is provided, filter by club tag

@@ -116,7 +116,11 @@ export const registerClubRoutes = (app: App) => {
 
     await Promise.all(
       leaderboardWithClubs.map(async (route) => {
-        const leaderboardData = (await route.fetchData({ kv: c.env.KV, platform: "crossplay" })) as ClubBaseUser[];
+        const leaderboardData = (await route.fetchData({
+          ctx: c.executionCtx,
+          kv: c.env.KV,
+          platform: "crossplay",
+        })) as ClubBaseUser[];
         const leaderboardId = route.id;
 
         // Calculate scores in a single pass

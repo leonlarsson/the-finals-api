@@ -35,7 +35,7 @@ import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
 import { getJsonFromKV } from "../utils/kv";
-import { type EmbarkApi, embarkApi, fetchStandardEmbarkLeaderboardData } from "./embarkApi";
+import { type EmbarkApi, cachedFetchStandardEmbarkLeaderboardData, embarkApi } from "./embarkApi";
 
 const allPlatforms: LeaderboardPlatforms[] = ["crossplay", "steam", "xbox", "psn"];
 
@@ -70,9 +70,9 @@ const createLiveLeaderboard = (data: CreateLeaderboardData, embarkApi: EmbarkApi
       kv: true,
       r2: true,
     },
-    fetchData: async function ({ kv, platform }) {
+    fetchData: async function ({ ctx, kv, platform }) {
       return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi),
+        () => cachedFetchStandardEmbarkLeaderboardData(embarkApi, kv, this.cacheMinutes * 60, ctx),
         kv,
         platform ? `backup_${this.id}_${platform}` : `backup_${this.id}`,
       );
