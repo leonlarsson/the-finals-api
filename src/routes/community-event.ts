@@ -25,7 +25,7 @@ export const registerCommunityEventRoutes = (app: App) => {
         : `/v1/community-event/${apiRoute.id}`,
       middleware: [
         withSearchParams(["name", "count", "clubTag", "exactClubTag"]),
-        cache(`v1-community-event-${apiRoute.id}`, apiRoute.metadata.cacheMinutes ?? 10),
+        cache(`v1-community-event-${apiRoute.id}`, apiRoute.cacheMinutes ?? 10),
       ],
       request: {
         params: standardPlatformPathParam(apiRoute),

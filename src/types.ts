@@ -30,9 +30,9 @@ export interface BaseAPIRoute {
     summary: string;
     description: string;
     tags: Tags[];
-    /** The amount of minutes to cache the route using the cache middleware. Defaults to whatever value is set on the route level. */
-    cacheMinutes?: number;
   };
+  /** The amount of minutes to cache the route using the cache middleware. Defaults to whatever value is set on the route level. */
+  cacheMinutes?: number;
   /** Where to store backups. */
   backups?: {
     kv?: boolean;

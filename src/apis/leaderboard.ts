@@ -32,17 +32,61 @@ import { season7TeamDeathmatchUserSchema } from "../schemas/leaderboards/season7
 import { season7TerminalAttackUserSchema } from "../schemas/leaderboards/season7TerminalAttack";
 import { season7WorldTourUserSchema } from "../schemas/leaderboards/season7WorldTour";
 import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
-import type { BaseAPIRoute } from "../types";
+import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
 import { getJsonFromKV } from "../utils/kv";
-import { embarkApi, fetchStandardEmbarkLeaderboardData } from "./embarkApi";
+import { type EmbarkApi, embarkApi, fetchStandardEmbarkLeaderboardData } from "./embarkApi";
+
+const allPlatforms: LeaderboardPlatforms[] = ["crossplay", "steam", "xbox", "psn"];
 
 // 20_160 minutes is 14 days
 const oldLeaderboardCacheMinutes = 20_160;
+const liveLeaderboardCacheMinutes = 10;
+
+type PartialLeaderboardWithRequired<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+
+/** createOldLeaderboard creates a leaderboard API route with the old cache settings and fetchData function that retrieves data from KV. No backups */
+const createOldLeaderboard = (
+  data: PartialLeaderboardWithRequired<
+    BaseAPIRoute,
+    "id" | "legacyIds" | "availablePlatforms" | "metadata" | "zodSchemaOpenApi"
+  >,
+): BaseAPIRoute => {
+  return {
+    cacheMinutes: oldLeaderboardCacheMinutes,
+    backups: {},
+    fetchData: async function ({ kv, platform }) {
+      return getJsonFromKV(kv, platform ? `data_${this.id}_${platform}` : `data_${this.id}`);
+    },
+    ...data,
+  };
+};
+
+/** createLiveLeaderboard creates a leaderboard API route with the live cache settings and fetchData function that retrieves data from the Embark API. All backups enabled */
+const createLiveLeaderboard = (
+  data: PartialLeaderboardWithRequired<BaseAPIRoute, "id" | "availablePlatforms" | "metadata" | "zodSchemaOpenApi">,
+  embarkApi: EmbarkApi,
+): BaseAPIRoute => {
+  return {
+    cacheMinutes: liveLeaderboardCacheMinutes,
+    backups: {
+      kv: true,
+      r2: true,
+    },
+    fetchData: async function ({ kv, platform }) {
+      return fetchWithKVFallback(
+        () => fetchStandardEmbarkLeaderboardData(embarkApi),
+        kv,
+        platform ? `backup_${this.id}_${platform}` : `backup_${this.id}`,
+      );
+    },
+    ...data,
+  };
+};
 
 export const leaderboardApiRoutes: BaseAPIRoute[] = [
   // CLOSED BETA 1
-  {
+  createOldLeaderboard({
     id: "cb1",
     legacyIds: ["closedbeta1"],
     availablePlatforms: [],
@@ -50,17 +94,12 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Closed Beta 1",
       description: "Get leaderboard data from the first closed beta of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv }) {
-      return getJsonFromKV(kv, `data_${this.id}`);
     },
     zodSchemaOpenApi: closedBeta1UserSchema,
-  },
+  }),
 
   // CLOSED BETA 2
-  {
+  createOldLeaderboard({
     id: "cb2",
     legacyIds: ["closedbeta2"],
     availablePlatforms: [],
@@ -68,72 +107,52 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Closed Beta 2",
       description: "Get leaderboard data from the second closed beta of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv }) {
-      return getJsonFromKV(kv, `data_${this.id}`);
     },
     zodSchemaOpenApi: closedBeta2UserSchema,
-  },
+  }),
 
   // OPEN BETA
-  {
+  createOldLeaderboard({
     id: "ob",
     legacyIds: ["openbeta"],
-    availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
+    availablePlatforms: allPlatforms,
     metadata: {
       summary: "Open Beta",
       description: "Get leaderboard data from the open beta of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: openBetaUserSchema,
-  },
+  }),
 
   // SEASON 1
-  {
+  createOldLeaderboard({
     id: "s1",
     legacyIds: ["season1"],
-    availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
+    availablePlatforms: allPlatforms,
     metadata: {
       summary: "Season 1",
       description: "Get leaderboard data from the first season of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season1UserSchema,
-  },
+  }),
 
   // SEASON 2
-  {
+  createOldLeaderboard({
     id: "s2",
     // "live" was a horrible idea, but it's here now. It will remain on S2
     legacyIds: ["season2", "live"],
-    availablePlatforms: ["crossplay", "steam", "xbox", "psn"],
+    availablePlatforms: allPlatforms,
     metadata: {
       summary: "Season 2",
       description: "Get leaderboard data from the second season of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season2UserSchema,
-  },
+  }),
 
   // SEASON 3
-  {
+  createOldLeaderboard({
     id: "s3",
     legacyIds: ["season3"],
     availablePlatforms: ["crossplay"],
@@ -141,15 +160,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 3",
       description: "Get leaderboard data from the third season of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season3UserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s3original",
     legacyIds: ["season3original"],
     availablePlatforms: ["crossplay"],
@@ -157,15 +171,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 3 - Original",
       description: "Get leaderboard data from the third season of THE FINALS. Pre-purge.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season3UserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s3worldtour",
     legacyIds: ["season3worldtour"],
     availablePlatforms: ["crossplay"],
@@ -173,17 +182,12 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 3 World Tour",
       description: "Get leaderboard data from the third season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season3WorldTourUserSchema,
-  },
+  }),
 
   // SEASON 4
-  {
+  createOldLeaderboard({
     id: "s4",
     legacyIds: ["season4"],
     availablePlatforms: ["crossplay"],
@@ -191,15 +195,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 4",
       description: "Get leaderboard data from the fourth season of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season4UserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s4worldtour",
     legacyIds: ["season4worldtour"],
     availablePlatforms: ["crossplay"],
@@ -207,15 +206,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 4 World Tour",
       description: "Get leaderboard data from the fourth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season4WorldTourUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s4sponsor",
     legacyIds: ["season4sponsor"],
     availablePlatforms: ["crossplay"],
@@ -223,17 +217,12 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 4 Sponsor",
       description: "Get leaderboard data from the fourth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season4SponsorUserSchema,
-  },
+  }),
 
   // SEASON 5
-  {
+  createOldLeaderboard({
     id: "s5",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -241,15 +230,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5",
       description: "Get leaderboard data from the fifth season of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5UserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s5sponsor",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -257,15 +241,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Sponsor",
       description: "Get leaderboard data from the fifth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5SponsorUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s5worldtour",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -273,15 +252,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 World Tour",
       description: "Get leaderboard data from the fifth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5WorldTourUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s5terminalattack",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -289,15 +263,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Terminal Attack",
       description: "Get leaderboard data from the fifth season of THE FINALS - Terminal Attack.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5TerminalAttackUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s5powershift",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -305,15 +274,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 PowerShift",
       description: "Get leaderboard data from the fifth season of THE FINALS - PowerShift.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5PowerShiftUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s5quickcash",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -321,15 +285,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Quick Cash",
       description: "Get leaderboard data from the fifth season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5QuickQashUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s5bankit",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -337,17 +296,12 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 5 Bank It",
       description: "Get leaderboard data from the fifth season of THE FINALS - Bank It.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season5BankItUserSchema,
-  },
+  }),
 
   // SEASON 6
-  {
+  createOldLeaderboard({
     id: "s6",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -355,15 +309,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6",
       description: "Get leaderboard data from the sixth season of THE FINALS.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6UserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s6sponsor",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -371,15 +320,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Sponsor",
       description: "Get leaderboard data from the sixth season of THE FINALS - Sponsor.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6SponsorUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s6worldtour",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -387,15 +331,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 World Tour",
       description: "Get leaderboard data from the sixth season of THE FINALS - World Tour.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6WorldTourUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s6terminalattack",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -403,15 +342,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Terminal Attack",
       description: "Get leaderboard data from the sixth season of THE FINALS - Terminal Attack.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6TerminalAttackUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s6powershift",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -419,15 +353,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 PowerShift",
       description: "Get leaderboard data from the sixth season of THE FINALS - PowerShift.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6PowerShiftUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s6quickcash",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -435,15 +364,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Quick Cash",
       description: "Get leaderboard data from the sixth season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6QuickQashUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s6teamdeathmatch",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -451,15 +375,10 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Team Deathmatch",
       description: "Get leaderboard data from the sixth season of THE FINALS - Team Deathmatch.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6TeamDeathmatchUserSchema,
-  },
-  {
+  }),
+  createOldLeaderboard({
     id: "s6heavyhitters",
     availablePlatforms: ["crossplay"],
     hasClubData: true,
@@ -467,208 +386,133 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       summary: "Season 6 Heavy Hitters",
       description: "Get leaderboard data from the sixth season of THE FINALS - Heavy Hitters.",
       tags: ["Leaderboards"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: season6HeavyHittersUserSchema,
-  },
+  }),
 
   // SEASON 7
-  {
-    id: "s7",
-    availablePlatforms: ["crossplay"],
-    hasClubData: true,
-    metadata: {
-      summary: "Season 7",
-      description: "Get leaderboard data from the seventh season of THE FINALS.",
-      tags: ["Leaderboards"],
+  createLiveLeaderboard(
+    {
+      id: "s7",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7",
+        description: "Get leaderboard data from the seventh season of THE FINALS.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7UserSchema,
     },
-    backups: {
-      kv: true,
-      r2: true,
+    embarkApi.season7,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s7sponsor",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7 Sponsor",
+        description: "Get leaderboard data from the seventh season of THE FINALS - Sponsor.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7SponsorUserSchema,
     },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+    embarkApi.season7Sponsor,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s7worldtour",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7 World Tour",
+        description: "Get leaderboard data from the seventh season of THE FINALS - World Tour.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7WorldTourUserSchema,
     },
-    zodSchemaOpenApi: season7UserSchema,
-  },
-  {
-    id: "s7sponsor",
-    availablePlatforms: ["crossplay"],
-    hasClubData: true,
-    metadata: {
-      summary: "Season 7 Sponsor",
-      description: "Get leaderboard data from the seventh season of THE FINALS - Sponsor.",
-      tags: ["Leaderboards"],
+    embarkApi.season7WorldTour,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s7terminalattack",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7 Terminal Attack",
+        description: "Get leaderboard data from the seventh season of THE FINALS - Terminal Attack.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7TerminalAttackUserSchema,
     },
-    backups: {
-      kv: true,
-      r2: true,
+    embarkApi.season7TerminalAttack,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s7powershift",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7 PowerShift",
+        description: "Get leaderboard data from the seventh season of THE FINALS - PowerShift.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7PowerShiftUserSchema,
     },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7Sponsor),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
+    embarkApi.season7PowerShift,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s7quickcash",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7 Quick Cash",
+        description: "Get leaderboard data from the seventh season of THE FINALS - Quick Cash.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7QuickQashUserSchema,
     },
-    zodSchemaOpenApi: season7SponsorUserSchema,
-  },
-  {
-    id: "s7worldtour",
-    availablePlatforms: ["crossplay"],
-    hasClubData: true,
-    metadata: {
-      summary: "Season 7 World Tour",
-      description: "Get leaderboard data from the seventh season of THE FINALS - World Tour.",
-      tags: ["Leaderboards"],
+    embarkApi.season7QuickCash,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s7teamdeathmatch",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7 Team Deathmatch",
+        description: "Get leaderboard data from the seventh season of THE FINALS - Team Deathmatch.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7TeamDeathmatchUserSchema,
     },
-    backups: {
-      kv: true,
-      r2: true,
-    },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7WorldTour),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
-    },
-    zodSchemaOpenApi: season7WorldTourUserSchema,
-  },
-  {
-    id: "s7terminalattack",
-    availablePlatforms: ["crossplay"],
-    hasClubData: true,
-    metadata: {
-      summary: "Season 7 Terminal Attack",
-      description: "Get leaderboard data from the seventh season of THE FINALS - Terminal Attack.",
-      tags: ["Leaderboards"],
-    },
-    backups: {
-      kv: true,
-      r2: true,
-    },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7TerminalAttack),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
-    },
-    zodSchemaOpenApi: season7TerminalAttackUserSchema,
-  },
-  {
-    id: "s7powershift",
-    availablePlatforms: ["crossplay"],
-    hasClubData: true,
-    metadata: {
-      summary: "Season 7 PowerShift",
-      description: "Get leaderboard data from the seventh season of THE FINALS - PowerShift.",
-      tags: ["Leaderboards"],
-    },
-    backups: {
-      kv: true,
-      r2: true,
-    },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7PowerShift),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
-    },
-    zodSchemaOpenApi: season7PowerShiftUserSchema,
-  },
-  {
-    id: "s7quickcash",
-    availablePlatforms: ["crossplay"],
-    hasClubData: true,
-    metadata: {
-      summary: "Season 7 Quick Cash",
-      description: "Get leaderboard data from the seventh season of THE FINALS - Quick Cash.",
-      tags: ["Leaderboards"],
-    },
-    backups: {
-      kv: true,
-      r2: true,
-    },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7QuickCash),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
-    },
-    zodSchemaOpenApi: season7QuickQashUserSchema,
-  },
-  {
-    id: "s7teamdeathmatch",
-    availablePlatforms: ["crossplay"],
-    hasClubData: true,
-    metadata: {
-      summary: "Season 7 Team Deathmatch",
-      description: "Get leaderboard data from the seventh season of THE FINALS - Team Deathmatch.",
-      tags: ["Leaderboards"],
-    },
-    backups: {
-      kv: true,
-      r2: true,
-    },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.season7TeamDeathmatch),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
-    },
-    zodSchemaOpenApi: season7TeamDeathmatchUserSchema,
-  },
+    embarkApi.season7TeamDeathmatch,
+  ),
 
-  // Special leaderboards. Any non-main leaderboards such as events
-  {
+  // Special leaderboards not tied to a season
+  createLiveLeaderboard(
+    {
+      id: "orf",
+      availablePlatforms: ["crossplay"],
+      metadata: {
+        summary: "ÖRF",
+        description: "Get leaderboard data from the ÖRF leaderboard.",
+        tags: ["Leaderboards - Special"],
+      },
+      zodSchemaOpenApi: orfUserSchema,
+    },
+    embarkApi.orf,
+  ),
+
+  createOldLeaderboard({
     id: "the-finals",
-    legacyIds: [],
     availablePlatforms: ["crossplay"],
     metadata: {
       summary: "THE FINALS",
       description: "Get leaderboard data from the 'The Finals'.",
       tags: ["Leaderboards - Special"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
-    },
-    backups: {},
-    fetchData: async function ({ kv, platform }) {
-      return getJsonFromKV(kv, `data_${this.id}_${platform}`);
     },
     zodSchemaOpenApi: theFinalsUserSchema,
-  },
-  {
-    id: "orf",
-    legacyIds: [],
-    availablePlatforms: ["crossplay"],
-    metadata: {
-      summary: "ÖRF",
-      description: "Get leaderboard data from the ÖRF leaderboard.",
-      tags: ["Leaderboards - Special"],
-    },
-    backups: {
-      kv: true,
-      r2: true,
-    },
-    fetchData: async function ({ kv, platform }) {
-      return fetchWithKVFallback(
-        () => fetchStandardEmbarkLeaderboardData(embarkApi.orf),
-        kv,
-        `backup_${this.id}_${platform}`,
-      );
-    },
-    zodSchemaOpenApi: orfUserSchema,
-  },
+  }),
 ] satisfies BaseAPIRoute[];

@@ -25,7 +25,7 @@ export const registerLeaderboardRoutes = (app: App) => {
         : `/v1/leaderboard/${apiRoute.id}`,
       middleware: [
         withSearchParams(["name", "count", "clubTag", "exactClubTag"]),
-        cache(`v1-leaderboard-${apiRoute.id}`, apiRoute.metadata.cacheMinutes ?? 10),
+        cache(`v1-leaderboard-${apiRoute.id}`, apiRoute.cacheMinutes ?? 10),
       ],
       request: {
         params: standardPlatformPathParam(apiRoute),

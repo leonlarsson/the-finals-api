@@ -14,11 +14,9 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
       summary: "Community Event 4.4",
       description: "Get leaderboard data from Community event 4.4.<br/>**Goal: Start 3.5 million cashouts.**",
       tags: ["Community Events"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    cacheMinutes: oldLeaderboardCacheMinutes,
+    backups: {},
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_event_${this.id}`);
     },
@@ -32,11 +30,9 @@ export const communityEventApiRoutes: BaseAPIRoute[] = [
       description:
         "Get leaderboard data from Community event 4.8.<br/>**Goal: Steal 600,000 cashouts in the final moments.**",
       tags: ["Community Events"],
-      cacheMinutes: oldLeaderboardCacheMinutes,
     },
-    backups: {
-      r2: true,
-    },
+    cacheMinutes: oldLeaderboardCacheMinutes,
+    backups: {},
     fetchData: async function ({ kv }) {
       return await getJsonFromKV(kv, `data_event_${this.id}`);
     },
