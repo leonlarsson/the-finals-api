@@ -14,7 +14,8 @@ export type HonoEnv = {
 // The LeaderboardPlatforms
 // This is the platform parameter of the /leaderboard endpoint
 // One leaderboard API version can have multiple platform params
-export type LeaderboardPlatforms = "crossplay" | "steam" | "xbox" | "psn";
+// Undefined is for the older leaderboard version that were probably PC only but not really tied to a specific platform
+export type LeaderboardPlatforms = "crossplay" | "steam" | "xbox" | "psn" | undefined;
 
 type LeaderboardAPIRouteFetchDataSettings = {
   ctx?: Pick<ExecutionContext, "waitUntil">;
