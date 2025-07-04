@@ -1,6 +1,7 @@
 import type { ZodSchema } from "zod";
 import { orfSchema } from "../schemas/leaderboards/orf";
 import { season7Schema } from "../schemas/leaderboards/season7";
+import { season7BlastOffSchema } from "../schemas/leaderboards/season7BlastOff";
 import { season7PowerShiftSchema } from "../schemas/leaderboards/season7PowerShift";
 import { season7QuickQashSchema } from "../schemas/leaderboards/season7QuickCash";
 import { season7SponsorSchema } from "../schemas/leaderboards/season7Sponsor";
@@ -43,6 +44,10 @@ export const embarkApi = {
   season7TeamDeathmatch: {
     url: "https://id.embark.games/the-finals/leaderboards/s7tdm",
     zodSchema: season7TeamDeathmatchSchema,
+  },
+  season7BlastOff: {
+    url: "https://id.embark.games/the-finals/leaderboards/s7bs",
+    zodSchema: season7BlastOffSchema,
   },
 
   orf: {

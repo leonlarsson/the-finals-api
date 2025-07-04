@@ -25,6 +25,7 @@ import { season6TeamDeathmatchUserSchema } from "../schemas/leaderboards/season6
 import { season6TerminalAttackUserSchema } from "../schemas/leaderboards/season6TerminalAttack";
 import { season6WorldTourUserSchema } from "../schemas/leaderboards/season6WorldTour";
 import { season7UserSchema } from "../schemas/leaderboards/season7";
+import { season7BlastOffUserSchema } from "../schemas/leaderboards/season7BlastOff";
 import { season7PowerShiftUserSchema } from "../schemas/leaderboards/season7PowerShift";
 import { season7QuickQashUserSchema } from "../schemas/leaderboards/season7QuickCash";
 import { season7SponsorUserSchema } from "../schemas/leaderboards/season7Sponsor";
@@ -474,6 +475,20 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       zodSchemaOpenApi: season7TeamDeathmatchUserSchema,
     },
     embarkApi.season7TeamDeathmatch,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s7blastoff",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 7 Blast Off",
+        description: "Get leaderboard data from the seventh season of THE FINALS - Blast Off.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season7BlastOffUserSchema,
+    },
+    embarkApi.season7BlastOff,
   ),
 
   // Special leaderboards not tied to a season
