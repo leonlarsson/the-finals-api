@@ -26,6 +26,7 @@ import { season6TerminalAttackUserSchema } from "../schemas/leaderboards/season6
 import { season6WorldTourUserSchema } from "../schemas/leaderboards/season6WorldTour";
 import { season7UserSchema } from "../schemas/leaderboards/season7";
 import { season7BlastOffUserSchema } from "../schemas/leaderboards/season7BlastOff";
+import { season7CashBallUserSchema } from "../schemas/leaderboards/season7CashBall";
 import { season7PowerShiftUserSchema } from "../schemas/leaderboards/season7PowerShift";
 import { season7QuickQashUserSchema } from "../schemas/leaderboards/season7QuickCash";
 import { season7SponsorUserSchema } from "../schemas/leaderboards/season7Sponsor";
@@ -476,19 +477,30 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     embarkApi.season7TeamDeathmatch,
   ),
+  createOldLeaderboard({
+    id: "s7blastoff",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Blast Off",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Blast Off.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season7BlastOffUserSchema,
+  }),
   createLiveLeaderboard(
     {
-      id: "s7blastoff",
+      id: "s7cashball",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 7 Blast Off",
-        description: "Get leaderboard data from the seventh season of THE FINALS - Blast Off.",
+        summary: "Season 7 Cash Ball",
+        description: "Get leaderboard data from the seventh season of THE FINALS - Cash Ball.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season7BlastOffUserSchema,
+      zodSchemaOpenApi: season7CashBallUserSchema,
     },
-    embarkApi.season7BlastOff,
+    embarkApi.season7CashBall,
   ),
 
   // Special leaderboards not tied to a season
