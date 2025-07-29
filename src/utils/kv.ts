@@ -5,7 +5,11 @@ import { setSourceToKV } from "./fetchSource";
 export const getJsonFromKV = async (KV: KVNamespace, key: string, cacheTtl = 86_400): Promise<BaseUser[]> => {
   const data = await KV.get<BaseUser[]>(key, { type: "json", cacheTtl });
   if (!data) {
-    throw new Error(`No data found in KV for key: ${key}`);
+    throw new Error(
+      key.includes("backup_")
+        ? `No backup data found in KV for key: ${key}. This may be due to the backup not being created yet.`
+        : `No data found in KV for key: ${key}`,
+    );
   }
 
   setSourceToKV();
