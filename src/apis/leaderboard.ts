@@ -33,6 +33,13 @@ import { season7SponsorUserSchema } from "../schemas/leaderboards/season7Sponsor
 import { season7TeamDeathmatchUserSchema } from "../schemas/leaderboards/season7TeamDeathmatch";
 import { season7TerminalAttackUserSchema } from "../schemas/leaderboards/season7TerminalAttack";
 import { season7WorldTourUserSchema } from "../schemas/leaderboards/season7WorldTour";
+import { season8UserSchema } from "../schemas/leaderboards/season8";
+import { season8Head2HeadUserSchema } from "../schemas/leaderboards/season8Head2Head";
+import { season8PowerShiftUserSchema } from "../schemas/leaderboards/season8PowerShift";
+import { season8QuickQashUserSchema } from "../schemas/leaderboards/season8QuickCash";
+import { season8SponsorUserSchema } from "../schemas/leaderboards/season8Sponsor";
+import { season8TeamDeathmatchUserSchema } from "../schemas/leaderboards/season8TeamDeathmatch";
+import { season8WorldTourUserSchema } from "../schemas/leaderboards/season8WorldTour";
 import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
@@ -379,104 +386,83 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
 
   // SEASON 7
-  createLiveLeaderboard(
-    {
-      id: "s7",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 7",
-        description: "Get leaderboard data from the seventh season of THE FINALS.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season7UserSchema,
+  createOldLeaderboard({
+    id: "s7",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7",
+      description: "Get leaderboard data from the seventh season of THE FINALS.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season7,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s7sponsor",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 7 Sponsor",
-        description: "Get leaderboard data from the seventh season of THE FINALS - Sponsor.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season7SponsorUserSchema,
+    zodSchemaOpenApi: season7UserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s7sponsor",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Sponsor",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Sponsor.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season7Sponsor,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s7worldtour",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 7 World Tour",
-        description: "Get leaderboard data from the seventh season of THE FINALS - World Tour.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season7WorldTourUserSchema,
+    zodSchemaOpenApi: season7SponsorUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s7worldtour",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 World Tour",
+      description: "Get leaderboard data from the seventh season of THE FINALS - World Tour.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season7WorldTour,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s7terminalattack",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 7 Terminal Attack",
-        description: "Get leaderboard data from the seventh season of THE FINALS - Terminal Attack.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season7TerminalAttackUserSchema,
+    zodSchemaOpenApi: season7WorldTourUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s7terminalattack",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Terminal Attack",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Terminal Attack.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season7TerminalAttack,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s7powershift",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 7 PowerShift",
-        description: "Get leaderboard data from the seventh season of THE FINALS - PowerShift.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season7PowerShiftUserSchema,
+    zodSchemaOpenApi: season7TerminalAttackUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s7powershift",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 PowerShift",
+      description: "Get leaderboard data from the seventh season of THE FINALS - PowerShift.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season7PowerShift,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s7quickcash",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 7 Quick Cash",
-        description: "Get leaderboard data from the seventh season of THE FINALS - Quick Cash.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season7QuickQashUserSchema,
+    zodSchemaOpenApi: season7PowerShiftUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s7quickcash",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Quick Cash",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Quick Cash.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season7QuickCash,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s7teamdeathmatch",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 7 Team Deathmatch",
-        description: "Get leaderboard data from the seventh season of THE FINALS - Team Deathmatch.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season7TeamDeathmatchUserSchema,
+    zodSchemaOpenApi: season7QuickQashUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s7teamdeathmatch",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Team Deathmatch",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Team Deathmatch.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season7TeamDeathmatch,
-  ),
+    zodSchemaOpenApi: season7TeamDeathmatchUserSchema,
+  }),
   createOldLeaderboard({
     id: "s7blastoff",
     availablePlatforms: ["crossplay"],
@@ -488,19 +474,116 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: season7BlastOffUserSchema,
   }),
+  createOldLeaderboard({
+    id: "s7cashball",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 7 Cash Ball",
+      description: "Get leaderboard data from the seventh season of THE FINALS - Cash Ball.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season7CashBallUserSchema,
+  }),
+
+  // SEASON 8
   createLiveLeaderboard(
     {
-      id: "s7cashball",
+      id: "s8",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 7 Cash Ball",
-        description: "Get leaderboard data from the seventh season of THE FINALS - Cash Ball.",
+        summary: "Season 8",
+        description: "Get leaderboard data from the eighth season of THE FINALS.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season7CashBallUserSchema,
+      zodSchemaOpenApi: season8UserSchema,
     },
-    embarkApi.season7CashBall,
+    embarkApi.season8,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8sponsor",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 Sponsor",
+        description: "Get leaderboard data from the eighth season of THE FINALS - Sponsor.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8SponsorUserSchema,
+    },
+    embarkApi.season8Sponsor,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8worldtour",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 World Tour",
+        description: "Get leaderboard data from the eighth season of THE FINALS - World Tour.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8WorldTourUserSchema,
+    },
+    embarkApi.season8WorldTour,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8head2head",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 Head2Head",
+        description: "Get leaderboard data from the eighth season of THE FINALS - Head2Head.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8Head2HeadUserSchema,
+    },
+    embarkApi.season8Head2Head,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8powershift",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 PowerShift",
+        description: "Get leaderboard data from the eighth season of THE FINALS - PowerShift.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8PowerShiftUserSchema,
+    },
+    embarkApi.season8PowerShift,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8quickcash",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 Quick Cash",
+        description: "Get leaderboard data from the eighth season of THE FINALS - Quick Cash.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8QuickQashUserSchema,
+    },
+    embarkApi.season8QuickCash,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8teamdeathmatch",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 Team Deathmatch",
+        description: "Get leaderboard data from the eighth season of THE FINALS - Team Deathmatch.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8TeamDeathmatchUserSchema,
+    },
+    embarkApi.season8TeamDeathmatch,
   ),
 
   // Special leaderboards not tied to a season
