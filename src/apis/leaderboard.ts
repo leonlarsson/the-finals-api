@@ -12,14 +12,14 @@ import { season4WorldTourUserSchema } from "../schemas/leaderboards/season4World
 import { season5UserSchema } from "../schemas/leaderboards/season5";
 import { season5BankItUserSchema } from "../schemas/leaderboards/season5BankIt";
 import { season5PowerShiftUserSchema } from "../schemas/leaderboards/season5PowerShift";
-import { season5QuickQashUserSchema } from "../schemas/leaderboards/season5QuickCash";
+import { season5QuickCashUserSchema } from "../schemas/leaderboards/season5QuickCash";
 import { season5SponsorUserSchema } from "../schemas/leaderboards/season5Sponsor";
 import { season5TerminalAttackUserSchema } from "../schemas/leaderboards/season5TerminalAttack";
 import { season5WorldTourUserSchema } from "../schemas/leaderboards/season5WorldTour";
 import { season6UserSchema } from "../schemas/leaderboards/season6";
 import { season6HeavyHittersUserSchema } from "../schemas/leaderboards/season6HeavyHitters";
 import { season6PowerShiftUserSchema } from "../schemas/leaderboards/season6PowerShift";
-import { season6QuickQashUserSchema } from "../schemas/leaderboards/season6QuickCash";
+import { season6QuickCashUserSchema } from "../schemas/leaderboards/season6QuickCash";
 import { season6SponsorUserSchema } from "../schemas/leaderboards/season6Sponsor";
 import { season6TeamDeathmatchUserSchema } from "../schemas/leaderboards/season6TeamDeathmatch";
 import { season6TerminalAttackUserSchema } from "../schemas/leaderboards/season6TerminalAttack";
@@ -28,7 +28,7 @@ import { season7UserSchema } from "../schemas/leaderboards/season7";
 import { season7BlastOffUserSchema } from "../schemas/leaderboards/season7BlastOff";
 import { season7CashBallUserSchema } from "../schemas/leaderboards/season7CashBall";
 import { season7PowerShiftUserSchema } from "../schemas/leaderboards/season7PowerShift";
-import { season7QuickQashUserSchema } from "../schemas/leaderboards/season7QuickCash";
+import { season7QuickCashUserSchema } from "../schemas/leaderboards/season7QuickCash";
 import { season7SponsorUserSchema } from "../schemas/leaderboards/season7Sponsor";
 import { season7TeamDeathmatchUserSchema } from "../schemas/leaderboards/season7TeamDeathmatch";
 import { season7TerminalAttackUserSchema } from "../schemas/leaderboards/season7TerminalAttack";
@@ -36,7 +36,7 @@ import { season7WorldTourUserSchema } from "../schemas/leaderboards/season7World
 import { season8UserSchema } from "../schemas/leaderboards/season8";
 import { season8Head2HeadUserSchema } from "../schemas/leaderboards/season8Head2Head";
 import { season8PowerShiftUserSchema } from "../schemas/leaderboards/season8PowerShift";
-import { season8QuickQashUserSchema } from "../schemas/leaderboards/season8QuickCash";
+import { season8QuickCashUserSchema } from "../schemas/leaderboards/season8QuickCash";
 import { season8SponsorUserSchema } from "../schemas/leaderboards/season8Sponsor";
 import { season8TeamDeathmatchUserSchema } from "../schemas/leaderboards/season8TeamDeathmatch";
 import { season8WorldTourUserSchema } from "../schemas/leaderboards/season8WorldTour";
@@ -281,7 +281,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the fifth season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
     },
-    zodSchemaOpenApi: season5QuickQashUserSchema,
+    zodSchemaOpenApi: season5QuickCashUserSchema,
   }),
   createOldLeaderboard({
     id: "s5bankit",
@@ -360,7 +360,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the sixth season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
     },
-    zodSchemaOpenApi: season6QuickQashUserSchema,
+    zodSchemaOpenApi: season6QuickCashUserSchema,
   }),
   createOldLeaderboard({
     id: "s6teamdeathmatch",
@@ -450,7 +450,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       description: "Get leaderboard data from the seventh season of THE FINALS - Quick Cash.",
       tags: ["Leaderboards"],
     },
-    zodSchemaOpenApi: season7QuickQashUserSchema,
+    zodSchemaOpenApi: season7QuickCashUserSchema,
   }),
   createOldLeaderboard({
     id: "s7teamdeathmatch",
@@ -567,7 +567,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
         description: "Get leaderboard data from the eighth season of THE FINALS - Quick Cash.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season8QuickQashUserSchema,
+      zodSchemaOpenApi: season8QuickCashUserSchema,
     },
     embarkApi.season8QuickCash,
   ),

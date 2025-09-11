@@ -3,7 +3,7 @@ import { orfSchema } from "../schemas/leaderboards/orf";
 import { season8Schema } from "../schemas/leaderboards/season8";
 import { season8Head2HeadSchema } from "../schemas/leaderboards/season8Head2Head";
 import { season8PowerShiftSchema } from "../schemas/leaderboards/season8PowerShift";
-import { season8QuickQashSchema } from "../schemas/leaderboards/season8QuickCash";
+import { season8QuickCashSchema } from "../schemas/leaderboards/season8QuickCash";
 import { season8SponsorSchema } from "../schemas/leaderboards/season8Sponsor";
 import { season8TeamDeathmatchSchema } from "../schemas/leaderboards/season8TeamDeathmatch";
 import { season8WorldTourSchema } from "../schemas/leaderboards/season8WorldTour";
@@ -38,7 +38,7 @@ export const embarkApi = {
   },
   season8QuickCash: {
     url: "https://id.embark.games/the-finals/leaderboards/s8qc",
-    zodSchema: season8QuickQashSchema,
+    zodSchema: season8QuickCashSchema,
   },
   season8TeamDeathmatch: {
     url: "https://id.embark.games/the-finals/leaderboards/s8tdm",

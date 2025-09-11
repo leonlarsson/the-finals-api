@@ -10,7 +10,7 @@ import {
   xboxNamePropertySchema,
 } from "../userProperties";
 
-export const season5QuickQashSchema = z
+export const season5QuickCashSchema = z
   .object({
     1: z.number(),
     // For some reason, the name can come back as a 0 (number) instead of a string. Example: {"1":4059,"2":57070,"3":0,"4":11,"5":25114,"6":"ඞ ⁧ AK","7":0,"8":0}
@@ -33,7 +33,7 @@ export const season5QuickQashSchema = z
   .array();
 
 // This is passed to the OpenAPI spec
-export const season5QuickQashUserSchema = z
+export const season5QuickCashUserSchema = z
   .object({
     rank: rankPropertySchema,
     name: namePropertySchema,
@@ -43,7 +43,7 @@ export const season5QuickQashUserSchema = z
     clubTag: clubTagPropertySchema,
     points: scorePropertySchema,
   })
-  .openapi("Season5QuickQashUser", {
+  .openapi("Season5QuickCashUser", {
     title: "Season 5 Quick Qash User",
     description: "A user in the Season 5 Quick Qash leaderboard.",
-  }) satisfies z.ZodType<z.infer<typeof season5QuickQashSchema>[number]>;
+  }) satisfies z.ZodType<z.infer<typeof season5QuickCashSchema>[number]>;
