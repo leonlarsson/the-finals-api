@@ -587,19 +587,16 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   ),
 
   // Special leaderboards not tied to a season
-  createLiveLeaderboard(
-    {
-      id: "orf",
-      availablePlatforms: ["crossplay"],
-      metadata: {
-        summary: "ÖRF",
-        description: "Get leaderboard data from the ÖRF leaderboard.",
-        tags: ["Leaderboards - Special"],
-      },
-      zodSchemaOpenApi: orfUserSchema,
+  createOldLeaderboard({
+    id: "orf",
+    availablePlatforms: ["crossplay"],
+    metadata: {
+      summary: "ÖRF",
+      description: "Get leaderboard data from the ÖRF leaderboard. Stopped being available from Season 8.",
+      tags: ["Leaderboards - Special"],
     },
-    embarkApi.orf,
-  ),
+    zodSchemaOpenApi: orfUserSchema,
+  }),
 
   createOldLeaderboard({
     id: "the-finals",
