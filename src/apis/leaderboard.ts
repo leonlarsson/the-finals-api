@@ -35,6 +35,7 @@ import { season7TerminalAttackUserSchema } from "../schemas/leaderboards/season7
 import { season7WorldTourUserSchema } from "../schemas/leaderboards/season7WorldTour";
 import { season8UserSchema } from "../schemas/leaderboards/season8";
 import { season8Head2HeadUserSchema } from "../schemas/leaderboards/season8Head2Head";
+import { season8HeavenOrElseUserSchema } from "../schemas/leaderboards/season8HeavenOrElse";
 import { season8PowerShiftUserSchema } from "../schemas/leaderboards/season8PowerShift";
 import { season8QuickCashUserSchema } from "../schemas/leaderboards/season8QuickCash";
 import { season8SponsorUserSchema } from "../schemas/leaderboards/season8Sponsor";
@@ -584,6 +585,20 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       zodSchemaOpenApi: season8TeamDeathmatchUserSchema,
     },
     embarkApi.season8TeamDeathmatch,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8heavenorelse",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 Heaven Or Else",
+        description: "Get leaderboard data from the eighth season of THE FINALS - Heaven Or Else.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8HeavenOrElseUserSchema,
+    },
+    embarkApi.season8HeavenOrElse,
   ),
 
   // Special leaderboards not tied to a season
