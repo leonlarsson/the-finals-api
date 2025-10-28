@@ -11,3 +11,4 @@ That's basically it.
 To convert a live leaderboard to an old leaderboard, the following steps should be followed:
 1. Change the `createLiveLeaderboard` function to `createOldLeaderboard` in `src/apis/leaderboard.ts`, no longer passing in `embarkApi`.
 2. Remove leaderboard from `embarkApi` in `src/apis/embarkApi.ts`.
+3. Rename KV entry from backup_ to data_ on CF.

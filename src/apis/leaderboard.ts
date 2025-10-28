@@ -34,6 +34,7 @@ import { season7TeamDeathmatchUserSchema } from "../schemas/leaderboards/season7
 import { season7TerminalAttackUserSchema } from "../schemas/leaderboards/season7TerminalAttack";
 import { season7WorldTourUserSchema } from "../schemas/leaderboards/season7WorldTour";
 import { season8UserSchema } from "../schemas/leaderboards/season8";
+import { season8GhoulRushUserSchema } from "../schemas/leaderboards/season8GhoulRush";
 import { season8Head2HeadUserSchema } from "../schemas/leaderboards/season8Head2Head";
 import { season8HeavenOrElseUserSchema } from "../schemas/leaderboards/season8HeavenOrElse";
 import { season8PowerShiftUserSchema } from "../schemas/leaderboards/season8PowerShift";
@@ -588,18 +589,29 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   ),
   createLiveLeaderboard(
     {
-      id: "s8heavenorelse",
+      id: "s8ghoulrush",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 8 Heaven Or Else",
-        description: "Get leaderboard data from the eighth season of THE FINALS - Heaven Or Else.",
+        summary: "Season 8 Ghoul Rush",
+        description: "Get leaderboard data from the eighth season of THE FINALS - Ghoul Rush.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season8HeavenOrElseUserSchema,
+      zodSchemaOpenApi: season8GhoulRushUserSchema,
     },
-    embarkApi.season8HeavenOrElse,
+    embarkApi.season8GhoulRush,
   ),
+  createOldLeaderboard({
+    id: "s8heavenorelse",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 8 Heaven Or Else",
+      description: "Get leaderboard data from the eighth season of THE FINALS - Heaven Or Else.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season8HeavenOrElseUserSchema,
+  }),
 
   // Special leaderboards not tied to a season
   createOldLeaderboard({
