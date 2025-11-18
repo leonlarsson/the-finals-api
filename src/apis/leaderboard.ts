@@ -587,20 +587,17 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     embarkApi.season8TeamDeathmatch,
   ),
-  createLiveLeaderboard(
-    {
-      id: "s8ghoulrush",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 8 Ghoul Rush",
-        description: "Get leaderboard data from the eighth season of THE FINALS - Ghoul Rush.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season8GhoulRushUserSchema,
+  createOldLeaderboard({
+    id: "s8ghoulrush",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 8 Ghoul Rush",
+      description: "Get leaderboard data from the eighth season of THE FINALS - Ghoul Rush.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season8GhoulRush,
-  ),
+    zodSchemaOpenApi: season8GhoulRushUserSchema,
+  }),
   createOldLeaderboard({
     id: "s8heavenorelse",
     availablePlatforms: ["crossplay"],

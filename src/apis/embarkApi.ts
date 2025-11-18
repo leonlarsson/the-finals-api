@@ -45,10 +45,6 @@ export const embarkApi = {
     url: "https://id.embark.games/the-finals/leaderboards/s8tdm",
     zodSchema: season8TeamDeathmatchSchema,
   },
-  season8GhoulRush: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8gs",
-    zodSchema: season8GhoulRushSchema,
-  },
 
   orf: {
     url: "https://id.embark.games/the-finals/leaderboards/orf",
