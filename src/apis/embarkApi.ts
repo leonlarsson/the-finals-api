@@ -1,7 +1,7 @@
 import type { ZodSchema } from "zod";
 import { orfSchema } from "../schemas/leaderboards/orf";
 import { season8Schema } from "../schemas/leaderboards/season8";
-import { season8GhoulRushSchema } from "../schemas/leaderboards/season8GhoulRush";
+import { season8BlastOffSchema } from "../schemas/leaderboards/season8BlastOff";
 import { season8Head2HeadSchema } from "../schemas/leaderboards/season8Head2Head";
 import { season8PowerShiftSchema } from "../schemas/leaderboards/season8PowerShift";
 import { season8QuickCashSchema } from "../schemas/leaderboards/season8QuickCash";
@@ -44,6 +44,10 @@ export const embarkApi = {
   season8TeamDeathmatch: {
     url: "https://id.embark.games/the-finals/leaderboards/s8tdm",
     zodSchema: season8TeamDeathmatchSchema,
+  },
+  season8BlastOff: {
+    url: "https://id.embark.games/the-finals/leaderboards/s8bo",
+    zodSchema: season8BlastOffSchema,
   },
 
   orf: {

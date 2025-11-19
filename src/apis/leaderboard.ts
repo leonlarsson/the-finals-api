@@ -34,6 +34,7 @@ import { season7TeamDeathmatchUserSchema } from "../schemas/leaderboards/season7
 import { season7TerminalAttackUserSchema } from "../schemas/leaderboards/season7TerminalAttack";
 import { season7WorldTourUserSchema } from "../schemas/leaderboards/season7WorldTour";
 import { season8UserSchema } from "../schemas/leaderboards/season8";
+import { season8BlastOffUserSchema } from "../schemas/leaderboards/season8BlastOff";
 import { season8GhoulRushUserSchema } from "../schemas/leaderboards/season8GhoulRush";
 import { season8Head2HeadUserSchema } from "../schemas/leaderboards/season8Head2Head";
 import { season8HeavenOrElseUserSchema } from "../schemas/leaderboards/season8HeavenOrElse";
@@ -586,6 +587,20 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       zodSchemaOpenApi: season8TeamDeathmatchUserSchema,
     },
     embarkApi.season8TeamDeathmatch,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s8blastoff",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 8 Blast Off",
+        description: "Get leaderboard data from the eighth season of THE FINALS - Blast Off.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season8BlastOffUserSchema,
+    },
+    embarkApi.season8BlastOff,
   ),
   createOldLeaderboard({
     id: "s8ghoulrush",
