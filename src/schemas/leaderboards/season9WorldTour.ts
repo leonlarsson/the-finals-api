@@ -10,7 +10,7 @@ import {
   xboxNamePropertySchema,
 } from "../userProperties";
 
-export const season9CashoutSchema = z
+export const season9WorldTourSchema = z
   .object({
     1: z.number(),
     // For some reason, the name can come back as a 0 (number) instead of a string. Example: {"1":4059,"2":57070,"3":0,"4":11,"5":25114,"6":"ඞ ⁧ AK","7":0,"8":0}
@@ -34,7 +34,7 @@ export const season9CashoutSchema = z
   .array();
 
 // This is passed to the OpenAPI spec
-export const season9CashoutUserSchema = z
+export const season9WorldTourUserSchema = z
   .object({
     rank: rankPropertySchema,
     name: namePropertySchema,
@@ -44,7 +44,7 @@ export const season9CashoutUserSchema = z
     clubTag: clubTagPropertySchema,
     cashouts: cashoutsPropertySchema,
   })
-  .openapi("Season9CashoutUser", {
-    title: "Season 9 Cashout User",
-    description: "A user in the Season 9 Cashout leaderboard.",
-  }) satisfies z.ZodType<z.infer<typeof season9CashoutSchema>[number]>;
+  .openapi("Season9WorldTourUser", {
+    title: "Season 9 World Tour User",
+    description: "A user in the Season 9 World Tour leaderboard.",
+  }) satisfies z.ZodType<z.infer<typeof season9WorldTourSchema>[number]>;
