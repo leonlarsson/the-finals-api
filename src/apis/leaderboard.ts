@@ -644,7 +644,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 Cashout (formerly World Tour)",
+        summary: "Season 9 Cashout",
         description: "Get leaderboard data from the ninth season of THE FINALS - Cashout (formerly World Tour).",
         tags: ["Leaderboards"],
       },
