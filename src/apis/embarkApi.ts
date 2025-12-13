@@ -1,13 +1,13 @@
 import type { ZodSchema } from "zod";
 import { orfSchema } from "../schemas/leaderboards/orf";
-import { season8Schema } from "../schemas/leaderboards/season8";
-import { season8BlastOffSchema } from "../schemas/leaderboards/season8BlastOff";
-import { season8Head2HeadSchema } from "../schemas/leaderboards/season8Head2Head";
-import { season8PowerShiftSchema } from "../schemas/leaderboards/season8PowerShift";
-import { season8QuickCashSchema } from "../schemas/leaderboards/season8QuickCash";
-import { season8SponsorSchema } from "../schemas/leaderboards/season8Sponsor";
-import { season8TeamDeathmatchSchema } from "../schemas/leaderboards/season8TeamDeathmatch";
-import { season8WorldTourSchema } from "../schemas/leaderboards/season8WorldTour";
+import { season9Schema } from "../schemas/leaderboards/season9";
+import { season9SponsorSchema } from "../schemas/leaderboards/season9Sponsor";
+import { season9CashoutSchema } from "../schemas/leaderboards/season9Cashout";
+import { season9QuickCashSchema } from "../schemas/leaderboards/season9QuickCash";
+import { season9PointBreakSchema } from "../schemas/leaderboards/season9PointBreak";
+import { season9PowerShiftSchema } from "../schemas/leaderboards/season9PowerShift";
+import { season9Head2HeadSchema } from "../schemas/leaderboards/season9Head2Head";
+import { season9TeamDeathmatchSchema } from "../schemas/leaderboards/season9TeamDeathmatch";
 import type { BaseUser } from "../types";
 
 export type EmbarkApi = {
@@ -17,37 +17,37 @@ export type EmbarkApi = {
 
 /** `embarkApi` lists the URL and Zod schema used to validate and transform the response for a leaderboard. */
 export const embarkApi = {
-  season8: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8",
-    zodSchema: season8Schema,
+  season9: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9",
+    zodSchema: season9Schema,
   },
-  season8Sponsor: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8s",
-    zodSchema: season8SponsorSchema,
+  season9Sponsor: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9s",
+    zodSchema: season9SponsorSchema,
   },
-  season8WorldTour: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8wt",
-    zodSchema: season8WorldTourSchema,
+  season9Cashout: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9wt",
+    zodSchema: season9CashoutSchema,
   },
-  season8Head2Head: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8h2h",
-    zodSchema: season8Head2HeadSchema,
+  season9Head2Head: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9h2h",
+    zodSchema: season9Head2HeadSchema,
   },
-  season8PowerShift: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8ps",
-    zodSchema: season8PowerShiftSchema,
+  season9PowerShift: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9ps",
+    zodSchema: season9PowerShiftSchema,
   },
-  season8QuickCash: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8qc",
-    zodSchema: season8QuickCashSchema,
+  season9QuickCash: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9qc",
+    zodSchema: season9QuickCashSchema,
   },
-  season8TeamDeathmatch: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8tdm",
-    zodSchema: season8TeamDeathmatchSchema,
+  season9TeamDeathmatch: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9tdm",
+    zodSchema: season9TeamDeathmatchSchema,
   },
-  season8BlastOff: {
-    url: "https://id.embark.games/the-finals/leaderboards/s8bo",
-    zodSchema: season8BlastOffSchema,
+  season9PointBreak: {
+    url: "https://id.embark.games/the-finals/leaderboards/s9pb",
+    zodSchema: season9PointBreakSchema,
   },
 
   orf: {
