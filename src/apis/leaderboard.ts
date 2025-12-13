@@ -44,13 +44,13 @@ import { season8SponsorUserSchema } from "../schemas/leaderboards/season8Sponsor
 import { season8TeamDeathmatchUserSchema } from "../schemas/leaderboards/season8TeamDeathmatch";
 import { season8WorldTourUserSchema } from "../schemas/leaderboards/season8WorldTour";
 import { season9UserSchema } from "../schemas/leaderboards/season9";
+import { season9CashoutUserSchema } from "../schemas/leaderboards/season9Cashout";
 import { season9Head2HeadUserSchema } from "../schemas/leaderboards/season9Head2Head";
+import { season9PointBreakUserSchema } from "../schemas/leaderboards/season9PointBreak";
 import { season9PowerShiftUserSchema } from "../schemas/leaderboards/season9PowerShift";
 import { season9QuickCashUserSchema } from "../schemas/leaderboards/season9QuickCash";
 import { season9SponsorUserSchema } from "../schemas/leaderboards/season9Sponsor";
 import { season9TeamDeathmatchUserSchema } from "../schemas/leaderboards/season9TeamDeathmatch";
-import { season9CashoutUserSchema } from "../schemas/leaderboards/season9Cashout";
-import { season9PointBreakUserSchema } from "../schemas/leaderboards/season9PointBreak";
 import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";

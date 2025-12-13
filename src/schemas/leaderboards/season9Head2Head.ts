@@ -33,7 +33,7 @@ export const season9Head2HeadSchema = z
   .array();
 
 // This is passed to the OpenAPI spec
-export const season9Head2HeadUserSchema= z
+export const season9Head2HeadUserSchema = z
   .object({
     rank: rankPropertySchema,
     name: namePropertySchema,
