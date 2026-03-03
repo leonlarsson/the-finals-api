@@ -44,6 +44,7 @@ import { season8SponsorUserSchema } from "../schemas/leaderboards/season8Sponsor
 import { season8TeamDeathmatchUserSchema } from "../schemas/leaderboards/season8TeamDeathmatch";
 import { season8WorldTourUserSchema } from "../schemas/leaderboards/season8WorldTour";
 import { season9UserSchema } from "../schemas/leaderboards/season9";
+import { season9BankItUserSchema } from "../schemas/leaderboards/season9BankIt";
 import { season9Head2HeadUserSchema } from "../schemas/leaderboards/season9Head2Head";
 import { season9PointBreakUserSchema } from "../schemas/leaderboards/season9PointBreak";
 import { season9PowerShiftUserSchema } from "../schemas/leaderboards/season9PowerShift";
@@ -721,6 +722,20 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       zodSchemaOpenApi: season9PointBreakUserSchema,
     },
     embarkApi.season9PointBreak,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s9bankit",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 9 Bank It",
+        description: "Get leaderboard data from the ninth season of THE FINALS - Bank It.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season9BankItUserSchema,
+    },
+    embarkApi.season9BankIt,
   ),
 
   // Special leaderboards not tied to a season
