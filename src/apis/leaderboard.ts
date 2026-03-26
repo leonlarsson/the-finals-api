@@ -825,7 +825,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   ),
   createLiveLeaderboard(
     {
-      id: "s10StarlightHollow",
+      id: "s10starlighthollow",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
@@ -839,7 +839,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   ),
   createLiveLeaderboard(
     {
-      id: "s10The24HourGauntlet",
+      id: "s10the24hourgauntlet",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
@@ -853,7 +853,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   ),
   createLiveLeaderboard(
     {
-      id: "s10CreatorGauntlet",
+      id: "s10creatorgauntlet",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
