@@ -52,6 +52,16 @@ import { season9QuickCashUserSchema } from "../schemas/leaderboards/season9Quick
 import { season9SponsorUserSchema } from "../schemas/leaderboards/season9Sponsor";
 import { season9TeamDeathmatchUserSchema } from "../schemas/leaderboards/season9TeamDeathmatch";
 import { season9WorldTourUserSchema } from "../schemas/leaderboards/season9WorldTour";
+import { season10UserSchema } from "../schemas/leaderboards/season10";
+import { season10CreatorGauntletUserSchema } from "../schemas/leaderboards/season10CreatorGauntlet";
+import { season10PointBreakUserSchema } from "../schemas/leaderboards/season10PointBreak";
+import { season10PowerShiftUserSchema } from "../schemas/leaderboards/season10PowerShift";
+import { season10QuickCashUserSchema } from "../schemas/leaderboards/season10QuickCash";
+import { season10SponsorUserSchema } from "../schemas/leaderboards/season10Sponsor";
+import { season10StarlightHollowUserSchema } from "../schemas/leaderboards/season10StarlightHollow";
+import { season10TeamDeathmatchUserSchema } from "../schemas/leaderboards/season10TeamDeathmatch";
+import { season10The24HourGauntletUserSchema } from "../schemas/leaderboards/season10The24HourGauntlet";
+import { season10WorldTourUserSchema } from "../schemas/leaderboards/season10WorldTour";
 import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
@@ -614,131 +624,246 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
 
   // SEASON 9
+  createOldLeaderboard({
+    id: "s9",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9",
+      description: "Get leaderboard data from the ninth season of THE FINALS.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9UserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9sponsor",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 Sponsor",
+      description: "Get leaderboard data from the ninth season of THE FINALS - Sponsor.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9SponsorUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9worldtour",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 World Tour",
+      description: "Get leaderboard data from the ninth season of THE FINALS - World Tour.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9WorldTourUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9head2head",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 Head2Head",
+      description: "Get leaderboard data from the ninth season of THE FINALS - Head2Head.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9Head2HeadUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9powershift",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 PowerShift",
+      description: "Get leaderboard data from the ninth season of THE FINALS - PowerShift.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9PowerShiftUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9quickcash",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 Quick Cash",
+      description: "Get leaderboard data from the ninth season of THE FINALS - Quick Cash.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9QuickCashUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9teamdeathmatch",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 Team Deathmatch",
+      description: "Get leaderboard data from the ninth season of THE FINALS - Team Deathmatch.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9TeamDeathmatchUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9pointbreak",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 Point Break",
+      description: "Get leaderboard data from the ninth season of THE FINALS - Point Break.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9PointBreakUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s9bankit",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 9 Bank It",
+      description: "Get leaderboard data from the ninth season of THE FINALS - Bank It.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season9BankItUserSchema,
+  }),
+
+  // SEASON 10
   createLiveLeaderboard(
     {
-      id: "s9",
+      id: "s10",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9",
-        description: "Get leaderboard data from the ninth season of THE FINALS.",
+        summary: "Season 10",
+        description: "Get leaderboard data from the tenth season of THE FINALS.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9UserSchema,
+      zodSchemaOpenApi: season10UserSchema,
     },
-    embarkApi.season9,
+    embarkApi.season10,
   ),
   createLiveLeaderboard(
     {
-      id: "s9sponsor",
+      id: "s10sponsor",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 Sponsor",
-        description: "Get leaderboard data from the ninth season of THE FINALS - Sponsor.",
+        summary: "Season 10 Sponsor",
+        description: "Get leaderboard data from the tenth season of THE FINALS - Sponsor.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9SponsorUserSchema,
+      zodSchemaOpenApi: season10SponsorUserSchema,
     },
-    embarkApi.season9Sponsor,
+    embarkApi.season10Sponsor,
   ),
   createLiveLeaderboard(
     {
-      id: "s9worldtour",
+      id: "s10worldtour",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 World Tour",
-        description: "Get leaderboard data from the ninth season of THE FINALS - World Tour.",
+        summary: "Season 10 World Tour",
+        description: "Get leaderboard data from the tenth season of THE FINALS - World Tour.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9WorldTourUserSchema,
+      zodSchemaOpenApi: season10WorldTourUserSchema,
     },
-    embarkApi.season9WorldTour,
+    embarkApi.season10WorldTour,
   ),
   createLiveLeaderboard(
     {
-      id: "s9head2head",
+      id: "s10powershift",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 Head2Head",
-        description: "Get leaderboard data from the ninth season of THE FINALS - Head2Head.",
+        summary: "Season 10 PowerShift",
+        description: "Get leaderboard data from the tenth season of THE FINALS - PowerShift.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9Head2HeadUserSchema,
+      zodSchemaOpenApi: season10PowerShiftUserSchema,
     },
-    embarkApi.season9Head2Head,
+    embarkApi.season10PowerShift,
   ),
   createLiveLeaderboard(
     {
-      id: "s9powershift",
+      id: "s10quickcash",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 PowerShift",
-        description: "Get leaderboard data from the ninth season of THE FINALS - PowerShift.",
+        summary: "Season 10 Quick Cash",
+        description: "Get leaderboard data from the tenth season of THE FINALS - Quick Cash.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9PowerShiftUserSchema,
+      zodSchemaOpenApi: season10QuickCashUserSchema,
     },
-    embarkApi.season9PowerShift,
+    embarkApi.season10QuickCash,
   ),
   createLiveLeaderboard(
     {
-      id: "s9quickcash",
+      id: "s10teamdeathmatch",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 Quick Cash",
-        description: "Get leaderboard data from the ninth season of THE FINALS - Quick Cash.",
+        summary: "Season 10 Team Deathmatch",
+        description: "Get leaderboard data from the tenth season of THE FINALS - Team Deathmatch.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9QuickCashUserSchema,
+      zodSchemaOpenApi: season10TeamDeathmatchUserSchema,
     },
-    embarkApi.season9QuickCash,
+    embarkApi.season10TeamDeathmatch,
   ),
   createLiveLeaderboard(
     {
-      id: "s9teamdeathmatch",
+      id: "s10pointbreak",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 Team Deathmatch",
-        description: "Get leaderboard data from the ninth season of THE FINALS - Team Deathmatch.",
+        summary: "Season 10 Point Break",
+        description: "Get leaderboard data from the tenth season of THE FINALS - Point Break.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9TeamDeathmatchUserSchema,
+      zodSchemaOpenApi: season10PointBreakUserSchema,
     },
-    embarkApi.season9TeamDeathmatch,
+    embarkApi.season10PointBreak,
   ),
   createLiveLeaderboard(
     {
-      id: "s9pointbreak",
+      id: "s10StarlightHollow",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 Point Break",
-        description: "Get leaderboard data from the ninth season of THE FINALS - Point Break.",
+        summary: "Season 10 Starlight Hollow",
+        description: "Get leaderboard data from the tenth season of THE FINALS - Starlight Hollow.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9PointBreakUserSchema,
+      zodSchemaOpenApi: season10StarlightHollowUserSchema,
     },
-    embarkApi.season9PointBreak,
+    embarkApi.season10StarlightHollow,
   ),
   createLiveLeaderboard(
     {
-      id: "s9bankit",
+      id: "s10The24HourGauntlet",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 9 Bank It",
-        description: "Get leaderboard data from the ninth season of THE FINALS - Bank It.",
+        summary: "Season 10 The 24 Hour Gauntlet",
+        description: "Get leaderboard data from the tenth season of THE FINALS - The 24 Hour Gauntlet.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season9BankItUserSchema,
+      zodSchemaOpenApi: season10The24HourGauntletUserSchema,
     },
-    embarkApi.season9BankIt,
+    embarkApi.season10The24HourGauntlet,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s10CreatorGauntlet",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 10 Creator Gauntlet",
+        description: "Get leaderboard data from the tenth season of THE FINALS - Creator Gauntlet.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season10CreatorGauntletUserSchema,
+    },
+    embarkApi.season10CreatorGauntlet,
   ),
 
   // Special leaderboards not tied to a season
