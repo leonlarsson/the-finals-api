@@ -101,12 +101,12 @@ const createLiveLeaderboard = (data: CreateLeaderboardData, embarkApi: EmbarkApi
       kv: true,
       r2: true,
     },
-    fetchData: async function ({ kv, platform }) {
+    fetchData: async function ({ ctx, kv, platform }) {
       // +0–100% jitter meaning TTL can be between 10 and 20 minutes. * 1 is useless, but whatever. Might change.
       const jitter = 1 + Math.random() * 1;
 
       return fetchWithKVFallback(
-        () => cachedFetchStandardEmbarkLeaderboardData(embarkApi, Math.round(this.cacheMinutes * 60 * jitter)),
+        () => cachedFetchStandardEmbarkLeaderboardData(embarkApi, kv, Math.round(this.cacheMinutes * 60 * jitter), ctx),
         kv,
         platform ? `backup_${this.id}_${platform}` : `backup_${this.id}`,
       );

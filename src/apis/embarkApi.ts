@@ -19,6 +19,7 @@ import { season10StarlightHollowSchema } from "../schemas/leaderboards/season10S
 import { season10TeamDeathmatchSchema } from "../schemas/leaderboards/season10TeamDeathmatch";
 import { season10The24HourGauntletSchema } from "../schemas/leaderboards/season10The24HourGauntlet";
 import { season10WorldTourSchema } from "../schemas/leaderboards/season10WorldTour";
+import type { BaseUser } from "../types";
 
 export type EmbarkApi = {
   url: string;
@@ -78,13 +79,8 @@ export const embarkApi = {
  * Fetches the standard leaderboard data from the Embark "API".
  * Returns the validated entries, or throws an error if there was an issue.
  */
-export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
-  const res = await fetch(api.url, {
-    // Use Cloudflare's edge cache to coalesce concurrent requests and avoid cache stampede.
-    // When multiple workers simultaneously miss the cache for the same URL, Cloudflare makes
-    // only one upstream request to Embark and serves the response to all waiting workers.
-    cf: cacheTtlSeconds ? { cacheEverything: true, cacheTtl: cacheTtlSeconds } : undefined,
-  });
+export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi) => {
+  const res = await fetch(api.url);
   const text = await res.text();
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
 
@@ -110,10 +106,8 @@ export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi, cacheTt
  * Fetches the standard community event data from the Embark "API".
  * Returns the validated entries and progress, or throws an error if there was an issue.
  */
-export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
-  const res = await fetch(api.url, {
-    cf: cacheTtlSeconds ? { cacheEverything: true, cacheTtl: cacheTtlSeconds } : undefined,
-  });
+export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi) => {
+  const res = await fetch(api.url);
   const text = await res.text();
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
 
@@ -139,16 +133,53 @@ export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi, cach
   return data;
 };
 
-/** Fetches the standard leaderboard data from the Embark API using Cloudflare's edge cache.
- * Cloudflare coalesces concurrent cache misses for the same URL into a single upstream request,
- * preventing cache stampedes when the TTL expires.
+/** Caches the standard leaderboard data from the Embark API in KV storage.
+ * If the data is already cached, it returns the cached data.
+ * If not, it fetches the data from the API, caches it, and returns the fetched data.
  */
-export const cachedFetchStandardEmbarkLeaderboardData = (api: EmbarkApi, ttlSeconds: number) =>
-  fetchStandardEmbarkLeaderboardData(api, ttlSeconds);
+export const cachedFetchStandardEmbarkLeaderboardData = async (
+  api: EmbarkApi,
+  KV: KVNamespace,
+  ttlSeconds: number,
+  ctx?: Pick<ExecutionContext, "waitUntil">,
+) => {
+  // If the data we're fetching is cached, return it immediately
+  const cacheKey = `cache_${new URL(api.url).pathname}`;
+  const cached = await KV.get<BaseUser[]>(cacheKey, { type: "json" });
+  if (cached !== null) {
+    return cached;
+  }
 
-/** Fetches the standard community event data from the Embark API using Cloudflare's edge cache.
- * Cloudflare coalesces concurrent cache misses for the same URL into a single upstream request,
- * preventing cache stampedes when the TTL expires.
+  // Fetch data from the Embark API
+  const data = await fetchStandardEmbarkLeaderboardData(api);
+
+  // Store the parsed data in KV with the specified TTL
+  ctx?.waitUntil(KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }));
+  return data;
+};
+
+/**
+ * Caches the standard community event data from the Embark API in KV storage.
+ * If the data is already cached, it returns the cached data.
+ * If not, it fetches the data from the API, caches it, and returns the fetched data.
  */
-export const cachedFetchStandardEmbarkCommunityEventData = (api: EmbarkApi, ttlSeconds: number) =>
-  fetchStandardEmbarkCommunityEventData(api, ttlSeconds);
+export const cachedFetchStandardEmbarkCommunityEventData = async (
+  api: EmbarkApi,
+  KV: KVNamespace,
+  ttlSeconds: number,
+  ctx?: ExecutionContext,
+) => {
+  // If the data we're fetching is cached, return it immediately
+  const cacheKey = `cache_${new URL(api.url).pathname}`;
+  const cached = await KV.get(cacheKey, { type: "json" });
+  if (cached !== null) {
+    return cached;
+  }
+
+  // Fetch data from the Embark API
+  const data = await fetchStandardEmbarkCommunityEventData(api);
+
+  // Store the parsed data in KV with the specified TTL
+  ctx?.waitUntil(KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }));
+  return data;
+};
