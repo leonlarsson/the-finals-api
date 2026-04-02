@@ -79,8 +79,11 @@ export const embarkApi = {
  * Fetches the standard leaderboard data from the Embark "API".
  * Returns the validated entries, or throws an error if there was an issue.
  */
-export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi) => {
-  const res = await fetch(api.url);
+export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
+  const res = await fetch(api.url, {
+    // Deduplicates concurrent Embark requests per PoP on KV cache miss.
+    cf: cacheTtlSeconds ? { cacheEverything: true, cacheTtl: cacheTtlSeconds } : undefined,
+  });
   const text = await res.text();
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
 
@@ -106,8 +109,10 @@ export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi) => {
  * Fetches the standard community event data from the Embark "API".
  * Returns the validated entries and progress, or throws an error if there was an issue.
  */
-export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi) => {
-  const res = await fetch(api.url);
+export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
+  const res = await fetch(api.url, {
+    cf: cacheTtlSeconds ? { cacheEverything: true, cacheTtl: cacheTtlSeconds } : undefined,
+  });
   const text = await res.text();
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
 
@@ -151,10 +156,14 @@ export const cachedFetchStandardEmbarkLeaderboardData = async (
   }
 
   // Fetch data from the Embark API
-  const data = await fetchStandardEmbarkLeaderboardData(api);
+  const data = await fetchStandardEmbarkLeaderboardData(api, ttlSeconds);
 
   // Store the parsed data in KV with the specified TTL
-  ctx?.waitUntil(KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }));
+  ctx?.waitUntil(
+    KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }).catch((e) =>
+      console.error(`KV PUT failed for key ${cacheKey}:`, e),
+    ),
+  );
   return data;
 };
 
@@ -177,9 +186,13 @@ export const cachedFetchStandardEmbarkCommunityEventData = async (
   }
 
   // Fetch data from the Embark API
-  const data = await fetchStandardEmbarkCommunityEventData(api);
+  const data = await fetchStandardEmbarkCommunityEventData(api, ttlSeconds);
 
   // Store the parsed data in KV with the specified TTL
-  ctx?.waitUntil(KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }));
+  ctx?.waitUntil(
+    KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }).catch((e) =>
+      console.error(`KV PUT failed for key ${cacheKey}:`, e),
+    ),
+  );
   return data;
 };
