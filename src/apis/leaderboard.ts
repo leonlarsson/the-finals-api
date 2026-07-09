@@ -725,146 +725,116 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
 
   // SEASON 10
-  createLiveLeaderboard(
-    {
-      id: "s10",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10",
-        description: "Get leaderboard data from the tenth season of THE FINALS.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10UserSchema,
+  createOldLeaderboard({
+    id: "s10",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10",
+      description: "Get leaderboard data from the tenth season of THE FINALS.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10sponsor",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 Sponsor",
-        description: "Get leaderboard data from the tenth season of THE FINALS - Sponsor.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10SponsorUserSchema,
+    zodSchemaOpenApi: season10UserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10sponsor",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 Sponsor",
+      description: "Get leaderboard data from the tenth season of THE FINALS - Sponsor.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10Sponsor,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10worldtour",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 World Tour",
-        description: "Get leaderboard data from the tenth season of THE FINALS - World Tour.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10WorldTourUserSchema,
+    zodSchemaOpenApi: season10SponsorUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10worldtour",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 World Tour",
+      description: "Get leaderboard data from the tenth season of THE FINALS - World Tour.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10WorldTour,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10powershift",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 PowerShift",
-        description: "Get leaderboard data from the tenth season of THE FINALS - PowerShift.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10PowerShiftUserSchema,
+    zodSchemaOpenApi: season10WorldTourUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10powershift",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 PowerShift",
+      description: "Get leaderboard data from the tenth season of THE FINALS - PowerShift.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10PowerShift,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10quickcash",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 Quick Cash",
-        description: "Get leaderboard data from the tenth season of THE FINALS - Quick Cash.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10QuickCashUserSchema,
+    zodSchemaOpenApi: season10PowerShiftUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10quickcash",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 Quick Cash",
+      description: "Get leaderboard data from the tenth season of THE FINALS - Quick Cash.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10QuickCash,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10teamdeathmatch",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 Team Deathmatch",
-        description: "Get leaderboard data from the tenth season of THE FINALS - Team Deathmatch.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10TeamDeathmatchUserSchema,
+    zodSchemaOpenApi: season10QuickCashUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10teamdeathmatch",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 Team Deathmatch",
+      description: "Get leaderboard data from the tenth season of THE FINALS - Team Deathmatch.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10TeamDeathmatch,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10pointbreak",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 Point Break",
-        description: "Get leaderboard data from the tenth season of THE FINALS - Point Break.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10PointBreakUserSchema,
+    zodSchemaOpenApi: season10TeamDeathmatchUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10pointbreak",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 Point Break",
+      description: "Get leaderboard data from the tenth season of THE FINALS - Point Break.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10PointBreak,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10starlighthollow",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 Starlight Hollow",
-        description: "Get leaderboard data from the tenth season of THE FINALS - Starlight Hollow.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10StarlightHollowUserSchema,
+    zodSchemaOpenApi: season10PointBreakUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10starlighthollow",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 Starlight Hollow",
+      description: "Get leaderboard data from the tenth season of THE FINALS - Starlight Hollow.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10StarlightHollow,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10the24hourgauntlet",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 The 24 Hour Gauntlet",
-        description: "Get leaderboard data from the tenth season of THE FINALS - The 24 Hour Gauntlet.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10The24HourGauntletUserSchema,
+    zodSchemaOpenApi: season10StarlightHollowUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10the24hourgauntlet",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 The 24 Hour Gauntlet",
+      description: "Get leaderboard data from the tenth season of THE FINALS - The 24 Hour Gauntlet.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10The24HourGauntlet,
-  ),
-  createLiveLeaderboard(
-    {
-      id: "s10creatorgauntlet",
-      availablePlatforms: ["crossplay"],
-      hasClubData: true,
-      metadata: {
-        summary: "Season 10 Creator Gauntlet",
-        description: "Get leaderboard data from the tenth season of THE FINALS - Creator Gauntlet.",
-        tags: ["Leaderboards"],
-      },
-      zodSchemaOpenApi: season10CreatorGauntletUserSchema,
+    zodSchemaOpenApi: season10The24HourGauntletUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s10creatorgauntlet",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 10 Creator Gauntlet",
+      description: "Get leaderboard data from the tenth season of THE FINALS - Creator Gauntlet.",
+      tags: ["Leaderboards"],
     },
-    embarkApi.season10CreatorGauntlet,
-  ),
+    zodSchemaOpenApi: season10CreatorGauntletUserSchema,
+  }),
 
   // Special leaderboards not tied to a season
   createOldLeaderboard({
