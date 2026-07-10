@@ -62,6 +62,13 @@ import { season10StarlightHollowUserSchema } from "../schemas/leaderboards/seaso
 import { season10TeamDeathmatchUserSchema } from "../schemas/leaderboards/season10TeamDeathmatch";
 import { season10The24HourGauntletUserSchema } from "../schemas/leaderboards/season10The24HourGauntlet";
 import { season10WorldTourUserSchema } from "../schemas/leaderboards/season10WorldTour";
+import { season11UserSchema } from "../schemas/leaderboards/season11";
+import { season11PointBreakUserSchema } from "../schemas/leaderboards/season11PointBreak";
+import { season11PowerShiftUserSchema } from "../schemas/leaderboards/season11PowerShift";
+import { season11QuickCashUserSchema } from "../schemas/leaderboards/season11QuickCash";
+import { season11SponsorUserSchema } from "../schemas/leaderboards/season11Sponsor";
+import { season11TeamDeathmatchUserSchema } from "../schemas/leaderboards/season11TeamDeathmatch";
+import { season11WorldTourUserSchema } from "../schemas/leaderboards/season11WorldTour";
 import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
@@ -835,6 +842,106 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
     },
     zodSchemaOpenApi: season10CreatorGauntletUserSchema,
   }),
+
+  // SEASON 11
+  createLiveLeaderboard(
+    {
+      id: "s11",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11",
+        description: "Get leaderboard data from the eleventh season of THE FINALS.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11UserSchema,
+    },
+    embarkApi.season11,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s11sponsor",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11 Sponsor",
+        description: "Get leaderboard data from the eleventh season of THE FINALS - Sponsor.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11SponsorUserSchema,
+    },
+    embarkApi.season11Sponsor,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s11worldtour",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11 World Tour",
+        description: "Get leaderboard data from the eleventh season of THE FINALS - World Tour.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11WorldTourUserSchema,
+    },
+    embarkApi.season11WorldTour,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s11powershift",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11 PowerShift",
+        description: "Get leaderboard data from the eleventh season of THE FINALS - PowerShift.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11PowerShiftUserSchema,
+    },
+    embarkApi.season11PowerShift,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s11quickcash",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11 Quick Cash",
+        description: "Get leaderboard data from the eleventh season of THE FINALS - Quick Cash.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11QuickCashUserSchema,
+    },
+    embarkApi.season11QuickCash,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s11teamdeathmatch",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11 Team Deathmatch",
+        description: "Get leaderboard data from the eleventh season of THE FINALS - Team Deathmatch.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11TeamDeathmatchUserSchema,
+    },
+    embarkApi.season11TeamDeathmatch,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s11pointbreak",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11 Point Break",
+        description: "Get leaderboard data from the eleventh season of THE FINALS - Point Break.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11PointBreakUserSchema,
+    },
+    embarkApi.season11PointBreak,
+  ),
 
   // Special leaderboards not tied to a season
   createOldLeaderboard({
