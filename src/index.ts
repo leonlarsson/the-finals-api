@@ -11,6 +11,7 @@ import { registerTflNoticeRoutes } from "./routes/tfl-notice";
 import type { HonoEnv } from "./types";
 import { backupToKV } from "./utils/backupToKV";
 import { backupToR2 } from "./utils/backupToR2";
+import { backfillOldLeaderboardsToD1, indexLiveLeaderboardsToD1 } from "./utils/indexToD1";
 
 const app = new OpenAPIHono<HonoEnv>();
 export type App = typeof app;
@@ -104,6 +105,7 @@ export default {
     // KV backup every 2 hours
     if (event.cron === "0 */2 * * *") {
       ctx.waitUntil(backupToKV(env.KV));
+      ctx.waitUntil(indexLiveLeaderboardsToD1(env.DB, env.KV));
     }
 
     // R2 backup every 12 hours - used for AutoRAG
@@ -117,7 +119,13 @@ app.post("/backup-to-kv-via-workflow", authentication, async (c) => {
   await c.env.BACKUP_WORKFLOW.create();
 });
 
+// backs up all live leaderboards to KV
 app.post("/backup-to-kv", authentication, (c) => backupToKV(c.env.KV));
+// backs up all live leaderboards to R2, used for AutoRAG
 app.post("/backup-to-r2", authentication, (c) => backupToR2(c.env.KV, c.env.R2));
+// one-time index of every frozen leaderboard into D1
+app.post("/backfill-old-leaderboards-to-d1", authentication, (c) => backfillOldLeaderboardsToD1(c.env.DB, c.env.KV));
+// re-runs the same D1 index the 2h cron does, for a fresh snapshot on demand
+app.post("/index-live-leaderboards-to-d1", authentication, (c) => indexLiveLeaderboardsToD1(c.env.DB, c.env.KV));
 
 export { BackupWorkflow } from "./workflows/backup";
