@@ -24,8 +24,10 @@ const getRank = (entry: BaseUser | ClubBaseUser) => {
   return typeof rank === "number" ? rank : null;
 };
 
-// 13 bound params per row. sqlite's variable limit is 999, so this must stay under 76 per batch.
-const BATCH_SIZE = 50;
+// 13 params per row, D1's real limit is ~100 per statement (not sqlite's usual 999), stay under 8.
+const ROWS_PER_STATEMENT = 6;
+// Statements grouped into one db.batch() call, so this is one network round-trip, not many.
+const STATEMENTS_PER_BATCH = 50;
 
 // Upserts a leaderboard's entries into leaderboard_entries.
 export const indexEntriesToD1 = async (
@@ -55,9 +57,8 @@ export const indexEntriesToD1 = async (
     };
   });
 
-  for (let i = 0; i < rows.length; i += BATCH_SIZE) {
-    const chunk = rows.slice(i, i + BATCH_SIZE);
-    await db
+  const upsert = (chunk: typeof rows) =>
+    db
       .insert(leaderboardEntries)
       .values(chunk)
       .onConflictDoUpdate({
@@ -73,6 +74,15 @@ export const indexEntriesToD1 = async (
           updatedAt: sql`excluded.updated_at`,
         },
       });
+
+  const statements = [];
+  for (let i = 0; i < rows.length; i += ROWS_PER_STATEMENT) {
+    statements.push(upsert(rows.slice(i, i + ROWS_PER_STATEMENT)));
+  }
+
+  for (let i = 0; i < statements.length; i += STATEMENTS_PER_BATCH) {
+    const group = statements.slice(i, i + STATEMENTS_PER_BATCH);
+    if (group.length) await db.batch(group as [(typeof statements)[number], ...(typeof statements)[number][]]);
   }
 };
 
@@ -121,7 +131,8 @@ const indexRoutes = async (db: DrizzleD1Database, kv: KVNamespace, routes: BaseA
         const data = await route.fetchData({ kv, platform });
         await indexEntriesToD1(db, route.id, platform, data);
       } catch (error) {
-        console.error(`Error indexing leaderboard '${route.id}' (${platform ?? "no platform"}) to D1:`, error);
+        const cause = error instanceof Error && error.cause ? String(error.cause) : String(error);
+        console.error(`Error indexing leaderboard '${route.id}' (${platform ?? "no platform"}) to D1: ${cause}`);
       }
     }
   }
