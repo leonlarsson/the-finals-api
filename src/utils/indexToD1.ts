@@ -24,7 +24,8 @@ const getRank = (entry: BaseUser | ClubBaseUser) => {
   return typeof rank === "number" ? rank : null;
 };
 
-const BATCH_SIZE = 100;
+// 13 bound params per row. sqlite's variable limit is 999, so this must stay under 76 per batch.
+const BATCH_SIZE = 50;
 
 // Upserts a leaderboard's entries into leaderboard_entries.
 export const indexEntriesToD1 = async (
