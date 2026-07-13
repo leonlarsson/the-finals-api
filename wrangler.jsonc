@@ -21,6 +21,19 @@
     }
   ],
 
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "the-finals-api",
+      "database_id": "feb1a0ae-90cd-402a-bd4f-126e8ee48b3c"
+    }
+  ],
+
+  // uncomment when needing to run /backfill-old-leaderboards-to-d1
+  // "limits": {
+  //   "cpu_ms": 300000
+  // },
+
   "triggers": {
     "crons": [
       // Every 2 hours at minute 0
