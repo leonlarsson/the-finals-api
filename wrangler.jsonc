@@ -29,6 +29,11 @@
     }
   ],
 
+  // uncomment when needing to run /backfill-old-leaderboards-to-d1
+  // "limits": {
+  //   "cpu_ms": 300000
+  // },
+
   "triggers": {
     "crons": [
       // Every 2 hours at minute 0
