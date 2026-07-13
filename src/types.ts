@@ -78,4 +78,5 @@ export type Tags =
   | "Leaderboards - Special"
   | "Community Events"
   | "Clubs"
+  | "Players"
   | "the-finals-leaderboard.com";

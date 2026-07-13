@@ -7,6 +7,7 @@ import { authentication } from "./middleware/authentication";
 import { registerClubRoutes } from "./routes/clubs";
 import { registerCommunityEventRoutes } from "./routes/community-event";
 import { registerLeaderboardRoutes } from "./routes/leaderboard";
+import { registerPlayerRoutes } from "./routes/player";
 import { registerTflNoticeRoutes } from "./routes/tfl-notice";
 import type { HonoEnv } from "./types";
 import { backupToKV } from "./utils/backupToKV";
@@ -29,6 +30,7 @@ registerAuthComponent(app);
 registerLeaderboardRoutes(app);
 registerCommunityEventRoutes(app);
 registerClubRoutes(app);
+registerPlayerRoutes(app);
 registerTflNoticeRoutes(app);
 
 // The OpenAPI spec will be available at /openapi.json
@@ -49,6 +51,10 @@ app.doc("/openapi.json", {
     {
       name: "Clubs",
       description: "Endpoints for clubs.",
+    },
+    {
+      name: "Players",
+      description: "Endpoints for players.",
     },
     {
       name: "the-finals-leaderboard.com",

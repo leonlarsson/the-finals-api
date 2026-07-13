@@ -14,6 +14,24 @@ import {
 } from "../schemas/responses";
 import type { BaseAPIRoute } from "../types";
 
+// Parses a comma-separated query param (e.g. ?platforms=steam,xbox) into a validated array
+export const commaSeparatedQuerySchema = <T extends [string, ...string[]]>(
+  paramName: string,
+  allowedValues: T,
+  options: { description: string; example: string },
+) =>
+  z
+    .string()
+    .max(200)
+    .optional()
+    .transform((val) => val?.split(",").map((v) => v.trim()))
+    .pipe(z.array(z.enum(allowedValues)).optional())
+    .openapi({
+      param: { name: paramName, in: "query" },
+      description: options.description,
+      example: options.example,
+    });
+
 export const standardQueryParams = () =>
   z.object({
     count: leaderboardCountQuerySchema,
