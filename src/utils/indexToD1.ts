@@ -1,4 +1,4 @@
-import { and, isNotNull, sql } from "drizzle-orm";
+import { and, eq, isNotNull, isNull, lt, sql } from "drizzle-orm";
 import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { clubRankings, leaderboardEntries } from "../db/schema";
@@ -83,6 +83,19 @@ export const indexEntriesToD1 = async (
   for (let i = 0; i < statements.length; i += STATEMENTS_PER_BATCH) {
     const group = statements.slice(i, i + STATEMENTS_PER_BATCH);
     if (group.length) await db.batch(group as [(typeof statements)[number], ...(typeof statements)[number][]]);
+  }
+
+  // deletes rows not touched by this run, skipped on empty fetch to avoid wiping real data
+  if (rows.length > 0) {
+    await db
+      .delete(leaderboardEntries)
+      .where(
+        and(
+          eq(leaderboardEntries.leaderboardId, leaderboardId),
+          platform ? eq(leaderboardEntries.platform, platform) : isNull(leaderboardEntries.platform),
+          lt(leaderboardEntries.updatedAt, now),
+        ),
+      );
   }
 };
 
