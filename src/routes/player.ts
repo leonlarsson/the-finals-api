@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { and, asc, inArray, like, or, sql } from "drizzle-orm";
+import { and, asc, like, or, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import type { App } from "..";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
@@ -190,8 +190,12 @@ export const registerPlayerRoutes = (app: App) => {
       exactMatch ? sql`${field} = ${q} COLLATE NOCASE` : like(field, likePattern);
 
     const fieldMatch = or(...fields.map((field) => matchField(searchableFields[field])));
+    // json_each binds the list as one param, avoiding D1's ~100 bound-parameter limit
     const where = leaderboards?.length
-      ? and(inArray(leaderboardEntries.leaderboardId, leaderboards), fieldMatch)
+      ? and(
+          sql`${leaderboardEntries.leaderboardId} IN (SELECT value FROM json_each(${JSON.stringify(leaderboards)}))`,
+          fieldMatch,
+        )
       : fieldMatch;
 
     let rows: (typeof leaderboardEntries.$inferSelect)[];

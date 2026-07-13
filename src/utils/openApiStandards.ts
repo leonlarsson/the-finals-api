@@ -22,7 +22,6 @@ export const commaSeparatedQuerySchema = <T extends [string, ...string[]]>(
 ) =>
   z
     .string()
-    .max(200)
     .optional()
     .transform((val) => val?.split(",").map((v) => v.trim()))
     .pipe(z.array(z.enum(allowedValues)).optional())
