@@ -4,6 +4,7 @@ import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { cache } from "../middleware/cache";
 import { withSearchParams } from "../middleware/withSearchParams";
 import type { ClubBaseUser, Tags } from "../types";
+import { getEntryValue } from "../utils/getEntryValue";
 
 const path = "/v1/clubs";
 const tags = ["Clubs"] satisfies Tags[];
@@ -133,12 +134,7 @@ export const registerClubRoutes = (app: App) => {
           if (!leaderboardUser.clubTag) continue;
 
           // Calculate total value for ranking
-          const value =
-            leaderboardUser.rankScore ??
-            leaderboardUser.fans ??
-            leaderboardUser.cashouts ??
-            leaderboardUser.points ??
-            0;
+          const value = getEntryValue(leaderboardUser) ?? 0;
           clubScores.set(leaderboardUser.clubTag, (clubScores.get(leaderboardUser.clubTag) || 0) + value);
 
           // Collect members

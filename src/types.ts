@@ -54,6 +54,8 @@ export type BaseUser = {
   steamName: string;
   psnName: string;
   xboxName: string;
+  score?: number;
+  tournamentWins?: number;
 };
 
 /** Base properties that exists in all club users. */
@@ -67,6 +69,8 @@ export type ClubBaseUser = {
   fans?: number;
   cashouts?: number;
   points?: number;
+  score?: number;
+  tournamentWins?: number;
 };
 
 export type Tags =

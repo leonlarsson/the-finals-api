@@ -3,18 +3,13 @@ import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { clubRankings, leaderboardEntries } from "../db/schema";
 import type { BaseAPIRoute, BaseUser, ClubBaseUser, LeaderboardPlatforms } from "../types";
+import { getEntryValue } from "./getEntryValue";
 
 const splitName = (name: string) => {
   const i = name.lastIndexOf("#");
   return i === -1
     ? { displayName: name, discriminator: null as string | null }
     : { displayName: name.slice(0, i), discriminator: name.slice(i + 1) };
-};
-
-// Value in the DB currently means the main score entity
-const getValue = (entry: BaseUser | ClubBaseUser) => {
-  const clubEntry = entry as ClubBaseUser;
-  return clubEntry.rankScore ?? clubEntry.fans ?? clubEntry.cashouts ?? clubEntry.points ?? null;
 };
 
 const getClubTag = (entry: BaseUser | ClubBaseUser) => (entry as ClubBaseUser).clubTag || null;
@@ -51,7 +46,7 @@ export const indexEntriesToD1 = async (
       psnName: entry.psnName || null,
       clubTag: getClubTag(entry),
       rank: getRank(entry),
-      value: getValue(entry),
+      value: getEntryValue(entry),
       rawEntry: JSON.stringify(entry),
       updatedAt: now,
     };
