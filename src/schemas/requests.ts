@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { BaseAPIRoute } from "../types";
+import { booleanQuerySchema } from "../utils/openApiParams";
 
 export const leaderboardPlatformParamSchema = (apiRoute: BaseAPIRoute) =>
   z
@@ -14,18 +15,10 @@ export const leaderboardPlatformParamSchema = (apiRoute: BaseAPIRoute) =>
       example: apiRoute.availablePlatforms[0],
     });
 
-export const leaderboardCountQuerySchema = z
-  .enum(["true", "false"])
-  .default("false")
-  .transform((v) => v === "true")
-  .openapi({
-    param: {
-      name: "count",
-      in: "query",
-    },
-    example: "true",
-    description: "Return only the count of the leaderboard.",
-  });
+export const leaderboardCountQuerySchema = booleanQuerySchema("count", {
+  description: "Return only the count of the leaderboard.",
+  example: "true",
+});
 
 export const leaderboardNameQuerySchema = z
   .string()
@@ -51,15 +44,7 @@ export const leaderboardClubTagQuerySchema = z
     example: "OG",
   });
 
-export const leaderboardExactClubTagQuerySchema = z
-  .enum(["true", "false"])
-  .default("false")
-  .transform((v) => v === "true")
-  .openapi({
-    param: {
-      name: "exactClubTag",
-      in: "query",
-    },
-    description: "Whether to filter by exact club tag. Will only work in leaderboards that support club tags.",
-    example: "true",
-  });
+export const leaderboardExactClubTagQuerySchema = booleanQuerySchema("exactClubTag", {
+  description: "Whether to filter by exact club tag. Will only work in leaderboards that support club tags.",
+  example: "true",
+});

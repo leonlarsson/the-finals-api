@@ -6,7 +6,7 @@ import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { leaderboardEntries } from "../db/schema";
 import { cache } from "../middleware/cache";
 import type { Tags } from "../types";
-import { commaSeparatedQuerySchema } from "../utils/openApiStandards";
+import { booleanQuerySchema, commaSeparatedQuerySchema } from "../utils/openApiParams";
 
 const tags = ["Players"] satisfies Tags[];
 
@@ -159,15 +159,9 @@ export const registerPlayerRoutes = (app: App) => {
           description: "Comma-separated leaderboard IDs to restrict the search to. Defaults to all leaderboards.",
           example: "s11,s8sponsor",
         }),
-        exactMatch: z
-          .enum(["true", "false"])
-          .default("false")
-          .transform((v) => v === "true")
-          .openapi({
-            param: { name: "exactMatch", in: "query" },
-            description: "Whether to match the whole field exactly instead of a partial match.",
-            example: "false",
-          }),
+        exactMatch: booleanQuerySchema("exactMatch", {
+          description: "Whether to match the whole field exactly instead of a partial match.",
+        }),
       }),
     },
     tags,

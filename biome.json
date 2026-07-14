@@ -1,15 +1,13 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
   "files": {
-    "ignore": [".vscode", ".wrangler", "worker-configuration.d.ts"]
+    "includes": ["**", "!**/.vscode", "!**/.wrangler", "!**/worker-configuration.d.ts"]
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "style": {
         "noNonNullAssertion": "off"
       },

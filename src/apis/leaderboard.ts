@@ -73,7 +73,7 @@ import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
 import { getJsonFromKV } from "../utils/kv";
-import { type EmbarkApi, cachedFetchStandardEmbarkLeaderboardData, embarkApi } from "./embarkApi";
+import { cachedFetchStandardEmbarkLeaderboardData, type EmbarkApi, embarkApi } from "./embarkApi";
 
 const allPlatforms: LeaderboardPlatforms[] = ["crossplay", "steam", "xbox", "psn"];
 

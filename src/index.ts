@@ -1,5 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { apiReference } from "@scalar/hono-api-reference";
+import { Scalar } from "@scalar/hono-api-reference";
 import { contextStorage } from "hono/context-storage";
 import { cors } from "hono/cors";
 import { registerAuthComponent } from "./components/auth";
@@ -14,7 +14,14 @@ import { backupToKV } from "./utils/backupToKV";
 import { backupToR2 } from "./utils/backupToR2";
 import { backfillOldLeaderboardsToD1, indexLiveLeaderboardsToD1 } from "./utils/indexToD1";
 
-const app = new OpenAPIHono<HonoEnv>();
+const app = new OpenAPIHono<HonoEnv>({
+  // zod v4 changed ZodError's default JSON shape; restore the v3 issues-array shape for API consumers
+  defaultHook: (result, c) => {
+    if (!result.success) {
+      return c.json({ success: false, error: { issues: result.error.issues, name: result.error.name } }, 400);
+    }
+  },
+});
 export type App = typeof app;
 
 // Enable CORS for all routes
@@ -87,16 +94,21 @@ app.doc("/openapi.json", {
 // The API Reference will be available at /
 app.get(
   "/",
-  apiReference({
+  Scalar({
     spec: {
       url: "/openapi.json",
     },
-    // (No longer) Downgraded to avoid: https://github.com/scalar/scalar/issues/4167 and https://github.com/scalar/scalar/issues/4210
-    cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.28.7",
+    cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.62.4",
     pageTitle: "THE FINALS API",
     favicon: "https://the-finals-leaderboard.com/favicon.png",
-    theme: "default",
+    theme: "deepSpace",
     layout: "modern",
+
+    // Disable unused things
+    showDeveloperTools: "never",
+    mcp: { disabled: true },
+    agent: { disabled: true },
+    hideClientButton: true,
   }),
 );
 

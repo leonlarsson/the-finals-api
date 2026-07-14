@@ -4,7 +4,7 @@ import type { HonoEnv } from "../types";
 const context = () => {
   try {
     return getContext<HonoEnv>();
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 };

@@ -6,7 +6,7 @@ import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { clubRankings, leaderboardEntries } from "../db/schema";
 import { cache } from "../middleware/cache";
 import type { Tags } from "../types";
-import { commaSeparatedQuerySchema } from "../utils/openApiStandards";
+import { booleanQuerySchema, commaSeparatedQuerySchema } from "../utils/openApiParams";
 
 const tags = ["Clubs"] satisfies Tags[];
 
@@ -75,15 +75,9 @@ export const registerClubRoutes = (app: App) => {
           }),
       }),
       query: z.object({
-        withMembers: z
-          .enum(["true", "false"])
-          .default("false")
-          .transform((v) => v === "true")
-          .openapi({
-            param: { name: "withMembers", in: "query" },
-            description: "Whether to also include the club's member list.",
-            example: "false",
-          }),
+        withMembers: booleanQuerySchema("withMembers", {
+          description: "Whether to also include the club's member list.",
+        }),
       }),
     },
     tags,
@@ -162,24 +156,12 @@ export const registerClubRoutes = (app: App) => {
             description: "Partial club tag to search for. Minimum 2, maximum 100 characters.",
             example: "EMBRK",
           }),
-        exactMatch: z
-          .enum(["true", "false"])
-          .default("false")
-          .transform((v) => v === "true")
-          .openapi({
-            param: { name: "exactMatch", in: "query" },
-            description: "Whether to match the whole club tag exactly instead of a partial match.",
-            example: "false",
-          }),
-        withMembers: z
-          .enum(["true", "false"])
-          .default("false")
-          .transform((v) => v === "true")
-          .openapi({
-            param: { name: "withMembers", in: "query" },
-            description: "Whether to also include each matched club's member list.",
-            example: "false",
-          }),
+        exactMatch: booleanQuerySchema("exactMatch", {
+          description: "Whether to match the whole club tag exactly instead of a partial match.",
+        }),
+        withMembers: booleanQuerySchema("withMembers", {
+          description: "Whether to also include each matched club's member list.",
+        }),
         leaderboards: commaSeparatedQuerySchema("leaderboards", clubLeaderboardIds, {
           description:
             "Comma-separated leaderboard IDs to restrict the search to. Unrecognized IDs are ignored. Defaults to all leaderboards.",
