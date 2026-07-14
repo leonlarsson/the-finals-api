@@ -1,212 +1,301 @@
 import { createRoute, z } from "@hono/zod-openapi";
+import { and, asc, like, sql } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/d1";
 import type { App } from "..";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
+import { clubRankings, leaderboardEntries } from "../db/schema";
 import { cache } from "../middleware/cache";
-import { withSearchParams } from "../middleware/withSearchParams";
-import type { ClubBaseUser, Tags } from "../types";
-import { getEntryValue } from "../utils/getEntryValue";
+import type { Tags } from "../types";
+import { commaSeparatedQuerySchema } from "../utils/openApiStandards";
 
-const path = "/v1/clubs";
 const tags = ["Clubs"] satisfies Tags[];
 
-const returnSchema = z
-  .object({
-    clubTag: z.string().openapi({ description: "The club tag.", example: "API" }),
-    members: z
-      .object({
-        name: z.string().openapi({ description: "The member's name.", example: "Mozzy#9999" }),
-      })
-      .array()
-      .openapi({
-        description: "The members in the club. Only users in the top 10K of any relevant leaderboard will show here.",
-        example: [{ name: "Mozzy#9999" }, { name: "TheFinalsApi#1337" }],
-      }),
-    leaderboards: z
-      .object({
-        leaderboard: z.string().openapi({ description: "The leaderboard identifier." }),
-        rank: z.number().openapi({ description: "The rank of the club in this leaderboard." }),
-        totalValue: z.number().openapi({
-          description:
-            "The total value of the club in this leaderboard. Combined rank score, fans, cashouts, or points of players from this club in the top 10K of players.",
-        }),
-      })
-      .array()
-      .openapi({
-        description: "The club's ranks and values in different leaderboards.",
-        example: [
-          {
-            leaderboard: "s5",
-            rank: 1,
-            totalValue: 1_408_049,
-          },
-          {
-            leaderboard: "s5sponsor",
-            rank: 5,
-            totalValue: 3_132_748,
-          },
-        ],
-      }),
-  })
-  .array()
-  .openapi({ description: "Club data, categorized by leaderboards." });
+const clubLeaderboardIds = leaderboardApiRoutes.filter((route) => route.hasClubData).map((route) => route.id) as [
+  string,
+  ...string[],
+];
+
+const badRequestSchema = z.object({ error: z.string() });
+
+const clubEntrySchema = z.object({
+  leaderboardId: z.string().openapi({ description: "The leaderboard identifier.", example: "s11" }),
+  totalValue: z.number().openapi({
+    description: "The club's combined rank score, fans, cashouts, or points on this leaderboard.",
+  }),
+  memberCount: z.number().openapi({ description: "The number of members contributing to this leaderboard." }),
+  clubRank: z.number().openapi({ description: "The club's rank on this leaderboard." }),
+  updatedAt: z
+    .string()
+    .openapi({ description: "When this entry was last indexed.", example: "2026-07-13T18:02:09.342Z" }),
+});
+
+const clubMemberSchema = z.object({
+  name: z.string().openapi({ description: "The member's name.", example: "Mozzy#9999" }),
+});
+
+const clubReturnSchema = z.object({
+  clubTag: z.string().openapi({ description: "The club tag.", example: "EMBRK" }),
+  members: clubMemberSchema
+    .array()
+    .openapi({ description: "Members of this club. Only users in the top 10K of any relevant leaderboard show here." }),
+  leaderboards: clubEntrySchema.array().openapi({ description: "Every leaderboard this club appears in." }),
+});
+
+const searchReturnSchema = z.object({
+  query: z.string(),
+  exactMatch: z.boolean(),
+  leaderboards: z
+    .string()
+    .array()
+    .nullable()
+    .openapi({ description: "The leaderboards the search was restricted to. Null means all leaderboards." }),
+  count: z.number().openapi({ description: "The number of unique clubs returned. Capped at 1,000." }),
+  clubs: clubReturnSchema.array(),
+});
+
+const notFoundSchema = z.object({
+  error: z.string(),
+  searchUrl: z.string().openapi({ description: "Try a partial-match search instead.", example: "/v1/clubs?q=EMBRK" }),
+});
 
 export const registerClubRoutes = (app: App) => {
   const getRoute = createRoute({
     method: "get",
-    path,
-    middleware: [withSearchParams(["clubTag", "exactClubTag"]), cache("v1-clubs", 30)],
+    path: "/v1/club/{clubTag}",
+    middleware: [cache("v1-club", 10)],
     request: {
-      query: z.object({
+      params: z.object({
         clubTag: z
           .string()
-          .optional()
+          .max(100)
           .openapi({
-            param: {
-              name: "clubTag",
-              in: "query",
-            },
-            description: "The club tag to filter by.",
-            example: "OG",
+            param: { name: "clubTag", in: "path" },
+            description: "The exact club tag to search for. Case-insensitive.",
+            example: "EMBRK",
           }),
-        exactClubTag: z
+      }),
+      query: z.object({
+        withMembers: z
           .enum(["true", "false"])
           .default("false")
           .transform((v) => v === "true")
           .openapi({
-            param: {
-              name: "exactClubTag",
-              in: "query",
-            },
-            description: "Whether to filter by exact club tag.",
-            example: "true",
+            param: { name: "withMembers", in: "query" },
+            description: "Whether to also include the club's member list.",
+            example: "false",
           }),
       }),
     },
     tags,
-    summary: "Get clubs",
+    summary: "Get a club",
     description:
-      "Get all clubs and their data. VERY experimental API. Includes any club that has any player in the top 10K of any mode (from any season that has clubs). This returns A LOT of data without filters.",
+      "Get a club's entries across every leaderboard it appears on, by exact (case-insensitive) club tag match. Backed by a D1 index refreshed every 2 hours for live leaderboards.",
     responses: {
       200: {
-        description: "The club data.",
-        content: {
-          "application/json": {
-            schema: returnSchema,
-          },
-        },
+        description: "The club's data.",
+        content: { "application/json": { schema: clubReturnSchema } },
+      },
+      404: {
+        description: "No club found with this club tag.",
+        content: { "application/json": { schema: notFoundSchema } },
       },
     },
   });
 
   app.openapi(getRoute, async (c) => {
-    const { clubTag, exactClubTag: useExactClubTag } = c.req.valid("query");
+    const { clubTag } = c.req.valid("param");
+    const { withMembers } = c.req.valid("query");
+    const db = drizzle(c.env.DB);
 
-    const normalizedClubTagFilter = clubTag?.toLowerCase();
+    const [rankingRows, memberRows] = await Promise.all([
+      db
+        .select()
+        .from(clubRankings)
+        .where(sql`${clubRankings.clubTag} = ${clubTag} COLLATE NOCASE`)
+        .orderBy(asc(clubRankings.clubRank)),
+      withMembers
+        ? db
+            .selectDistinct({ name: leaderboardEntries.name })
+            .from(leaderboardEntries)
+            .where(sql`${leaderboardEntries.clubTag} = ${clubTag} COLLATE NOCASE`)
+        : [],
+    ]);
 
-    const leaderboardWithClubs = leaderboardApiRoutes.filter((route) => route.hasClubData);
+    if (rankingRows.length === 0) {
+      return c.json(
+        {
+          error: `No club found with tag '${clubTag}'.`,
+          searchUrl: `/v1/clubs?q=${encodeURIComponent(clubTag)}`,
+        } satisfies z.infer<typeof notFoundSchema>,
+        404,
+      );
+    }
 
-    // Create a single map for club aggregation
-    const clubsMap = new Map<
-      string,
+    return c.json(
       {
-        clubTag: string;
-        members: Map<string, { name: string }>;
-        leaderboards: { leaderboard: string; rank: number; totalValue: number }[];
-      }
-    >();
-
-    await Promise.all(
-      leaderboardWithClubs.map(async (route) => {
-        const leaderboardData = (await route.fetchData({
-          ctx: c.executionCtx,
-          kv: c.env.KV,
-          platform: "crossplay",
-        })) as ClubBaseUser[];
-        const leaderboardId = route.id;
-
-        // Calculate scores in a single pass
-        const clubScores = new Map<string, number>();
-
-        // Create a temporary map to track all clubs and their members
-        const tempClubMembers = new Map<string, Set<string>>();
-
-        for (const leaderboardUser of leaderboardData) {
-          if (!leaderboardUser.clubTag) continue;
-
-          // Calculate total value for ranking
-          const value = getEntryValue(leaderboardUser) ?? 0;
-          clubScores.set(leaderboardUser.clubTag, (clubScores.get(leaderboardUser.clubTag) || 0) + value);
-
-          // Collect members
-          if (leaderboardUser.name) {
-            let memberSet = tempClubMembers.get(leaderboardUser.clubTag);
-            if (!memberSet) {
-              memberSet = new Set();
-              tempClubMembers.set(leaderboardUser.clubTag, memberSet);
-            }
-            memberSet.add(leaderboardUser.name);
-          }
-        }
-
-        // Calculate ranks
-        const clubRanks = new Map<string, { rank: number; totalValue: number }>();
-
-        [...clubScores.entries()]
-          .sort((a, b) => b[1] - a[1])
-          .forEach(([clubTag, totalValue], index) => {
-            clubRanks.set(clubTag, { rank: index + 1, totalValue });
-          });
-
-        // Process filtered clubs
-        for (const [clubTag, rankData] of clubRanks.entries()) {
-          // Apply filtering
-          if (normalizedClubTagFilter) {
-            const normalizedClubTag = clubTag.toLowerCase();
-            if (useExactClubTag) {
-              if (normalizedClubTag !== normalizedClubTagFilter) continue;
-            } else {
-              if (!normalizedClubTag.includes(normalizedClubTagFilter)) continue;
-            }
-          }
-
-          // Add or update club in the global map
-          let clubData = clubsMap.get(clubTag);
-          if (!clubData) {
-            clubData = {
-              clubTag,
-              members: new Map(),
-              leaderboards: [],
-            };
-            clubsMap.set(clubTag, clubData);
-          }
-
-          // Add leaderboard data
-          clubData.leaderboards.push({
-            leaderboard: leaderboardId,
-            rank: rankData.rank,
-            totalValue: rankData.totalValue,
-          });
-
-          // Add members
-          const memberSet = tempClubMembers.get(clubTag);
-          if (memberSet) {
-            for (const name of memberSet) {
-              clubData.members.set(name, { name });
-            }
-          }
-        }
-      }),
+        clubTag: rankingRows[0].clubTag,
+        members: memberRows.map((row) => ({ name: row.name })),
+        leaderboards: rankingRows.map((row) => ({
+          leaderboardId: row.leaderboardId,
+          totalValue: row.totalValue,
+          memberCount: row.memberCount,
+          clubRank: row.clubRank,
+          updatedAt: new Date(row.updatedAt).toISOString(),
+        })),
+      } satisfies z.infer<typeof clubReturnSchema>,
+      200,
     );
+  });
 
-    // Create final response
-    const response = [...clubsMap.values()]
-      .map((club) => ({
-        clubTag: club.clubTag,
-        members: Array.from(club.members.values()),
-        leaderboards: club.leaderboards.sort((a, b) => a.rank - b.rank),
-      }))
-      .sort((a, b) => a.clubTag.localeCompare(b.clubTag));
+  const searchRoute = createRoute({
+    method: "get",
+    path: "/v1/clubs",
+    middleware: [cache("v1-clubs-search", 10)],
+    request: {
+      query: z.object({
+        q: z
+          .string()
+          .min(2)
+          .max(100)
+          .openapi({
+            param: { name: "q", in: "query" },
+            description: "Partial club tag to search for. Minimum 2, maximum 100 characters.",
+            example: "EMBRK",
+          }),
+        exactMatch: z
+          .enum(["true", "false"])
+          .default("false")
+          .transform((v) => v === "true")
+          .openapi({
+            param: { name: "exactMatch", in: "query" },
+            description: "Whether to match the whole club tag exactly instead of a partial match.",
+            example: "false",
+          }),
+        withMembers: z
+          .enum(["true", "false"])
+          .default("false")
+          .transform((v) => v === "true")
+          .openapi({
+            param: { name: "withMembers", in: "query" },
+            description: "Whether to also include each matched club's member list.",
+            example: "false",
+          }),
+        leaderboards: commaSeparatedQuerySchema("leaderboards", clubLeaderboardIds, {
+          description:
+            "Comma-separated leaderboard IDs to restrict the search to. Unrecognized IDs are ignored. Defaults to all leaderboards.",
+          example: "s11,s10sponsor",
+          lenient: true,
+        }),
+      }),
+    },
+    tags,
+    summary: "Search clubs",
+    description:
+      "Search for clubs by partial club tag match, across every leaderboard at once. Backed by a D1 index refreshed every 2 hours for live leaderboards. Results are capped at 1,000 rows, sorted by rank.",
+    responses: {
+      200: {
+        description: "Matching entries.",
+        content: { "application/json": { schema: searchReturnSchema } },
+      },
+      400: {
+        description: "The search query could not be matched.",
+        content: { "application/json": { schema: badRequestSchema } },
+      },
+    },
+  });
 
-    return c.json(response, 200);
+  app.openapi(searchRoute, async (c) => {
+    const { q, exactMatch, withMembers, leaderboards } = c.req.valid("query");
+    const db = drizzle(c.env.DB);
+
+    const clubTagMatch = exactMatch
+      ? sql`${clubRankings.clubTag} = ${q} COLLATE NOCASE`
+      : like(clubRankings.clubTag, `%${q}%`);
+    const memberClubTagMatch = exactMatch
+      ? sql`${leaderboardEntries.clubTag} = ${q} COLLATE NOCASE`
+      : like(leaderboardEntries.clubTag, `%${q}%`);
+
+    // json_each binds the list as one param, avoiding D1's ~100 bound-parameter limit
+    const rankingsWhere = leaderboards?.length
+      ? and(
+          sql`${clubRankings.leaderboardId} IN (SELECT value FROM json_each(${JSON.stringify(leaderboards)}))`,
+          clubTagMatch,
+        )
+      : clubTagMatch;
+    const membersWhere = leaderboards?.length
+      ? and(
+          sql`${leaderboardEntries.leaderboardId} IN (SELECT value FROM json_each(${JSON.stringify(leaderboards)}))`,
+          memberClubTagMatch,
+        )
+      : memberClubTagMatch;
+
+    let rows: (typeof clubRankings.$inferSelect)[];
+    let memberRows: { name: string; clubTag: string | null }[];
+    try {
+      [rows, memberRows] = await Promise.all([
+        db.select().from(clubRankings).where(rankingsWhere).orderBy(asc(clubRankings.clubRank)).limit(1000),
+        withMembers
+          ? db
+              .selectDistinct({ name: leaderboardEntries.name, clubTag: leaderboardEntries.clubTag })
+              .from(leaderboardEntries)
+              .where(membersWhere)
+          : [],
+      ]);
+    } catch (error) {
+      const cause = error instanceof Error && error.cause ? String(error.cause) : String(error);
+      if (cause.includes("too complex")) {
+        return c.json(
+          {
+            error: "Search term is too complex to match. Try a shorter or less repetitive query.",
+          } satisfies z.infer<typeof badRequestSchema>,
+          400,
+        );
+      }
+      throw error;
+    }
+
+    const namesByClubTag = new Map<string, z.infer<typeof clubMemberSchema>[]>();
+    for (const row of memberRows) {
+      if (!row.clubTag) continue;
+      let names = namesByClubTag.get(row.clubTag);
+      if (!names) {
+        names = [];
+        namesByClubTag.set(row.clubTag, names);
+      }
+      names.push({ name: row.name });
+    }
+
+    const clubsMap = new Map<string, z.infer<typeof clubEntrySchema>[]>();
+    for (const row of rows) {
+      let leaderboards = clubsMap.get(row.clubTag);
+      if (!leaderboards) {
+        leaderboards = [];
+        clubsMap.set(row.clubTag, leaderboards);
+      }
+      leaderboards.push({
+        leaderboardId: row.leaderboardId,
+        totalValue: row.totalValue,
+        memberCount: row.memberCount,
+        clubRank: row.clubRank,
+        updatedAt: new Date(row.updatedAt).toISOString(),
+      });
+    }
+
+    const clubs = Array.from(clubsMap, ([clubTag, leaderboards]) => ({
+      clubTag,
+      members: namesByClubTag.get(clubTag) ?? [],
+      leaderboards,
+    }));
+
+    return c.json(
+      {
+        query: q,
+        exactMatch,
+        leaderboards: leaderboards?.length ? leaderboards : null,
+        count: clubs.length,
+        clubs,
+      } satisfies z.infer<typeof searchReturnSchema>,
+      200,
+    );
   });
 };
