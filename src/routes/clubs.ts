@@ -41,14 +41,20 @@ const clubReturnSchema = z.object({
   leaderboards: clubEntrySchema.array().openapi({ description: "Every leaderboard this club appears in." }),
 });
 
+const searchMetaSchema = z
+  .object({
+    query: z.string(),
+    exactMatch: z.boolean(),
+    leaderboards: z
+      .string()
+      .array()
+      .nullable()
+      .openapi({ description: "The leaderboards the search was restricted to. Null means all leaderboards." }),
+  })
+  .openapi({ title: "Club Search Meta", description: "Metadata about the club search response." });
+
 const searchReturnSchema = z.object({
-  query: z.string(),
-  exactMatch: z.boolean(),
-  leaderboards: z
-    .string()
-    .array()
-    .nullable()
-    .openapi({ description: "The leaderboards the search was restricted to. Null means all leaderboards." }),
+  meta: searchMetaSchema,
   count: z.number().openapi({ description: "The number of unique clubs returned. Capped at 1,000." }),
   clubs: clubReturnSchema.array(),
 });
@@ -158,6 +164,7 @@ export const registerClubRoutes = (app: App) => {
           }),
         exactMatch: booleanQuerySchema("exactMatch", {
           description: "Whether to match the whole club tag exactly instead of a partial match.",
+          example: "true",
         }),
         withMembers: booleanQuerySchema("withMembers", {
           description: "Whether to also include each matched club's member list.",
@@ -271,9 +278,11 @@ export const registerClubRoutes = (app: App) => {
 
     return c.json(
       {
-        query: q,
-        exactMatch,
-        leaderboards: leaderboards?.length ? leaderboards : null,
+        meta: {
+          query: q,
+          exactMatch,
+          leaderboards: leaderboards?.length ? leaderboards : null,
+        },
         count: clubs.length,
         clubs,
       } satisfies z.infer<typeof searchReturnSchema>,

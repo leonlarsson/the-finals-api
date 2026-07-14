@@ -28,15 +28,21 @@ const playerReturnSchema = z.object({
   leaderboards: entrySchema.array().openapi({ description: "Every leaderboard/platform this player appears in." }),
 });
 
+const searchMetaSchema = z
+  .object({
+    query: z.string(),
+    exactMatch: z.boolean(),
+    platforms: z.string().array().openapi({ description: "The fields that were actually searched." }),
+    leaderboards: z
+      .string()
+      .array()
+      .nullable()
+      .openapi({ description: "The leaderboards the search was restricted to. Null means all leaderboards." }),
+  })
+  .openapi({ title: "Player Search Meta", description: "Metadata about the player search response." });
+
 const searchReturnSchema = z.object({
-  query: z.string(),
-  exactMatch: z.boolean(),
-  platforms: z.string().array().openapi({ description: "The fields that were actually searched." }),
-  leaderboards: z
-    .string()
-    .array()
-    .nullable()
-    .openapi({ description: "The leaderboards the search was restricted to. Null means all leaderboards." }),
+  meta: searchMetaSchema,
   count: z.number().openapi({ description: "The number of entries returned. Capped at 1,000." }),
   entries: entrySchema.array(),
 });
@@ -83,7 +89,7 @@ export const registerPlayerRoutes = (app: App) => {
           .openapi({
             param: { name: "name", in: "path" },
             description: "The exact player Embark name to search for. Case-insensitive. URL-encode it please.",
-            example: "Balise%232431",
+            example: "Balise#2431",
           }),
       }),
     },
@@ -161,6 +167,7 @@ export const registerPlayerRoutes = (app: App) => {
         }),
         exactMatch: booleanQuerySchema("exactMatch", {
           description: "Whether to match the whole field exactly instead of a partial match.",
+          example: "true",
         }),
       }),
     },
@@ -217,10 +224,12 @@ export const registerPlayerRoutes = (app: App) => {
 
     return c.json(
       {
-        query: q,
-        exactMatch,
-        platforms: fields,
-        leaderboards: leaderboards?.length ? leaderboards : null,
+        meta: {
+          query: q,
+          exactMatch,
+          platforms: fields,
+          leaderboards: leaderboards?.length ? leaderboards : null,
+        },
         count: rows.length,
         entries: rows.map(toEntry),
       } satisfies z.infer<typeof searchReturnSchema>,
