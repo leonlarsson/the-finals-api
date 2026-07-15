@@ -99,22 +99,29 @@ export const indexEntriesToD1 = async (
   }
 };
 
-// Upserts club_rankings, skipping unchanged clubs, then removes clubs with no members left
-export const refreshClubRankings = async (db: DrizzleD1Database) => {
+// Upserts club_rankings, skipping unchanged clubs, then removes clubs with no members left.
+// Scoped to leaderboardIds so a live-only refresh doesn't re-aggregate every frozen leaderboard too.
+export const refreshClubRankings = async (db: DrizzleD1Database, leaderboardIds: string[]) => {
+  if (leaderboardIds.length === 0) return;
+
+  const leaderboardIdFilter = sql`${leaderboardEntries.leaderboardId} IN (SELECT value FROM json_each(${JSON.stringify(leaderboardIds)}))`;
+
   const clubTotals = db
     .select({
       leaderboardId: leaderboardEntries.leaderboardId,
       clubTag: leaderboardEntries.clubTag,
-      totalValue: sql<number>`SUM(${leaderboardEntries.value})`.as("total_value"),
-      memberCount: sql<number>`COUNT(*)`.as("member_count"),
+      // aliased to avoid colliding with club_rankings' own total_value/member_count once joined below
+      totalValue: sql<number>`SUM(${leaderboardEntries.value})`.as("computed_total_value"),
+      memberCount: sql<number>`COUNT(*)`.as("computed_member_count"),
     })
     .from(leaderboardEntries)
-    .where(and(isNotNull(leaderboardEntries.clubTag), sql`${leaderboardEntries.clubTag} != ''`))
+    .where(and(leaderboardIdFilter, isNotNull(leaderboardEntries.clubTag), sql`${leaderboardEntries.clubTag} != ''`))
     .groupBy(leaderboardEntries.leaderboardId, leaderboardEntries.clubTag)
     .as("club_totals");
 
-  // Materialized (not a subquery insert) because SQLite rejects ON CONFLICT after INSERT...SELECT...FROM
-  const rankedClubs = await db
+  // Fetched independently (no JOIN) since leaderboard_entries has no composite index on
+  // (leaderboard_id, club_tag) and a nested-loop join between the two blew D1's CPU budget.
+  const freshClubs = await db
     .select({
       leaderboardId: clubTotals.leaderboardId,
       clubTag: clubTotals.clubTag,
@@ -124,9 +131,38 @@ export const refreshClubRankings = async (db: DrizzleD1Database) => {
     })
     .from(clubTotals);
 
+  const existingClubs = await db
+    .select({
+      leaderboardId: clubRankings.leaderboardId,
+      clubTag: clubRankings.clubTag,
+      totalValue: clubRankings.totalValue,
+      memberCount: clubRankings.memberCount,
+    })
+    .from(clubRankings)
+    .where(sql`${clubRankings.leaderboardId} IN (SELECT value FROM json_each(${JSON.stringify(leaderboardIds)}))`);
+
+  const existingByKey = new Map(existingClubs.map((row) => [`${row.leaderboardId}:${row.clubTag}`, row]));
+
   const now = Date.now();
-  // clubTag is guaranteed non-null by clubTotals' WHERE clause, TS just can't see through the aggregate
-  const rows = rankedClubs.map((row) => ({ ...row, clubTag: row.clubTag as string, updatedAt: now }));
+  const freshKeys = new Set<string>();
+  const rows: {
+    leaderboardId: string;
+    clubTag: string;
+    totalValue: number;
+    memberCount: number;
+    clubRank: number;
+    updatedAt: number;
+  }[] = [];
+  for (const fresh of freshClubs) {
+    // clubTag is guaranteed non-null by clubTotals' WHERE clause, TS just can't see through the aggregate
+    const clubTag = fresh.clubTag as string;
+    const key = `${fresh.leaderboardId}:${clubTag}`;
+    freshKeys.add(key);
+    const existing = existingByKey.get(key);
+    if (!existing || existing.totalValue !== fresh.totalValue || existing.memberCount !== fresh.memberCount) {
+      rows.push({ ...fresh, clubTag, updatedAt: now });
+    }
+  }
 
   const upsert = (chunk: typeof rows) =>
     db
@@ -154,15 +190,19 @@ export const refreshClubRankings = async (db: DrizzleD1Database) => {
     if (group.length) await db.batch(group as [(typeof statements)[number], ...(typeof statements)[number][]]);
   }
 
-  // Removes clubs with no remaining qualifying members in any leaderboard
-  await db.delete(clubRankings).where(sql`
-    NOT EXISTS (
-      SELECT 1 FROM ${leaderboardEntries}
-      WHERE ${leaderboardEntries.leaderboardId} = ${clubRankings.leaderboardId}
-        AND ${leaderboardEntries.clubTag} = ${clubRankings.clubTag}
-        AND ${leaderboardEntries.clubTag} != ''
-    )
-  `);
+  // Removes clubs that were in the scoped leaderboards before but have no members left,
+  // using the exact keys already known from existingClubs/freshKeys above (no re-query needed).
+  const keysToPrune = existingClubs
+    .map((row) => `${row.leaderboardId}:${row.clubTag}`)
+    .filter((key) => !freshKeys.has(key));
+
+  if (keysToPrune.length > 0) {
+    await db
+      .delete(clubRankings)
+      .where(
+        sql`(${clubRankings.leaderboardId} || ':' || ${clubRankings.clubTag}) IN (SELECT value FROM json_each(${JSON.stringify(keysToPrune)}))`,
+      );
+  }
 };
 
 const indexRoutes = async (db: DrizzleD1Database, kv: KVNamespace, routes: BaseAPIRoute[]) => {
@@ -184,14 +224,14 @@ const indexRoutes = async (db: DrizzleD1Database, kv: KVNamespace, routes: BaseA
 // Refreshes the leaderboards that change over time. Runs every 4h, independent of the 2h KV backup.
 export const indexLiveLeaderboardsToD1 = async (d1: D1Database, kv: KVNamespace) => {
   const db = drizzle(d1);
+  const liveRoutes = leaderboardApiRoutes.filter((r) => r.backups?.kv);
 
-  await indexRoutes(
-    db,
-    kv,
-    leaderboardApiRoutes.filter((r) => r.backups?.kv),
-  );
+  await indexRoutes(db, kv, liveRoutes);
   try {
-    await refreshClubRankings(db);
+    await refreshClubRankings(
+      db,
+      liveRoutes.filter((r) => r.hasClubData).map((r) => r.id),
+    );
   } catch (error) {
     const cause = error instanceof Error && error.cause ? String(error.cause) : String(error);
     console.error(`Error refreshing club_rankings: ${cause}`);
@@ -204,14 +244,14 @@ export const indexLiveLeaderboardsToD1 = async (d1: D1Database, kv: KVNamespace)
 // One-time indexing for leaderboards that never change again. Not on cron, triggered manually.
 export const backfillOldLeaderboardsToD1 = async (d1: D1Database, kv: KVNamespace) => {
   const db = drizzle(d1);
+  const oldRoutes = leaderboardApiRoutes.filter((r) => !r.backups?.kv);
 
-  await indexRoutes(
-    db,
-    kv,
-    leaderboardApiRoutes.filter((r) => !r.backups?.kv),
-  );
+  await indexRoutes(db, kv, oldRoutes);
   try {
-    await refreshClubRankings(db);
+    await refreshClubRankings(
+      db,
+      oldRoutes.filter((r) => r.hasClubData).map((r) => r.id),
+    );
   } catch (error) {
     const cause = error instanceof Error && error.cause ? String(error.cause) : String(error);
     console.error(`Error refreshing club_rankings: ${cause}`);
