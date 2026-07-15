@@ -87,9 +87,9 @@ export const registerClubRoutes = (app: App) => {
       }),
     },
     tags,
-    summary: "Get a club",
+    summary: "[UNSTABLE] Get a club",
     description:
-      "Get a club's entries across every leaderboard it appears on, by exact (case-insensitive) club tag match. Backed by a D1 index refreshed every 4 hours for live leaderboards.",
+      "HIGHLY UNSTABLE. DO NOT USE. Get a club's entries across every leaderboard it appears on, by exact (case-insensitive) club tag match. Backed by a D1 index refreshed every 4 hours for live leaderboards.",
     responses: {
       200: {
         description: "The club's data.",
@@ -178,9 +178,9 @@ export const registerClubRoutes = (app: App) => {
       }),
     },
     tags,
-    summary: "Search clubs",
+    summary: "[UNSTABLE] Search clubs",
     description:
-      "Search for clubs by partial club tag match, across every leaderboard at once. Backed by a D1 index refreshed every 4 hours for live leaderboards. Results are capped at 1,000 rows, sorted by rank.",
+      "HIGHLY UNSTABLE. DO NOT USE. Search for clubs by partial club tag match, across every leaderboard at once. Backed by a D1 index refreshed every 4 hours for live leaderboards. Results are capped at 1,000 rows, sorted by rank.",
     responses: {
       200: {
         description: "Matching entries.",
