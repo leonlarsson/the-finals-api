@@ -190,7 +190,12 @@ export const indexLiveLeaderboardsToD1 = async (d1: D1Database, kv: KVNamespace)
     kv,
     leaderboardApiRoutes.filter((r) => r.backups?.kv),
   );
-  await refreshClubRankings(db);
+  try {
+    await refreshClubRankings(db);
+  } catch (error) {
+    const cause = error instanceof Error && error.cause ? String(error.cause) : String(error);
+    console.error(`Error refreshing club_rankings: ${cause}`);
+  }
   await kv.put("last-d1-index", new Date().toISOString());
 
   return new Response("D1 live index complete");
@@ -205,7 +210,12 @@ export const backfillOldLeaderboardsToD1 = async (d1: D1Database, kv: KVNamespac
     kv,
     leaderboardApiRoutes.filter((r) => !r.backups?.kv),
   );
-  await refreshClubRankings(db);
+  try {
+    await refreshClubRankings(db);
+  } catch (error) {
+    const cause = error instanceof Error && error.cause ? String(error.cause) : String(error);
+    console.error(`Error refreshing club_rankings: ${cause}`);
+  }
   await kv.put("last-d1-backfill", new Date().toISOString());
 
   return new Response("D1 backfill complete");
