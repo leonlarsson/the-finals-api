@@ -36,8 +36,10 @@
 
   "triggers": {
     "crons": [
-      // Every 2 hours at minute 0
+      // Every 2 hours at minute 0 (KV backup)
       "0 */2 * * *",
+      // Every 4 hours at minute 0 (D1 index)
+      "0 */4 * * *",
       // Every 12 hours at minute 30
       "30 */12 * * *"
     ]

@@ -1,4 +1,4 @@
-import { and, eq, isNotNull, isNull, lt, sql } from "drizzle-orm";
+import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1";
 import { leaderboardApiRoutes } from "../apis/leaderboard";
 import { clubRankings, leaderboardEntries } from "../db/schema";
@@ -68,6 +68,8 @@ export const indexEntriesToD1 = async (
           rawEntry: sql`excluded.raw_entry`,
           updatedAt: sql`excluded.updated_at`,
         },
+        // skip the write when nothing meaningful changed; rank/change reshuffle constantly on their own
+        setWhere: sql`json_remove(${leaderboardEntries.rawEntry}, '$.rank', '$.change') != json_remove(excluded.raw_entry, '$.rank', '$.change')`,
       });
 
   const statements = [];
@@ -80,22 +82,22 @@ export const indexEntriesToD1 = async (
     if (group.length) await db.batch(group as [(typeof statements)[number], ...(typeof statements)[number][]]);
   }
 
-  // deletes rows not touched by this run, skipped on empty fetch to avoid wiping real data
+  // Removes players who fell off; can't use updatedAt anymore since unchanged rows skip the write above
   if (rows.length > 0) {
+    const currentNames = entries.map((entry) => entry.name);
     await db
       .delete(leaderboardEntries)
       .where(
         and(
           eq(leaderboardEntries.leaderboardId, leaderboardId),
           platform ? eq(leaderboardEntries.platform, platform) : isNull(leaderboardEntries.platform),
-          lt(leaderboardEntries.updatedAt, now),
+          sql`${leaderboardEntries.name} NOT IN (SELECT value FROM json_each(${JSON.stringify(currentNames)}))`,
         ),
       );
   }
 };
 
-// Rebuilds club_rankings from scratch. Delete then insert, not upsert, so a club with no
-// remaining members gets removed instead of leaving a stale row behind.
+// Upserts club_rankings, skipping unchanged clubs, then removes clubs with no members left
 export const refreshClubRankings = async (db: DrizzleD1Database) => {
   const clubTotals = db
     .select({
@@ -123,11 +125,32 @@ export const refreshClubRankings = async (db: DrizzleD1Database) => {
     })
     .from(clubTotals);
 
-  const deleteAll = db.run(sql`DELETE FROM club_rankings`);
-  const rebuild = db.insert(clubRankings).select(rankedClubs);
+  const upsert = db
+    .insert(clubRankings)
+    .select(rankedClubs)
+    .onConflictDoUpdate({
+      target: [clubRankings.leaderboardId, clubRankings.clubTag],
+      set: {
+        totalValue: sql`excluded.total_value`,
+        memberCount: sql`excluded.member_count`,
+        clubRank: sql`excluded.club_rank`,
+        updatedAt: sql`excluded.updated_at`,
+      },
+      // clubRank reshuffles on its own when other clubs move; only write on a real stat change
+      setWhere: sql`${clubRankings.totalValue} != excluded.total_value OR ${clubRankings.memberCount} != excluded.member_count`,
+    });
 
-  // batch, not two awaited calls, so club_rankings is never briefly empty mid-refresh
-  await db.batch([deleteAll, rebuild]);
+  // Removes clubs with no remaining qualifying members in any leaderboard
+  const pruneRemoved = db.delete(clubRankings).where(sql`
+    NOT EXISTS (
+      SELECT 1 FROM ${leaderboardEntries}
+      WHERE ${leaderboardEntries.leaderboardId} = ${clubRankings.leaderboardId}
+        AND ${leaderboardEntries.clubTag} = ${clubRankings.clubTag}
+        AND ${leaderboardEntries.clubTag} != ''
+    )
+  `);
+
+  await db.batch([upsert, pruneRemoved]);
 };
 
 const indexRoutes = async (db: DrizzleD1Database, kv: KVNamespace, routes: BaseAPIRoute[]) => {
@@ -146,8 +169,7 @@ const indexRoutes = async (db: DrizzleD1Database, kv: KVNamespace, routes: BaseA
   }
 };
 
-// Refreshes the leaderboards that change over time. Runs every 2h alongside backupToKV,
-// reusing the same fetchData call so Embark isn't fetched twice.
+// Refreshes the leaderboards that change over time. Runs every 4h, independent of the 2h KV backup.
 export const indexLiveLeaderboardsToD1 = async (d1: D1Database, kv: KVNamespace) => {
   const db = drizzle(d1);
 

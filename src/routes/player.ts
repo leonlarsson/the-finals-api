@@ -96,7 +96,7 @@ export const registerPlayerRoutes = (app: App) => {
     tags,
     summary: "Get a player",
     description:
-      "Get a player's entries across every leaderboard they appear on, by exact (case-insensitive) Embark name match. Backed by a D1 index refreshed every 2 hours for live leaderboards.",
+      "Get a player's entries across every leaderboard they appear on, by exact (case-insensitive) Embark name match. Backed by a D1 index refreshed every 4 hours for live leaderboards.",
     responses: {
       200: {
         description: "The player's data.",
@@ -174,7 +174,7 @@ export const registerPlayerRoutes = (app: App) => {
     tags,
     summary: "Search players",
     description:
-      "Search for players by partial name match, across every leaderboard at once. Backed by a D1 index refreshed every 2 hours for live leaderboards. Results are capped at 1,000 rows, sorted by rank.",
+      "Search for players by partial name match, across every leaderboard at once. Backed by a D1 index refreshed every 4 hours for live leaderboards. Results are capped at 1,000 rows, sorted by rank.",
     responses: {
       200: {
         description: "Matching entries.",

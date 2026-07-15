@@ -123,6 +123,10 @@ export default {
     // KV backup every 2 hours
     if (event.cron === "0 */2 * * *") {
       ctx.waitUntil(backupToKV(env.KV));
+    }
+
+    // D1 index every 4 hours
+    if (event.cron === "0 */4 * * *") {
       ctx.waitUntil(indexLiveLeaderboardsToD1(env.DB, env.KV));
     }
 
@@ -143,7 +147,7 @@ app.post("/backup-to-kv", authentication, (c) => backupToKV(c.env.KV));
 app.post("/backup-to-r2", authentication, (c) => backupToR2(c.env.KV, c.env.R2));
 // one-time index of every frozen leaderboard into D1
 app.post("/backfill-old-leaderboards-to-d1", authentication, (c) => backfillOldLeaderboardsToD1(c.env.DB, c.env.KV));
-// re-runs the same D1 index the 2h cron does, for a fresh snapshot on demand
+// re-runs the same D1 index the 4h cron does, for a fresh snapshot on demand
 app.post("/index-live-leaderboards-to-d1", authentication, (c) => indexLiveLeaderboardsToD1(c.env.DB, c.env.KV));
 
 export { BackupWorkflow } from "./workflows/backup";
