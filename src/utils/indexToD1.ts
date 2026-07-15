@@ -21,6 +21,8 @@ const getRank = (entry: BaseUser | ClubBaseUser) => {
 
 // 13 params per row, D1's real limit is ~100 per statement (not sqlite's usual 999), stay under 8.
 const ROWS_PER_STATEMENT = 6;
+// 6 params per row for club_rankings, more headroom than leaderboard_entries' wider rows.
+const CLUB_ROWS_PER_STATEMENT = 12;
 // Statements grouped into one db.batch() call, so this is one network round-trip, not many.
 const STATEMENTS_PER_BATCH = 50;
 
@@ -111,37 +113,49 @@ export const refreshClubRankings = async (db: DrizzleD1Database) => {
     .groupBy(leaderboardEntries.leaderboardId, leaderboardEntries.clubTag)
     .as("club_totals");
 
-  const rankedClubs = db
+  // Materialized (not a subquery insert) because SQLite rejects ON CONFLICT after INSERT...SELECT...FROM
+  const rankedClubs = await db
     .select({
       leaderboardId: clubTotals.leaderboardId,
       clubTag: clubTotals.clubTag,
       totalValue: clubTotals.totalValue,
       memberCount: clubTotals.memberCount,
-      clubRank:
-        sql<number>`RANK() OVER (PARTITION BY ${clubTotals.leaderboardId} ORDER BY ${clubTotals.totalValue} DESC)`.as(
-          "club_rank",
-        ),
-      updatedAt: sql<number>`unixepoch() * 1000`.as("updated_at"),
+      clubRank: sql<number>`RANK() OVER (PARTITION BY ${clubTotals.leaderboardId} ORDER BY ${clubTotals.totalValue} DESC)`,
     })
     .from(clubTotals);
 
-  const upsert = db
-    .insert(clubRankings)
-    .select(rankedClubs)
-    .onConflictDoUpdate({
-      target: [clubRankings.leaderboardId, clubRankings.clubTag],
-      set: {
-        totalValue: sql`excluded.total_value`,
-        memberCount: sql`excluded.member_count`,
-        clubRank: sql`excluded.club_rank`,
-        updatedAt: sql`excluded.updated_at`,
-      },
-      // clubRank reshuffles on its own when other clubs move; only write on a real stat change
-      setWhere: sql`${clubRankings.totalValue} != excluded.total_value OR ${clubRankings.memberCount} != excluded.member_count`,
-    });
+  const now = Date.now();
+  // clubTag is guaranteed non-null by clubTotals' WHERE clause, TS just can't see through the aggregate
+  const rows = rankedClubs.map((row) => ({ ...row, clubTag: row.clubTag as string, updatedAt: now }));
+
+  const upsert = (chunk: typeof rows) =>
+    db
+      .insert(clubRankings)
+      .values(chunk)
+      .onConflictDoUpdate({
+        target: [clubRankings.leaderboardId, clubRankings.clubTag],
+        set: {
+          totalValue: sql`excluded.total_value`,
+          memberCount: sql`excluded.member_count`,
+          clubRank: sql`excluded.club_rank`,
+          updatedAt: sql`excluded.updated_at`,
+        },
+        // clubRank reshuffles on its own when other clubs move; only write on a real stat change
+        setWhere: sql`${clubRankings.totalValue} != excluded.total_value OR ${clubRankings.memberCount} != excluded.member_count`,
+      });
+
+  const statements = [];
+  for (let i = 0; i < rows.length; i += CLUB_ROWS_PER_STATEMENT) {
+    statements.push(upsert(rows.slice(i, i + CLUB_ROWS_PER_STATEMENT)));
+  }
+
+  for (let i = 0; i < statements.length; i += STATEMENTS_PER_BATCH) {
+    const group = statements.slice(i, i + STATEMENTS_PER_BATCH);
+    if (group.length) await db.batch(group as [(typeof statements)[number], ...(typeof statements)[number][]]);
+  }
 
   // Removes clubs with no remaining qualifying members in any leaderboard
-  const pruneRemoved = db.delete(clubRankings).where(sql`
+  await db.delete(clubRankings).where(sql`
     NOT EXISTS (
       SELECT 1 FROM ${leaderboardEntries}
       WHERE ${leaderboardEntries.leaderboardId} = ${clubRankings.leaderboardId}
@@ -149,8 +163,6 @@ export const refreshClubRankings = async (db: DrizzleD1Database) => {
         AND ${leaderboardEntries.clubTag} != ''
     )
   `);
-
-  await db.batch([upsert, pruneRemoved]);
 };
 
 const indexRoutes = async (db: DrizzleD1Database, kv: KVNamespace, routes: BaseAPIRoute[]) => {
