@@ -14,6 +14,8 @@ export const leaderboardEntries = sqliteTable(
     xboxName: text("xbox_name"),
     psnName: text("psn_name"),
     clubTag: text("club_tag"),
+    clubUuid: text("club_uuid"),
+    officialClubName: text("official_club_name"),
     rank: integer("rank"),
     value: integer("value"),
     rawEntry: text("raw_entry").notNull(),

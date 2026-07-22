@@ -14,12 +14,16 @@ const splitName = (name: string) => {
 
 const getClubTag = (entry: BaseUser | ClubBaseUser) => (entry as ClubBaseUser).clubTag || null;
 
+const getClubUuid = (entry: BaseUser | ClubBaseUser) => (entry as ClubBaseUser).clubUuid || null;
+
+const getOfficialClubName = (entry: BaseUser | ClubBaseUser) => (entry as ClubBaseUser).officialClubName || null;
+
 const getRank = (entry: BaseUser | ClubBaseUser) => {
   const rank = (entry as { rank?: number }).rank;
   return typeof rank === "number" ? rank : null;
 };
 
-// 13 params per row, D1's real limit is ~100 per statement (not sqlite's usual 999), stay under 8.
+// 15 params per row, D1's real limit is ~100 per statement (not sqlite's usual 999), stay under 8.
 const ROWS_PER_STATEMENT = 6;
 // 6 params per row for club_rankings, more headroom than leaderboard_entries' wider rows.
 const CLUB_ROWS_PER_STATEMENT = 12;
@@ -47,6 +51,8 @@ export const indexEntriesToD1 = async (
       xboxName: entry.xboxName || null,
       psnName: entry.psnName || null,
       clubTag: getClubTag(entry),
+      clubUuid: getClubUuid(entry),
+      officialClubName: getOfficialClubName(entry),
       rank: getRank(entry),
       value: getEntryValue(entry),
       rawEntry: JSON.stringify(entry),
@@ -65,6 +71,8 @@ export const indexEntriesToD1 = async (
           xboxName: sql`excluded.xbox_name`,
           psnName: sql`excluded.psn_name`,
           clubTag: sql`excluded.club_tag`,
+          clubUuid: sql`excluded.club_uuid`,
+          officialClubName: sql`excluded.official_club_name`,
           rank: sql`excluded.rank`,
           value: sql`excluded.value`,
           rawEntry: sql`excluded.raw_entry`,

@@ -4,9 +4,11 @@ import nameFallback from "../../utils/nameFallback";
 import {
   changePropertySchema,
   clubTagPropertySchema,
+  clubUuidPropertySchema,
   leagueNumberPropertySchema,
   leaguePropertySchema,
   namePropertySchema,
+  officialClubNamePropertySchema,
   psnNamePropertySchema,
   rankPropertySchema,
   rankScorePropertySchema,
@@ -27,6 +29,8 @@ export const season10Schema = z
     7: z.union([z.string(), z.number()]).optional(),
     8: z.union([z.string(), z.number()]).optional(),
     12: z.union([z.string(), z.number()]).optional(),
+    13: z.union([z.string(), z.number()]).optional(),
+    officialClubName: z.string().optional(),
   })
   .transform((data) => ({
     rank: data[1],
@@ -36,6 +40,8 @@ export const season10Schema = z
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
     clubTag: nameFallback(data[12]),
+    clubUuid: nameFallback(data[13]),
+    officialClubName: data.officialClubName ?? "",
     leagueNumber: data[4],
     league: leagueNumberToName(data[4]),
     rankScore: data[5],
@@ -52,6 +58,8 @@ export const season10UserSchema = z
     psnName: psnNamePropertySchema,
     xboxName: xboxNamePropertySchema,
     clubTag: clubTagPropertySchema,
+    clubUuid: clubUuidPropertySchema,
+    officialClubName: officialClubNamePropertySchema,
     leagueNumber: leagueNumberPropertySchema,
     league: leaguePropertySchema,
     rankScore: rankScorePropertySchema,

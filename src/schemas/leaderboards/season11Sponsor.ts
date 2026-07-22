@@ -2,8 +2,10 @@ import { z } from "zod";
 import nameFallback from "../../utils/nameFallback";
 import {
   clubTagPropertySchema,
+  clubUuidPropertySchema,
   fansPropertySchema,
   namePropertySchema,
+  officialClubNamePropertySchema,
   psnNamePropertySchema,
   rankPropertySchema,
   sponsorPropertySchema,
@@ -22,6 +24,8 @@ export const season11SponsorSchema = z
     9: z.string(),
     10: z.number(),
     12: z.union([z.string(), z.number()]).optional(),
+    13: z.union([z.string(), z.number()]).optional(),
+    officialClubName: z.string().optional(),
   })
   .transform((data) => ({
     rank: data[1],
@@ -30,6 +34,8 @@ export const season11SponsorSchema = z
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
     clubTag: nameFallback(data[12]),
+    clubUuid: nameFallback(data[13]),
+    officialClubName: data.officialClubName ?? "",
     sponsor: data[9],
     fans: data[10],
   }))
@@ -44,6 +50,8 @@ export const season11SponsorUserSchema = z
     psnName: psnNamePropertySchema,
     xboxName: xboxNamePropertySchema,
     clubTag: clubTagPropertySchema,
+    clubUuid: clubUuidPropertySchema,
+    officialClubName: officialClubNamePropertySchema,
     sponsor: sponsorPropertySchema,
     fans: fansPropertySchema,
   })

@@ -29,4 +29,11 @@ export const tournamentWinsPropertySchema = z
   .openapi({ description: "The user's number of tournament wins." });
 export const clubTagPropertySchema = z
   .string()
-  .openapi({ description: "The user's club tag.", examples: ["TFL", "API"] });
+  .openapi({ description: "The user's club tag.", examples: ["5F", "TFL", "API"] });
+export const clubUuidPropertySchema = z
+  .string()
+  .openapi({ description: "The user's club UUID.", example: "76881183-e545-4670-8ff0-71a36af02d77" });
+export const officialClubNamePropertySchema = z.string().openapi({
+  description: "The club's official name. Only present if the club is a recognized esports organization.",
+  example: "Five Fears",
+});

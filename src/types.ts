@@ -65,6 +65,8 @@ export type ClubBaseUser = {
   psnName: string;
   xboxName: string;
   clubTag: string;
+  clubUuid?: string;
+  officialClubName?: string;
   rankScore?: number;
   fans?: number;
   cashouts?: number;

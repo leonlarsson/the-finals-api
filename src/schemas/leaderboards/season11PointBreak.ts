@@ -2,7 +2,9 @@ import { z } from "zod";
 import nameFallback from "../../utils/nameFallback";
 import {
   clubTagPropertySchema,
+  clubUuidPropertySchema,
   namePropertySchema,
+  officialClubNamePropertySchema,
   psnNamePropertySchema,
   rankPropertySchema,
   scorePropertySchema,
@@ -20,6 +22,8 @@ export const season11PointBreakSchema = z
     7: z.union([z.string(), z.number()]).optional(),
     8: z.union([z.string(), z.number()]).optional(),
     12: z.union([z.string(), z.number()]).optional(),
+    13: z.union([z.string(), z.number()]).optional(),
+    officialClubName: z.string().optional(),
   })
   .transform((data) => ({
     rank: data[1],
@@ -28,6 +32,8 @@ export const season11PointBreakSchema = z
     psnName: nameFallback(data[7]),
     xboxName: nameFallback(data[8]),
     clubTag: nameFallback(data[12]),
+    clubUuid: nameFallback(data[13]),
+    officialClubName: data.officialClubName ?? "",
     points: data[5],
   }))
   .array();
@@ -41,6 +47,8 @@ export const season11PointBreakUserSchema = z
     psnName: psnNamePropertySchema,
     xboxName: xboxNamePropertySchema,
     clubTag: clubTagPropertySchema,
+    clubUuid: clubUuidPropertySchema,
+    officialClubName: officialClubNamePropertySchema,
     points: scorePropertySchema,
   })
   .openapi("Season11PointBreakUser", {
