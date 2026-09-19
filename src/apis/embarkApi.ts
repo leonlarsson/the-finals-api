@@ -56,14 +56,20 @@ export const embarkApi = {
   },
 } satisfies Record<string, EmbarkApi>;
 
+// Deduplicates concurrent Embark requests per PoP on KV cache miss.
+// Errors get a short TTL so an Embark blip can't stick around for the full TTL.
+const embarkCacheOptions = (cacheTtlSeconds?: number): RequestInitCfProperties | undefined =>
+  cacheTtlSeconds
+    ? { cacheEverything: true, cacheTtlByStatus: { "200-299": cacheTtlSeconds, "400-599": 30 } }
+    : undefined;
+
 /**
  * Fetches the standard leaderboard data from the Embark "API".
  * Returns the validated entries, or throws an error if there was an issue.
  */
 export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
   const res = await fetch(api.url, {
-    // Deduplicates concurrent Embark requests per PoP on KV cache miss.
-    cf: cacheTtlSeconds ? { cacheEverything: true, cacheTtl: cacheTtlSeconds } : undefined,
+    cf: embarkCacheOptions(cacheTtlSeconds),
   });
   const text = await res.text();
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
@@ -92,7 +98,7 @@ export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi, cacheTt
  */
 export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
   const res = await fetch(api.url, {
-    cf: cacheTtlSeconds ? { cacheEverything: true, cacheTtl: cacheTtlSeconds } : undefined,
+    cf: embarkCacheOptions(cacheTtlSeconds),
   });
   const text = await res.text();
   const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
