@@ -1,6 +1,7 @@
 import type { ZodSchema } from "zod";
 import { orfSchema } from "../schemas/leaderboards/orf";
 import { season11Schema } from "../schemas/leaderboards/season11";
+import { season11OrbitalHittersSchema } from "../schemas/leaderboards/season11OrbitalHitters";
 import { season11PointBreakSchema } from "../schemas/leaderboards/season11PointBreak";
 import { season11PowerShiftSchema } from "../schemas/leaderboards/season11PowerShift";
 import { season11QuickCashSchema } from "../schemas/leaderboards/season11QuickCash";
@@ -43,6 +44,10 @@ export const embarkApi = {
   season11PointBreak: {
     url: "https://id.embark.games/the-finals/leaderboards/s11pb",
     zodSchema: season11PointBreakSchema,
+  },
+  season11OrbitalHitters: {
+    url: "https://id.embark.games/the-finals/leaderboards/s11hh",
+    zodSchema: season11OrbitalHittersSchema,
   },
 
   orf: {

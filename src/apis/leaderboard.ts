@@ -63,6 +63,7 @@ import { season10TeamDeathmatchUserSchema } from "../schemas/leaderboards/season
 import { season10The24HourGauntletUserSchema } from "../schemas/leaderboards/season10The24HourGauntlet";
 import { season10WorldTourUserSchema } from "../schemas/leaderboards/season10WorldTour";
 import { season11UserSchema } from "../schemas/leaderboards/season11";
+import { season11OrbitalHittersUserSchema } from "../schemas/leaderboards/season11OrbitalHitters";
 import { season11PointBreakUserSchema } from "../schemas/leaderboards/season11PointBreak";
 import { season11PowerShiftUserSchema } from "../schemas/leaderboards/season11PowerShift";
 import { season11QuickCashUserSchema } from "../schemas/leaderboards/season11QuickCash";
@@ -941,6 +942,20 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       zodSchemaOpenApi: season11PointBreakUserSchema,
     },
     embarkApi.season11PointBreak,
+  ),
+  createLiveLeaderboard(
+    {
+      id: "s11orbitalhitters",
+      availablePlatforms: ["crossplay"],
+      hasClubData: true,
+      metadata: {
+        summary: "Season 11 Orbital Hitters",
+        description: "Get leaderboard data from the eleventh season of THE FINALS - Orbital Hitters.",
+        tags: ["Leaderboards"],
+      },
+      zodSchemaOpenApi: season11OrbitalHittersUserSchema,
+    },
+    embarkApi.season11OrbitalHitters,
   ),
 
   // Special leaderboards not tied to a season
