@@ -9,12 +9,17 @@ export const fetchWithKVFallback = async (fetcher: () => Promise<any>, kv: KVNam
     // If fetcher was successful, set the context to fetch
     setSourceToFetch();
     return data;
-  } catch (e) {
-    console.error(`Failed to fetch data. Falling back to KV backup with key ${kvKey}`, e);
-    const backupData = await getJsonFromKV(kv, kvKey);
-    // Since this is from backup data, set the context to backup.
-    // getJsonFromKV() sets the context to kv, but this overrides it.
-    setSourceToBackup();
-    return backupData ?? console.error(`Failed to fetch data and no backup data found in KV with key ${kvKey}`);
+  } catch (fetchError) {
+    console.error(`Failed to fetch data. Falling back to KV backup with key ${kvKey}`, fetchError);
+
+    try {
+      const backupData = await getJsonFromKV(kv, kvKey);
+      // Since this is from backup data, set the context to backup.
+      // getJsonFromKV() sets the context to kv, but this overrides it.
+      setSourceToBackup();
+      return backupData;
+    } catch (backupError) {
+      throw new Error(`${backupError} Original fetch error: ${fetchError}`, { cause: fetchError });
+    }
   }
 };
