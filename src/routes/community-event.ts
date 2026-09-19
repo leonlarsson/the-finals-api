@@ -120,9 +120,11 @@ export const registerCommunityEventRoutes = (app: App) => {
       } catch (error) {
         console.error("Error in getCommunityEvent:", error);
 
+        const rayId = c.req.header("cf-ray");
+
         return c.json(
           {
-            error: `An error occurred in the getCommunityEvent handler. Community event: ${apiRoute.id}. Error: ${error}`,
+            error: `An error occurred in the getCommunityEvent handler. Community event: ${apiRoute.id}.${rayId ? ` Ray ID: ${rayId}.` : ""}`,
           } satisfies z.infer<typeof leaderboard500ResponseSchema>,
           500,
         );

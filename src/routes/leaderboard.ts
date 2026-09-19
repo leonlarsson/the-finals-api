@@ -118,9 +118,11 @@ export const registerLeaderboardRoutes = (app: App) => {
       } catch (error) {
         console.error("Error in getLeaderboard:", error);
 
+        const rayId = c.req.header("cf-ray");
+
         return c.json(
           {
-            error: `An error occurred in the getLeaderboard handler. Leaderboard: ${apiRoute.id}. Error: ${error}`,
+            error: `An error occurred in the getLeaderboard handler. Leaderboard: ${apiRoute.id}.${rayId ? ` Ray ID: ${rayId}.` : ""}`,
           } satisfies z.infer<typeof leaderboard500ResponseSchema>,
           500,
         );

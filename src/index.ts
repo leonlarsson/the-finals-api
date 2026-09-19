@@ -2,6 +2,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { contextStorage } from "hono/context-storage";
 import { cors } from "hono/cors";
+import { HTTPException } from "hono/http-exception";
 import { registerAuthComponent } from "./components/auth";
 import { authentication } from "./middleware/authentication";
 import { registerClubRoutes } from "./routes/clubs";
@@ -116,6 +117,20 @@ app.get(
 app.notFound((c) =>
   c.json({ error: "Route not found. Check https://api.the-finals-leaderboard.com for all available routes." }, 404),
 );
+
+// Catches anything a route throws. Details are logged, not returned.
+app.onError((error, c) => {
+  // bearerAuth throws these to return its own 401
+  if (error instanceof HTTPException) {
+    return error.getResponse();
+  }
+
+  console.error("Unhandled error:", error);
+
+  const rayId = c.req.header("cf-ray");
+
+  return c.json({ error: `An unexpected error occurred.${rayId ? ` Ray ID: ${rayId}.` : ""}` }, 500);
+});
 
 export default {
   fetch: app.fetch,
