@@ -63,6 +63,13 @@ const embarkCacheOptions = (cacheTtlSeconds?: number): RequestInitCfProperties |
     ? { cacheEverything: true, cacheTtlByStatus: { "200-299": cacheTtlSeconds, "400-599": 30 } }
     : undefined;
 
+// Best-effort cache fill. A 429 means another isolate is writing this key, so our write is redundant.
+const putCache = (KV: KVNamespace, cacheKey: string, data: unknown, ttlSeconds: number) =>
+  KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }).catch((e) => {
+    const log = String(e).includes("429") ? console.warn : console.error;
+    log(`KV PUT failed for key ${cacheKey}:`, e);
+  });
+
 /**
  * Fetches the standard leaderboard data from the Embark "API".
  * Returns the validated entries, or throws an error if there was an issue.
@@ -146,11 +153,7 @@ export const cachedFetchStandardEmbarkLeaderboardData = async (
   const data = await fetchStandardEmbarkLeaderboardData(api, ttlSeconds);
 
   // Store the parsed data in KV with the specified TTL
-  ctx?.waitUntil(
-    KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }).catch((e) =>
-      console.error(`KV PUT failed for key ${cacheKey}:`, e),
-    ),
-  );
+  ctx?.waitUntil(putCache(KV, cacheKey, data, ttlSeconds));
   return data;
 };
 
@@ -176,10 +179,6 @@ export const cachedFetchStandardEmbarkCommunityEventData = async (
   const data = await fetchStandardEmbarkCommunityEventData(api, ttlSeconds);
 
   // Store the parsed data in KV with the specified TTL
-  ctx?.waitUntil(
-    KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttlSeconds }).catch((e) =>
-      console.error(`KV PUT failed for key ${cacheKey}:`, e),
-    ),
-  );
+  ctx?.waitUntil(putCache(KV, cacheKey, data, ttlSeconds));
   return data;
 };
