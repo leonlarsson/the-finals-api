@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "the-finals-api",
   "main": "src/index.ts",
-  "compatibility_date": "2023-12-18",
+  "compatibility_date": "2026-07-27",
   "compatibility_flags": ["nodejs_compat"],
 
   "kv_namespaces": [
@@ -46,7 +46,10 @@
   },
 
   "observability": {
-    "enabled": true
+    "enabled": true,
+    "issues": {
+      "enabled": true
+    }
   },
 
   "workflows": [
