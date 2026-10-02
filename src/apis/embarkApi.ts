@@ -70,30 +70,34 @@ const putCache = (KV: KVNamespace, cacheKey: string, data: unknown, ttlSeconds: 
     log(`KV PUT failed for key ${cacheKey}:`, e);
   });
 
+const nextDataRegex = /<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/;
+
+// Returns pageProps from the page's __NEXT_DATA__, or throws.
+const fetchEmbarkPageProps = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
+  const res = await fetch(api.url, { cf: embarkCacheOptions(cacheTtlSeconds) });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch data. URL ${api.url} returned status ${res.status}`);
+  }
+
+  const stringData = (await res.text()).match(nextDataRegex)?.[1];
+  if (!stringData) {
+    throw new Error(`Failed to find __NEXT_DATA__ script tag on URL ${api.url}`);
+  }
+
+  return JSON.parse(stringData).props.pageProps;
+};
+
 /**
  * Fetches the standard leaderboard data from the Embark "API".
  * Returns the validated entries, or throws an error if there was an issue.
  */
 export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
-  const res = await fetch(api.url, {
-    cf: embarkCacheOptions(cacheTtlSeconds),
-  });
-  const text = await res.text();
-  const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
+  const pageProps = await fetchEmbarkPageProps(api, cacheTtlSeconds);
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch data. URL ${res.url} returned status ${res.status}`);
-  }
-
-  if (!stringData) {
-    throw new Error(`Failed to find __NEXT_DATA__ script tag on URL ${res.url}`);
-  }
-
-  const jsonData = JSON.parse(stringData);
-
-  const { success, data } = api.zodSchema.safeParse(jsonData.props.pageProps.entries);
+  const { success, data } = api.zodSchema.safeParse(pageProps.entries);
   if (!success) {
-    throw new Error(`Failed to validate fetched data from URL ${res.url} with provided Zod schema.`);
+    throw new Error(`Failed to validate fetched data from URL ${api.url} with provided Zod schema.`);
   }
 
   return data;
@@ -104,29 +108,15 @@ export const fetchStandardEmbarkLeaderboardData = async (api: EmbarkApi, cacheTt
  * Returns the validated entries and progress, or throws an error if there was an issue.
  */
 export const fetchStandardEmbarkCommunityEventData = async (api: EmbarkApi, cacheTtlSeconds?: number) => {
-  const res = await fetch(api.url, {
-    cf: embarkCacheOptions(cacheTtlSeconds),
-  });
-  const text = await res.text();
-  const stringData = text.match(/<script id="__NEXT_DATA__" type="application\/json">(.*)<\/script>/)?.[1];
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch data. URL ${res.url} returned status ${res.status}`);
-  }
-
-  if (!stringData) {
-    throw new Error(`Failed to find __NEXT_DATA__ script tag on URL ${res.url}`);
-  }
-
-  const jsonData = JSON.parse(stringData);
+  const pageProps = await fetchEmbarkPageProps(api, cacheTtlSeconds);
 
   const { success, data } = api.zodSchema.safeParse({
-    entries: jsonData.props.pageProps.entries,
-    progress: jsonData.props.pageProps.progress,
+    entries: pageProps.entries,
+    progress: pageProps.progress,
   });
 
   if (!success) {
-    throw new Error(`Failed to validate fetched data from URL ${res.url} with provided Zod schema.`);
+    throw new Error(`Failed to validate fetched data from URL ${api.url} with provided Zod schema.`);
   }
 
   return data;
