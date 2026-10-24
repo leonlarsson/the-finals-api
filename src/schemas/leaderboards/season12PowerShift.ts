@@ -52,6 +52,6 @@ export const season12PowerShiftUserSchema = z
     points: scorePropertySchema,
   })
   .openapi("Season12PowerShiftUser", {
-    title: "Season 12 Power Shift User",
-    description: "A user in the Season 12 Power Shift leaderboard.",
+    title: "Season 12 PowerShift User",
+    description: "A user in the Season 12 PowerShift leaderboard.",
   }) satisfies z.ZodType<z.infer<typeof season12PowerShiftSchema>[number]>;

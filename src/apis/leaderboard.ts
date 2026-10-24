@@ -992,7 +992,7 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
       hasClubData: true,
       metadata: {
         summary: "Season 12 PowerShift",
-        description: "Get leaderboard data from the twelfth season of THE FINALS - Power Shift.",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - PowerShift.",
         tags: ["Leaderboards"],
       },
       zodSchemaOpenApi: season12PowerShiftUserSchema,
