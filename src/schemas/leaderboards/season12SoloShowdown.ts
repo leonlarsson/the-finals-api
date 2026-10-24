@@ -12,7 +12,7 @@ import {
   xboxNamePropertySchema,
 } from "../userProperties";
 
-export const season12SolowShowdownSchema = z
+export const season12SoloShowdownSchema = z
   .object({
     1: z.number(),
     // For some reason, the name can come back as a 0 (number) instead of a string. Example: {"1":4059,"2":57070,"3":0,"4":11,"5":25114,"6":"ඞ ⁧ AK","7":0,"8":0}
@@ -54,4 +54,4 @@ export const season12SoloShowdownUserSchema = z
   .openapi("Season12SoloShowdownUser", {
     title: "Season 12 Solo Showdown User",
     description: "A user in the Season 12 Solo Showdown leaderboard.",
-  }) satisfies z.ZodType<z.infer<typeof season12SolowShowdownSchema>[number]>;
+  }) satisfies z.ZodType<z.infer<typeof season12SoloShowdownSchema>[number]>;
