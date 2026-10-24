@@ -70,6 +70,14 @@ import { season11QuickCashUserSchema } from "../schemas/leaderboards/season11Qui
 import { season11SponsorUserSchema } from "../schemas/leaderboards/season11Sponsor";
 import { season11TeamDeathmatchUserSchema } from "../schemas/leaderboards/season11TeamDeathmatch";
 import { season11WorldTourUserSchema } from "../schemas/leaderboards/season11WorldTour";
+import { season12UserSchema } from "../schemas/leaderboards/season12";
+import { season12PointBreakUserSchema } from "../schemas/leaderboards/season12PointBreak";
+import { season12PowerShiftUserSchema } from "../schemas/leaderboards/season12PowerShift";
+import { season12QuickCashUserSchema } from "../schemas/leaderboards/season12QuickCash";
+import { season12SoloShowdownUserSchema } from "../schemas/leaderboards/season12SoloShowdown";
+import { season12SponsorUserSchema } from "../schemas/leaderboards/season12Sponsor";
+import { season12TeamDeathmatchUserSchema } from "../schemas/leaderboards/season12TeamDeathmatch";
+import { season12WorldTourUserSchema } from "../schemas/leaderboards/season12WorldTour";
 import { theFinalsUserSchema } from "../schemas/leaderboards/theFinals";
 import type { BaseAPIRoute, LeaderboardPlatforms } from "../types";
 import { fetchWithKVFallback } from "../utils/fetchWithKVFallback";
@@ -845,117 +853,207 @@ export const leaderboardApiRoutes: BaseAPIRoute[] = [
   }),
 
   // SEASON 11
+  createOldLeaderboard({
+    id: "s11",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11",
+      description: "Get leaderboard data from the eleventh season of THE FINALS.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11UserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s11sponsor",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11 Sponsor",
+      description: "Get leaderboard data from the eleventh season of THE FINALS - Sponsor.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11SponsorUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s11worldtour",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11 World Tour",
+      description: "Get leaderboard data from the eleventh season of THE FINALS - World Tour.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11WorldTourUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s11powershift",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11 PowerShift",
+      description: "Get leaderboard data from the eleventh season of THE FINALS - PowerShift.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11PowerShiftUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s11quickcash",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11 Quick Cash",
+      description: "Get leaderboard data from the eleventh season of THE FINALS - Quick Cash.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11QuickCashUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s11teamdeathmatch",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11 Team Deathmatch",
+      description: "Get leaderboard data from the eleventh season of THE FINALS - Team Deathmatch.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11TeamDeathmatchUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s11pointbreak",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11 Point Break",
+      description: "Get leaderboard data from the eleventh season of THE FINALS - Point Break.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11PointBreakUserSchema,
+  }),
+  createOldLeaderboard({
+    id: "s11orbitalhitters",
+    availablePlatforms: ["crossplay"],
+    hasClubData: true,
+    metadata: {
+      summary: "Season 11 Orbital Hitters",
+      description: "Get leaderboard data from the eleventh season of THE FINALS - Orbital Hitters.",
+      tags: ["Leaderboards"],
+    },
+    zodSchemaOpenApi: season11OrbitalHittersUserSchema,
+  }),
+
+  // SEASON 12
   createLiveLeaderboard(
     {
-      id: "s11",
+      id: "s12",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11",
-        description: "Get leaderboard data from the eleventh season of THE FINALS.",
+        summary: "Season 12",
+        description: "Get leaderboard data from the twelfth season of THE FINALS.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11UserSchema,
+      zodSchemaOpenApi: season12UserSchema,
     },
-    embarkApi.season11,
+    embarkApi.season12,
   ),
   createLiveLeaderboard(
     {
-      id: "s11sponsor",
+      id: "s12sponsor",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11 Sponsor",
-        description: "Get leaderboard data from the eleventh season of THE FINALS - Sponsor.",
+        summary: "Season 12 Sponsor",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - Sponsor.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11SponsorUserSchema,
+      zodSchemaOpenApi: season12SponsorUserSchema,
     },
-    embarkApi.season11Sponsor,
+    embarkApi.season12Sponsor,
   ),
   createLiveLeaderboard(
     {
-      id: "s11worldtour",
+      id: "s12worldtour",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11 World Tour",
-        description: "Get leaderboard data from the eleventh season of THE FINALS - World Tour.",
+        summary: "Season 12 World Tour",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - World Tour.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11WorldTourUserSchema,
+      zodSchemaOpenApi: season12WorldTourUserSchema,
     },
-    embarkApi.season11WorldTour,
+    embarkApi.season12WorldTour,
   ),
   createLiveLeaderboard(
     {
-      id: "s11powershift",
+      id: "s12powershift",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11 PowerShift",
-        description: "Get leaderboard data from the eleventh season of THE FINALS - PowerShift.",
+        summary: "Season 12 PowerShift",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - Power Shift.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11PowerShiftUserSchema,
+      zodSchemaOpenApi: season12PowerShiftUserSchema,
     },
-    embarkApi.season11PowerShift,
+    embarkApi.season12PowerShift,
   ),
   createLiveLeaderboard(
     {
-      id: "s11quickcash",
+      id: "s12quickcash",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11 Quick Cash",
-        description: "Get leaderboard data from the eleventh season of THE FINALS - Quick Cash.",
+        summary: "Season 12 Quick Cash",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - Quick Cash.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11QuickCashUserSchema,
+      zodSchemaOpenApi: season12QuickCashUserSchema,
     },
-    embarkApi.season11QuickCash,
+    embarkApi.season12QuickCash,
   ),
   createLiveLeaderboard(
     {
-      id: "s11teamdeathmatch",
+      id: "s12teamdeathmatch",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11 Team Deathmatch",
-        description: "Get leaderboard data from the eleventh season of THE FINALS - Team Deathmatch.",
+        summary: "Season 12 Team Deathmatch",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - Team Deathmatch.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11TeamDeathmatchUserSchema,
+      zodSchemaOpenApi: season12TeamDeathmatchUserSchema,
     },
-    embarkApi.season11TeamDeathmatch,
+    embarkApi.season12TeamDeathmatch,
   ),
   createLiveLeaderboard(
     {
-      id: "s11pointbreak",
+      id: "s12pointbreak",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11 Point Break",
-        description: "Get leaderboard data from the eleventh season of THE FINALS - Point Break.",
+        summary: "Season 12 Point Break",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - Point Break.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11PointBreakUserSchema,
+      zodSchemaOpenApi: season12PointBreakUserSchema,
     },
-    embarkApi.season11PointBreak,
+    embarkApi.season12PointBreak,
   ),
   createLiveLeaderboard(
     {
-      id: "s11orbitalhitters",
+      id: "s12soloshowdown",
       availablePlatforms: ["crossplay"],
       hasClubData: true,
       metadata: {
-        summary: "Season 11 Orbital Hitters",
-        description: "Get leaderboard data from the eleventh season of THE FINALS - Orbital Hitters.",
+        summary: "Season 12 Solo Showdown",
+        description: "Get leaderboard data from the twelfth season of THE FINALS - Solo Showdown.",
         tags: ["Leaderboards"],
       },
-      zodSchemaOpenApi: season11OrbitalHittersUserSchema,
+      zodSchemaOpenApi: season12SoloShowdownUserSchema,
     },
-    embarkApi.season11OrbitalHitters,
+    embarkApi.season12SoloShowdown,
   ),
 
   // Special leaderboards not tied to a season
